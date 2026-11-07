@@ -5,6 +5,9 @@ const freshState = () => ({
   student: structuredClone(emptyStudent),
   saved: [],
   applications: [],
+  hours: [],
+  shifts: [],
+  readNotificationIds: [],
 });
 
 // A malformed or older browser record must not break the entire student app.
@@ -29,6 +32,13 @@ export function read() {
         ? [...new Set(student[field].filter((x) => options.includes(x)))]
         : [];
     }
+    if (
+      !student.schoolConnection ||
+      typeof student.schoolConnection.schoolId !== "string" ||
+      typeof student.schoolConnection.schoolName !== "string" ||
+      typeof student.schoolConnection.isDemo !== "boolean"
+    )
+      student.schoolConnection = null;
     student.age =
       Number.isInteger(Number(student.age)) &&
       Number(student.age) >= 13 &&
@@ -40,11 +50,28 @@ export function read() {
       student.name.trim() &&
       student.school.trim() &&
       student.age &&
-      Object.keys(choices).every((field) => student[field].length),
+      ["interests", "skills", "availability", "locations"].every(
+        (field) => student[field].length,
+      ),
     );
     return {
       version: 1,
       student,
+      hours: Array.isArray(raw.hours)
+        ? raw.hours.filter(
+            (h) =>
+              h && typeof h.id === "string" && typeof h.studentId === "string",
+          )
+        : [],
+      shifts: Array.isArray(raw.shifts)
+        ? raw.shifts.filter(
+            (h) =>
+              h && typeof h.id === "string" && typeof h.studentId === "string",
+          )
+        : [],
+      readNotificationIds: Array.isArray(raw.readNotificationIds)
+        ? raw.readNotificationIds.filter((id) => typeof id === "string")
+        : [],
       saved: Array.isArray(raw.saved)
         ? [...new Set(raw.saved.filter((x) => typeof x === "string"))]
         : [],
@@ -105,6 +132,7 @@ export function apply(opportunityId, interest) {
     studentId: state.student.id,
     opportunityId,
     status: "pending",
+    isDemo: opportunity.isDemo === true,
     interest: interest.trim(),
     availabilityConfirmed: true,
     submittedAt: new Date().toISOString(),

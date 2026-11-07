@@ -1228,3 +1228,197 @@ form > small {
   text-decoration: underline;
   text-underline-offset: 3px;
 }
+/* Student connections and research directory share the existing card system. */
+.school-invitation {
+  margin-top: 24px;
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: #fcfbff;
+}
+.school-invitation h3,
+.school-preview h3 {
+  font-size: 14px;
+  line-height: 1.6;
+  margin-top: 0;
+}
+.school-invitation p,
+.school-invitation small,
+.feature-intro {
+  color: #81788e;
+  font-size: 12px;
+  line-height: 1.8;
+}
+.school-invitation small {
+  display: block;
+  margin-top: 12px;
+}
+.school-preview {
+  padding: 20px;
+  background: #f4f0fc;
+  border-radius: 14px;
+  margin-top: 20px;
+}
+#school-code-form > .primary {
+  margin-top: 16px;
+}
+.form-error {
+  color: #ad3b58 !important;
+  background: #fff0f3;
+  padding: 12px;
+  border-radius: 8px;
+  line-height: 1.7;
+}
+.form-success {
+  color: #416e4b !important;
+  background: #edf7ef;
+  padding: 12px;
+  border-radius: 8px;
+}
+.organization-section {
+  margin: 45px 0 20px;
+  max-width: 1050px;
+}
+.organization-section > p {
+  font-size: 12px;
+  color: #81788e;
+  line-height: 1.8;
+}
+.organization-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  margin-top: 22px;
+}
+.organization-card {
+  padding: 23px;
+  border: 1px solid #e8e1f0;
+  background: #fff;
+  border-radius: 17px;
+}
+.org-emoji {
+  font-size: 29px;
+}
+.organization-card h3 {
+  font-size: 13px;
+  line-height: 1.6;
+  color: #8862bc;
+}
+.organization-card strong {
+  display: block;
+  font-size: 14px;
+  line-height: 1.7;
+}
+.potential-label {
+  display: block;
+  width: fit-content;
+  background: #faf3e7;
+  color: #92733f;
+  border-radius: 7px;
+  padding: 6px 9px;
+  font-size: 10px;
+  margin: 13px 0;
+}
+.organization-card .text-button {
+  font-size: 11px;
+  text-align: left;
+  line-height: 1.7;
+}
+.coordinator-section {
+  margin-top: 22px;
+  border: 1px solid var(--border);
+  padding: 15px;
+  border-radius: 12px;
+}
+.coordinator-section summary {
+  color: var(--purple);
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  padding: 6px 0;
+}
+.feature-modal {
+  font-family: "DM Sans", sans-serif;
+}
+.notification-bell {
+  display: grid;
+  place-items: center;
+  position: relative;
+  border: 1px solid var(--border);
+  background: white;
+  border-radius: 50%;
+  width: 39px;
+  height: 39px;
+  color: #776a8d;
+  flex-shrink: 0;
+}
+.unread-count {
+  position: absolute;
+  top: -5px;
+  right: -6px;
+  background: var(--purple);
+  color: white;
+  font-size: 9px;
+  border-radius: 20px;
+  min-width: 18px;
+  padding: 3px;
+  letter-spacing: 0;
+}
+.notification-list {
+  margin-top: 15px;
+}
+.notification-item {
+  padding: 17px;
+  margin: 12px 0;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+.notification-item.unread {
+  background: #f7f3ff;
+  border-color: #e1d7f5;
+}
+.notification-kind {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--purple);
+  line-height: 1.7;
+}
+.notification-item > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+.notification-item .text-button {
+  font-size: 11px;
+}
+@media (max-width: 760px) {
+  header > span {
+    max-width: 110px;
+    line-height: 1.8;
+  }
+  .notification-bell {
+    width: 33px;
+    height: 33px;
+  }
+  .header-right {
+    gap: 10px;
+  }
+  .organization-grid {
+    gap: 10px;
+  }
+  .organization-card {
+    padding: 15px;
+  }
+  .organization-card strong {
+    font-size: 12px;
+  }
+  .organization-card h3 {
+    font-size: 12px;
+  }
+  .feature-modal {
+    width: 94vw;
+  }
+  .organization-section h2 {
+    font-size: 22px;
+  }
+}

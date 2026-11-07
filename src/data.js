@@ -5,6 +5,12 @@ export const choices = {
     "Children and youth",
     "Open to any cause",
   ],
+  womensHealth: [
+    "Period Care & Menstrual Equity",
+    "Cancer Support",
+    "Maternal & Postpartum Health",
+    "Mental Health & Emotional Wellness",
+  ],
   skills: [
     "Events and hands-on help",
     "Creative and social media",
@@ -105,8 +111,53 @@ export const emptyStudent = {
   school: "",
   age: "",
   interests: [],
+  womensHealth: [],
+  schoolConnection: null,
   skills: [],
   availability: [],
   locations: [],
   onboarded: false,
 };
+
+// Directory entries are research leads, never opportunity or placement records.
+export const potentialOrganizations = [
+  {
+    id: "period-miami",
+    name: "PERIOD. Miami",
+    category: choices.womensHealth[0],
+    emoji: "🌸",
+    website: "https://period.org/chapters",
+    description:
+      "Period care and menstrual equity. The official PERIOD chapter directory is linked; Miami chapter details and availability need confirmation.",
+    websiteLabel: "Official PERIOD chapter directory",
+  },
+  {
+    id: "gildas",
+    name: "Gilda’s Club South Florida",
+    category: choices.womensHealth[1],
+    emoji: "🎗️",
+    website: "https://gildasclubsouthflorida.org/",
+    description: "Community and support for people affected by cancer.",
+    websiteLabel: "Official website",
+  },
+  {
+    id: "hmhb",
+    name: "Healthy Mothers, Healthy Babies Coalition of Broward County",
+    category: choices.womensHealth[2],
+    emoji: "🤱",
+    website: "https://www.hmhbbroward.org/",
+    description:
+      "Support for maternal, infant, and family health in Broward County.",
+    websiteLabel: "Official website",
+  },
+  {
+    id: "lotus",
+    name: "Lotus House",
+    category: choices.womensHealth[3],
+    emoji: "💛",
+    website: "https://www.lotushouse.org/",
+    description:
+      "Support for women experiencing homelessness, including mental health and emotional wellness services.",
+    websiteLabel: "Official website",
+  },
+];
