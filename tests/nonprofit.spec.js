@@ -343,6 +343,7 @@ test("nonprofit publishes recruitment, confirms staffing, verifies training and 
     );
   }, sharedKey);
   await page.reload();
+  await nav(page, "Discover");
   for (
     let index = 0;
     index < 12 && !(await page.locator(`[data-card="${eventId}"]`).count());
