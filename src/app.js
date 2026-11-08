@@ -1,3 +1,4 @@
+import { publicHomeMarkup } from "./presentation-home.js";
 import { bloomMarkup } from "./bloom.js";
 import { schoolRecordsMarkup, bindSchoolRecords } from "./school-records.js";
 import { eventDayMarkup, bindEventDay } from "./event-day.js";
@@ -85,14 +86,17 @@ function changeWorkspace(next) {
   modal = null;
   const url = new URL(location.href);
   url.searchParams.set("view", next);
+  url.searchParams.delete("home");
   history.replaceState(null, "", url);
   render();
   window.scrollTo(0, 0);
   document.querySelector(`[data-workspace="${next}"]`)?.focus();
 }
-let page = new URLSearchParams(location.search).has("invite")
-    ? "Integrations"
-    : workspaceHome[workspace],
+let page = new URLSearchParams(location.search).has("home")
+    ? "Home"
+    : new URLSearchParams(location.search).has("invite")
+      ? "Integrations"
+      : workspaceHome[workspace],
   step = -1,
   editing = false,
   filter = "All causes",
@@ -210,23 +214,46 @@ function shell(body) {
   bind();
 }
 function welcome() {
-  shell(
-    `<section class="welcome">${invitationMarkup()}<div class="eyebrow">YOUR TIME. YOUR COMMUNITY. YOUR IMPACT.</div><h1>Find your cause.<br><em>Make your impact.</em></h1><p>Big change starts with a little of your time. Find volunteer opportunities that feel like you.</p><button class="primary" id="start">Find my opportunities <span>↗</span></button>${
-      savedStudentProfiles().length
-        ? `<details class="saved-student-profiles"><summary>Resume a saved demo profile</summary><p>Profiles are saved on this device only. This demo does not require a password.</p>${savedStudentProfiles()
-            .map(
-              (profile) =>
-                `<button type="button" class="secondary" data-resume-student="${esc(profile.student.id)}">Resume ${esc(profile.student.name)}</button>`,
-            )
-            .join("")}</details>`
-        : ""
-    }<div class="welcome-tags"><span>♡ Causes you care about</span><span>✧ A fit for your schedule</span></div><div class="welcome-art"><span>✦</span><div>YOU +<br> A LITTLE TIME<br><b>= A BIG DIFFERENCE</b></div><span>♡</span></div><p class="demo-notice">Explore demo listings and a separate directory of real potential organizations. No partnerships or placements are confirmed. Applications stay on this device.</p></section>`,
+  const savedProfiles = savedStudentProfiles();
+  const ownWorkspace = `<section class="vu-own-workspace"><h3>Ready to make it yours?</h3><p class="vu-small vu-muted">The accounts above are pre-filled for presentations. Open your own workspace below.</p><button class="vu-button primary vu-setup-button" id="start">Find my opportunities →</button><button class="vu-button vu-setup-button" id="public-account-login" data-page="Integrations">Account sign in</button>${savedProfiles.length ? `<details class="saved-student-profiles"><summary>Resume a saved demo profile</summary><p>Profiles are saved on this device only. This demo does not require a password.</p>${savedProfiles.map((profile) => `<button type="button" class="secondary" data-resume-student="${esc(profile.student.id)}">Resume ${esc(profile.student.name)}</button>`).join("")}</details>` : ""}${workspaceSwitcher()}</section>`;
+  app.innerHTML = publicHomeMarkup()
+    .replace(
+      '<main id="vu-preview-main" class="vu-site-main">',
+      '<main id="vu-preview-main" class="vu-site-main">' + invitationMarkup(),
+    )
+    .replace("</main>", ownWorkspace + "</main>");
+  document
+    .querySelector("#vu-photo-preview")
+    .style.setProperty("--vu-plant-image", 'url("/images/bloom-stages.png")');
+  bind();
+  document.querySelectorAll("[data-vu]").forEach(
+    (button) =>
+      (button.onclick = () => {
+        const action = button.dataset.vu;
+        if (["student", "nonprofit", "school"].includes(action)) {
+          location.assign(`/demo.html?role=${action}`);
+        } else if (action === "accounts" || action === "how") {
+          document
+            .querySelector(action === "accounts" ? "#vu-accounts" : "#vu-how")
+            .scrollIntoView({ block: "start", behavior: "smooth" });
+        } else if (action === "home") {
+          window.scrollTo(0, 0);
+        }
+      }),
   );
   document.querySelector("#start").onclick = () => {
+    workspace = "student";
+    page = "Discover";
     step = 0;
+    const url = new URL(location.href);
+    url.searchParams.delete("home");
+    url.searchParams.set("view", "student");
+    history.replaceState(null, "", url);
     render();
+    window.scrollTo(0, 0);
   };
 }
+
 const questions = [
   [
     "interests",
@@ -381,6 +408,7 @@ function discover() {
 }
 function render() {
   refreshOpportunities();
+  if (page === "Home") return welcome();
   if (page === "Integrations") {
     shell(integrationsMarkup());
     bindIntegrations(render);
@@ -518,6 +546,10 @@ function bind() {
     (button) =>
       (button.onclick = () => {
         if (resumeStudentProfile(button.dataset.resumeStudent)) {
+          const url = new URL(location.href);
+          url.searchParams.delete("home");
+          url.searchParams.set("view", "student");
+          history.replaceState(null, "", url);
           page = "Discover";
           step = -1;
           editing = false;
@@ -546,7 +578,10 @@ function bind() {
   );
   document.querySelector(".brand").onclick = (e) => {
     e.preventDefault();
-    page = workspaceHome[workspace];
+    page = "Home";
+    const url = new URL(location.href);
+    url.searchParams.set("home", "1");
+    history.replaceState(null, "", url);
     step = -1;
     editing = false;
     render();

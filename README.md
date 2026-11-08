@@ -177,3 +177,26 @@ npm run test:server
 ```
 
 The existing DM Sans and Manrope fonts are bundled locally to preserve the design without a third-party font request. Their SIL Open Font License notices are included under `public/font-licenses/` and copied into production builds.
+
+## Presentation demo
+
+The photo-led public homepage has three one-click sample accounts. Open
+`/demo.html?role=student`, `/demo.html?role=nonprofit`, or
+`/demo.html?role=school` to bypass setup. Use `/?home=1` to view the public
+homepage while retaining an existing personal profile.
+
+The demo is an isolated presentation scenario: no authentication, messages,
+real placements, or modifications to the personal workspace. It stores only
+sample presentation state in `sessionStorage` under
+`volunteeru.presentation-demo.v1`. The sample people, school, and event records
+are fictional; Flowers for Women is shown as a demonstration organization.
+
+Suggested walkthrough: Student (26/40 hours) → Nonprofit (verify Maya's four
+hours) → School Admin (accept the verified hours) → Student (30/40 hours,
+budding plant). Reset demo restores the starting scenario. Sample dashboard
+pages, roster search, and a CSV impact report are pre-filled and usable.
+
+Stock photographs: [volunteers packing donations](https://www.pexels.com/photo/volunteers-packing-up-donations-7156189/)
+and [students working together](https://www.pexels.com/photo/cheerful-multiethnic-female-students-working-on-homework-together-5965707/),
+used under the [Pexels license](https://www.pexels.com/license/). The plant
+illustration is the previously approved VolunteerU mascot asset.
