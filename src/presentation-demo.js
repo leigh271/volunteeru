@@ -115,6 +115,8 @@ document.querySelector("#app").innerHTML = publicHomeMarkup();
       year: "numeric",
       hour: "numeric",
       minute: "2-digit",
+      timeZone: "America/New_York",
+      timeZoneName: "short",
     });
   const clockHours = () =>
     serviceClock?.end
@@ -131,7 +133,7 @@ document.querySelector("#app").innerHTML = publicHomeMarkup();
   }
   function clockCard() {
     const active = serviceClock && !serviceClock.end;
-    return `<section class="vu-panel" style="margin:18px 0"><span class="vu-small vu-muted">YOUR SERVICE CLOCK</span><h3>Period-kit packing</h3><p class="vu-context">Flowers for Women · Scheduled Nov 7, 2026 · 9 AM–1 PM · 4-hour shift</p>${attendanceDetails()}${active ? '<p class="vu-statusline"><strong>Checked in · timer running</strong><span id="vu-clock-elapsed" role="timer"></span></p>' : ""}${serviceClock?.end ? `<p role="status"><strong>Thank you, Maya! You completed your service.</strong></p><p>${clockHours()} hours recorded${clockHours() === 0 ? " · Less than a minute elapsed. Enter your completed hours below or try the sample shift." : ". Review your hours below and submit for verification. This sample event allows up to 4 credited hours."}</p>` : ""}<button class="vu-button primary" data-vu="${active ? "clock-out" : "clock-in"}" ${submittedHours || serviceClock?.end ? "disabled" : ""}>${serviceClock?.end ? "Checked out ✓" : active ? "Check out" : "Check in"}</button>${!serviceClock && !submittedHours ? '<button class="vu-button" data-vu="clock-sample" style="margin:8px">Try a 4-hour sample shift</button><p class="vu-context">Check in/out uses your device’s current date and time. For a quick presentation, the sample shift uses Nov 7, 9 AM–1 PM.</p>' : ""}</section>`;
+    return `<section class="vu-panel" style="margin:18px 0"><span class="vu-small vu-muted">YOUR SERVICE CLOCK</span><h3>Period-kit packing</h3><p class="vu-context">Flowers for Women · Scheduled Nov 7, 2026 · 9 AM–1 PM ET · 4-hour shift</p>${attendanceDetails()}${active ? '<p class="vu-statusline"><strong>Checked in · timer running</strong><span id="vu-clock-elapsed" role="timer"></span></p>' : ""}${serviceClock?.end ? `<p role="status"><strong>Thank you, Maya! You completed your service.</strong></p><p>${clockHours()} hours recorded${clockHours() === 0 ? " · Less than a minute elapsed. Enter your completed hours below or try the sample shift." : ". Review your hours below and submit for verification. This sample event allows up to 4 credited hours."}</p>` : ""}<button class="vu-button primary" data-vu="${active ? "clock-out" : "clock-in"}" ${submittedHours || serviceClock?.end ? "disabled" : ""}>${serviceClock?.end ? "Checked out ✓" : active ? "Check out" : "Check in"}</button>${!serviceClock && !submittedHours ? '<button class="vu-button" data-vu="clock-sample" style="margin:8px">Try a 4-hour sample shift</button><p class="vu-context">Check in/out uses your device’s current date and time. For a quick presentation, the sample shift uses Nov 7, 9 AM–1 PM Eastern Time.</p>' : ""}</section>`;
   }
   function submissionForm() {
     return (
