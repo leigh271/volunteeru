@@ -1,0 +1,349 @@
+.school-dashboard {
+  margin-bottom: 24px;
+}
+.school-dashboard-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.school-dashboard-heading h2 {
+  margin: 0 0 8px;
+}
+.school-dashboard-heading p {
+  margin: 0;
+  font-size: 13px;
+  color: #777181;
+  line-height: 1.6;
+}
+.school-dashboard-heading a.secondary {
+  text-decoration: none;
+  font-size: 12px;
+}
+.school-kpis {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin: 22px 0;
+}
+.school-kpis article {
+  padding: 22px 18px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: #fff;
+}
+.school-kpis strong {
+  display: block;
+  font-size: 28px;
+  font-family: Manrope, sans-serif;
+  color: #6954a7;
+}
+.school-kpis span {
+  display: block;
+  font-size: 12px;
+  color: #716a7b;
+  line-height: 1.5;
+  margin-top: 9px;
+}
+.school-charts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+.school-chart {
+  padding: 24px;
+  border-radius: 18px;
+  border: 1px solid var(--border);
+  background: white;
+  min-width: 0;
+}
+.school-chart h3 {
+  font-family: Manrope, sans-serif;
+  margin: 0 0 18px;
+  font-size: 16px;
+}
+.school-chart-note {
+  font-size: 11px;
+  color: #787180;
+  line-height: 1.65;
+  margin: 14px 0 0;
+}
+.school-donut-layout {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.school-donut {
+  position: relative;
+  width: 148px;
+  height: 148px;
+  border-radius: 50%;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+}
+.school-donut > span {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 11px;
+  color: #777181;
+}
+.school-donut strong {
+  font-size: 27px;
+  color: #413748;
+}
+.school-chart-legend {
+  flex: 1;
+  min-width: 170px;
+}
+.school-chart-legend button {
+  display: flex;
+  align-items: center;
+  text-align: left;
+  gap: 8px;
+  width: 100%;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  padding: 9px 3px;
+  color: #61586d;
+  font: inherit;
+  font-size: 11px;
+  cursor: pointer;
+}
+.school-chart-legend button > span:nth-child(2) {
+  flex: 1;
+}
+.school-chart-legend button[aria-pressed="true"] {
+  border-color: #cfc0ec;
+  background: #f6f2fd;
+}
+.school-chart-legend small {
+  width: 29px;
+  text-align: right;
+}
+.legend-dot {
+  height: 9px;
+  width: 9px;
+  flex: 0 0 auto;
+  border-radius: 3px;
+}
+.school-month-chart {
+  display: flex;
+  gap: 8px;
+  height: 220px;
+  margin-top: 18px;
+}
+.school-chart-axis {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 38px;
+  padding: 18px 0 27px;
+  font-size: 10px;
+  color: #7d7486;
+}
+.school-month-bars {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  align-items: flex-end;
+  gap: 8px;
+  border-bottom: 1px solid #e8e1f0;
+}
+.school-month {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  font-size: 11px;
+  color: #746a80;
+}
+.school-month-plot {
+  height: 186px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+}
+.school-month-bar {
+  width: min(100%, 38px);
+  background: #8b78ca;
+}
+.school-month > span {
+  padding-bottom: 7px;
+}
+.school-review-chart {
+  margin-top: 18px;
+}
+.school-review-bars {
+  margin: 20px 0;
+}
+.school-review-bars > div {
+  display: grid;
+  grid-template-columns: minmax(130px, 190px) 1fr 34px;
+  gap: 12px;
+  align-items: center;
+  margin: 14px 0;
+  font-size: 12px;
+  color: #61586d;
+}
+.review-bar-track {
+  height: 14px;
+  background: #f3f0f7;
+}
+.review-bar-track span {
+  height: 100%;
+  display: block;
+}
+.school-review-chart > a {
+  font-size: 12px;
+  color: #6954a7;
+}
+.school-metric-definitions,
+.school-settings {
+  margin: 20px 0;
+  font-size: 12px;
+  color: #746c80;
+}
+.school-metric-definitions p {
+  line-height: 1.7;
+}
+.school-metric-definitions summary,
+.school-settings summary {
+  cursor: pointer;
+  padding: 12px 0;
+  font-weight: 600;
+}
+.school-settings {
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: white;
+  padding: 8px 22px;
+}
+.school-settings summary {
+  font-size: 14px;
+  color: #51455e;
+}
+.school-roster-controls {
+  display: flex;
+  align-items: flex-end;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin: 24px 0 14px;
+}
+.school-roster-controls label {
+  flex: 1;
+  min-width: 160px;
+  margin: 0;
+}
+.school-roster-controls .text-button {
+  padding-bottom: 14px;
+}
+#school-roster-count {
+  font-size: 12px;
+}
+.school-pagination {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 18px;
+}
+.school-pagination button {
+  font-size: 11px;
+}
+.dashboard-empty {
+  color: #82788a;
+  padding: 36px 12px;
+  font-size: 13px;
+  line-height: 1.7;
+  text-align: center;
+}
+.school-dashboard button:focus-visible,
+.school-roster-controls button:focus-visible,
+.school-settings summary:focus-visible {
+  outline: 2px solid #7258e8;
+  outline-offset: 3px;
+}
+.workflow-shortcuts {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 0 0 24px;
+}
+.workflow-shortcuts a,
+.workflow-shortcuts button {
+  background: #fff;
+  color: #68577e;
+  border: 1px solid #e6dfee;
+  padding: 12px 16px;
+  font: inherit;
+  font-size: 12px;
+  border-radius: 12px;
+  text-decoration: none;
+  cursor: pointer;
+}
+@media (max-width: 1100px) {
+  .school-kpis {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .school-charts {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 760px) {
+  .school-chart {
+    padding: 18px;
+  }
+  .school-kpis article {
+    padding: 16px 12px;
+  }
+  .school-kpis strong {
+    font-size: 24px;
+  }
+  .school-review-bars > div {
+    grid-template-columns: minmax(100px, 135px) 1fr 24px;
+    gap: 8px;
+    font-size: 11px;
+  }
+  .school-roster-controls label {
+    min-width: 100%;
+  }
+  .school-roster-controls .text-button {
+    padding-bottom: 0;
+  }
+  .school-settings {
+    padding: 8px 16px;
+  }
+  .school-donut {
+    width: 130px;
+    height: 130px;
+  }
+  .school-donut > span {
+    width: 88px;
+    height: 88px;
+  }
+  .workflow-shortcuts {
+    gap: 6px;
+  }
+  .workflow-shortcuts a,
+  .workflow-shortcuts button {
+    flex: 1;
+    font-size: 11px;
+    padding: 10px;
+    text-align: center;
+  }
+}

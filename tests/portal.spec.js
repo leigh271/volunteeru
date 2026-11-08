@@ -70,6 +70,9 @@ test("school registration creates an invitation that explicitly links a student 
     .fill("Write an event reflection");
   await page.getByRole("checkbox", { name: /authorized/ }).check();
   await page.getByRole("button", { name: /Create demo school/ }).click();
+  await page
+    .getByText("School settings & invitations", { exact: true })
+    .click();
   const link = await page.getByLabel("Unique school link").inputValue();
   expect(new URL(link).searchParams.get("school")).toBeTruthy();
   await page.goto(link);
@@ -110,6 +113,9 @@ test("school registration creates an invitation that explicitly links a student 
   );
   await nav(page, "School Portal");
   await expect(page.locator(".school-table")).toContainText("Sam Student");
+  await page
+    .getByText("School settings & invitations", { exact: true })
+    .click();
   await page.getByLabel("Graduation volunteer hours").fill("80");
   await page.getByRole("button", { name: "Save requirements" }).click();
   await nav(page, "My Progress");
