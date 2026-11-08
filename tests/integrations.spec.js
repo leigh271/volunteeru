@@ -1,10 +1,16 @@
 import { test, expect } from "@playwright/test";
-const nav = (page) =>
-  page
+const nav = async (page) => {
+  const publicLogin = page.getByRole("button", {
+    name: "Account sign in",
+    exact: true,
+  });
+  if (await publicLogin.isVisible()) return publicLogin.click();
+  await page
     .locator("aside:visible,.mobile-nav:visible")
     .getByRole("button", { name: "Integrations", exact: false })
     .first()
     .click();
+};
 test("late session restoration cannot replace a newer signed-in account", async ({
   page,
 }) => {

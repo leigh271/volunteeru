@@ -185,3 +185,30 @@ The supplied fictional HerWell dataset now connects the existing student, nonpro
 The mock attendance intentionally represents future November 2026 events. It is never presented as real completed activity. Loading demo records does not create server-authenticated accounts or connect external services.
 
 On this Mac, double-click `start-demo.command` to start both local services (close existing instances first). Keep the terminal open while presenting. It uses installed Node.js 22+ or the ignored local `.tools/node` runtime prepared during this build. Other machines need Node.js 22+; the runtime is not committed.
+
+## Presentation demo
+
+The photo-led public homepage has three one-click sample accounts. Open
+`/demo.html?role=student`, `/demo.html?role=nonprofit`, or
+`/demo.html?role=school` to bypass setup. Use `/?home=1` to view the public
+homepage while retaining an existing personal profile.
+
+The demo is an isolated presentation scenario: no authentication, messages,
+real placements, or modifications to the personal workspace. It stores only
+sample presentation state in `sessionStorage` under
+`volunteeru.presentation-demo.v1`. The sample people, school, and event records
+are fictional; Flowers for Women is shown as a demonstration organization.
+
+Suggested walkthrough: Student (26/40 hours) → Nonprofit (verify Maya's four
+hours) → School Admin (accept the verified hours) → Student (30/40 hours,
+budding plant). Reset demo restores the starting scenario. Sample dashboard
+pages, roster search, and a CSV impact report are pre-filled and usable.
+
+Stock photographs: [volunteers packing donations](https://www.pexels.com/photo/volunteers-packing-up-donations-7156189/)
+and [students working together](https://www.pexels.com/photo/cheerful-multiethnic-female-students-working-on-homework-together-5965707/),
+used under the [Pexels license](https://www.pexels.com/license/). The plant
+illustration is the previously approved VolunteerU mascot asset.
+
+Student demo hours are editable: open My dashboard or My volunteering, enter 0.01–4 hours for the completed sample shift, then select Submit hours. Switch to Nonprofit to verify the submitted amount and School Admin to accept it. Only acceptance adds those hours to the existing 26-hour progress. Reset demo clears the submission; refresh preserves it within the current browser session.
+
+The student service clock is available on My dashboard and My volunteering. Check in starts a live timer using the device clock; Check out records both timestamps and fills elapsed hours (rounded to two decimal places, capped at the sample shift’s four-hour limit). Students review and submit; checkout alone does not award credit. Attendance timestamps follow the submission into nonprofit and school views. The clearly labeled four-hour sample shift allows an immediate presentation without waiting. Clock state survives refresh within the same browser session and Reset demo clears it.
