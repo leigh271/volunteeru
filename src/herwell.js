@@ -703,3 +703,21 @@ export function runDueDemoReminders() {
   }
   return false;
 }
+
+export async function initializeNonprofitDemo() {
+  const params = new URLSearchParams(location.search);
+  if (
+    params.get("view") !== "nonprofit" ||
+    params.get("demo") !== "herwell" ||
+    get()
+  )
+    return;
+  const response = await fetch("/herwell-demo/dataset.json");
+  if (!response.ok) throw Error("Could not load nonprofit demo data.");
+  const d = await response.json();
+  if (d.version !== 1 || d.isDemo !== true || d.profiles.length !== 100)
+    throw Error("Invalid demo data.");
+  linkFlowersEvent(d);
+  seedEventAttendanceDemo(d);
+  bridge(d);
+}
