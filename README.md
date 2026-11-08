@@ -177,3 +177,11 @@ npm run test:server
 ```
 
 The existing DM Sans and Manrope fonts are bundled locally to preserve the design without a third-party font request. Their SIL Open Font License notices are included under `public/font-licenses/` and copied into production builds.
+
+## HerWell hackathon demo
+
+The supplied fictional HerWell dataset now connects the existing student, nonprofit, and school browser-demo workspaces. Open `/?view=nonprofit&demo=herwell`, load the fixture, and use **Command Center**, **Volunteer Directory**, **School Reports**, or **Demo Tour**. See [the alignment and walkthrough](docs/HERWELL-ALIGNMENT.md) for mapping decisions and production boundaries. `npm run test:demo` validates fixture counts, null-hour handling, combined filters, adapter idempotence, school totals, source evidence, and CSV protection.
+
+The mock attendance intentionally represents future November 2026 events. It is never presented as real completed activity. Loading demo records does not create server-authenticated accounts or connect external services.
+
+On this Mac, double-click `start-demo.command` to start both local services (close existing instances first). Keep the terminal open while presenting. It uses installed Node.js 22+ or the ignored local `.tools/node` runtime prepared during this build. Other machines need Node.js 22+; the runtime is not committed.

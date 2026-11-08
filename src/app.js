@@ -1,3 +1,27 @@
+import { publicOutreachMarkup, bindPublicOutreach } from "./outreach-demo.js";
+import { eventsCalendarMarkup, bindEventsCalendar } from "./events-calendar.js";
+import { readNonprofits } from "./nonprofit-store.js";
+import {
+  coordinatorPages,
+  coordinatorDestination,
+  coordinatorIcons,
+} from "./coordinator-navigation.js";
+import { eventsHubMarkup, reportingTabs } from "./coordinator-hub.js";
+import { selectCommandEvent } from "./command-center.js";
+import { publicHomeMarkup } from "./presentation-home.js";
+import {
+  studentEventAccessMarkup,
+  bindStudentEventAccess,
+} from "./command-center.js";
+import {
+  herwellMarkup,
+  bindHerwell,
+  herwellEntryMarkup,
+  herwellContextMarkup,
+  ensureFlowersWorkspace,
+  saveDemoParticipant,
+  runDueDemoReminders,
+} from "./herwell.js";
 import { bloomMarkup } from "./bloom.js";
 import { schoolRecordsMarkup, bindSchoolRecords } from "./school-records.js";
 import { eventDayMarkup, bindEventDay } from "./event-day.js";
@@ -8,7 +32,11 @@ import {
   signOutStudentIntegration,
 } from "./integrations.js";
 import { nearbyMarkup, bindNearby } from "./nearby.js";
-import { nonprofitMarkup, bindNonprofit } from "./nonprofit.js";
+import {
+  nonprofitMarkup,
+  bindNonprofit,
+  selectNonprofitEvent,
+} from "./nonprofit.js";
 import {
   schoolPortalMarkup,
   bindSchoolPortal,
@@ -56,13 +84,14 @@ const workspacePages = {
     "Event Day",
     "Profile",
     "Integrations",
+    "Demo Tour",
   ],
-  nonprofit: ["Nonprofit Portal", "Impact Reports", "Integrations"],
-  school: ["School Portal", "Integrations"],
+  nonprofit: coordinatorPages,
+  school: ["School Portal", "School Reports", "Demo Tour", "Integrations"],
 };
 const workspaceHome = {
   student: "Discover",
-  nonprofit: "Nonprofit Portal",
+  nonprofit: "Events",
   school: "School Portal",
 };
 const workspaceLabels = {
@@ -71,7 +100,10 @@ const workspaceLabels = {
   school: "School",
 };
 const navigationEntries = () =>
-  workspacePages[workspace].map((name) => [name, icons[name]]);
+  workspacePages[workspace].map((name) => [
+    name,
+    workspace === "nonprofit" ? coordinatorIcons[name] : icons[name],
+  ]);
 function workspaceSwitcher() {
   return `<section class="workspace-bar" aria-label="Workspace switcher"><div><strong>Choose your space</strong><p>${workspace === "student" ? "For high school and college students" : workspace === "nonprofit" ? "For nonprofit organizers and coordinators" : "For school administrators and coordinators"}</p></div><div class="workspace-options"><div class="workspace-tabs" role="group" aria-label="View as"><button type="button" data-workspace="student" aria-pressed="${workspace === "student"}">Student</button><button type="button" data-workspace="nonprofit" aria-pressed="${workspace === "nonprofit"}">Nonprofit</button></div><button type="button" class="workspace-school" data-workspace="school" aria-pressed="${workspace === "school"}">School admin</button></div></section>`;
 }
@@ -85,14 +117,36 @@ function changeWorkspace(next) {
   modal = null;
   const url = new URL(location.href);
   url.searchParams.set("view", next);
+  for (const key of ["page", "home", "demo", "eventAccess"])
+    url.searchParams.delete(key);
   history.replaceState(null, "", url);
   render();
   window.scrollTo(0, 0);
   document.querySelector(`[data-workspace="${next}"]`)?.focus();
 }
-let page = new URLSearchParams(location.search).has("invite")
-    ? "Integrations"
-    : workspaceHome[workspace],
+const requestedPage = new URLSearchParams(location.search).get("page");
+let page =
+    new URLSearchParams(location.search).has("outreach") ||
+    new URLSearchParams(location.search).has("training")
+      ? "Volunteer invite"
+      : new URLSearchParams(location.search).has("home")
+        ? "Home"
+        : new URLSearchParams(location.search).has("eventAccess")
+          ? "Event Check-in"
+          : [
+                "Command Center",
+                "Events",
+                "Reporting",
+                "Volunteer Directory",
+                "School Reports",
+                "Demo Tour",
+              ].includes(requestedPage)
+            ? requestedPage
+            : new URLSearchParams(location.search).get("demo") === "herwell"
+              ? "Demo Tour"
+              : new URLSearchParams(location.search).has("invite")
+                ? "Integrations"
+                : workspaceHome[workspace],
   step = -1,
   editing = false,
   filter = "All causes",
@@ -100,7 +154,14 @@ let page = new URLSearchParams(location.search).has("invite")
   skipped = new Set(),
   modal = null,
   toastTimer;
+let reportingView = "impact";
 const icons = {
+  Events: "▦",
+  Reporting: "▥",
+  "Command Center": "✳",
+  "Volunteer Directory": "♧",
+  "School Reports": "▥",
+  "Demo Tour": "◈",
   Discover: "◈",
   Saved: "♡",
   "My Applications": "▤",
@@ -164,6 +225,25 @@ function notify(t) {
   toastTimer = setTimeout(() => el.remove(), 4000);
 }
 function nav() {
+  const registry = readNonprofits();
+  const organization = registry.organizations.find(
+    (o) => o.id === registry.activeId,
+  );
+  if (workspace === "nonprofit")
+    return `<aside class="co-sidebar"><a class="brand" href="#" aria-label="VolunteerU home"><span class="brandmark">v<span>✦</span></span>Volunteer<span class="purple">U</span></a><div class="co-nav-label">COORDINATOR WORKSPACE</div><nav aria-label="Coordinator navigation">${navigationEntries()
+      .map(
+        ([name, icon]) =>
+          `<button data-page="${name}" class="co-nav-item ${coordinatorDestination(page) === name ? "active" : ""}" ${coordinatorDestination(page) === name ? 'aria-current="page"' : ""}><span class="co-nav-icon">${icon}</span><span>${name}</span></button>`,
+      )
+      .join(
+        "",
+      )}</nav><div class="co-sidebar-account"><div class="co-org-avatar">${esc(
+      (organization?.name || "Your nonprofit")
+        .split(" ")
+        .slice(0, 2)
+        .map((x) => x[0])
+        .join(""),
+    )}</div><div><strong>${esc(organization?.name || "Your nonprofit")}</strong><small>Volunteer coordinator · demo</small></div></div></aside>`;
   return `<aside><a class="brand" href="#" aria-label="VolunteerU home"><span class="brandmark">v<span>✦</span></span>Volunteer<span class="purple">U</span></a><div class="workspace">${workspaceLabels[workspace].toUpperCase()} SPACE</div><nav>${navigationEntries()
     .map(
       ([n, i]) =>
@@ -172,6 +252,9 @@ function nav() {
     .join(
       "",
     )}</nav><div class="sidebar-note"><span>✳︎</span><strong>Small acts.<br>Real impact.</strong><p>Your next chapter starts with showing up.</p></div><div class="user"><div class="avatar">${workspace === "student" ? esc(state.student.name[0] || "Y") : icons[workspaceHome[workspace]]}</div><div><strong>${workspace === "student" ? esc(state.student.name || "Your student space") : `${workspaceLabels[workspace]} workspace`}</strong><small>${workspace === "student" ? esc(state.student.school || "Let’s get started") : "Coordinate your community"}</small></div></div></aside>`;
+}
+function coordinatorTools() {
+  return `<details class="co-tools"><summary>Workspace tools ⌄</summary><div><button data-page="Volunteer Directory">Volunteer directory</button><button data-page="Demo Tour">Flowers for Women demo guide</button><a href="/demo.html?role=student" target="_blank" rel="noopener">Maya Chen reference ↗</a><button data-page="Integrations">Connections & account</button></div></details>`;
 }
 function shell(body) {
   const approvedHours = state.hours
@@ -191,10 +274,10 @@ function shell(body) {
           : 0),
       0,
     );
-  app.innerHTML = `${nav()}<main><header><span>GOOD THINGS START WITH YOU <span class="tiny-star">✦</span></span><div class="header-right">${workspace === "student" ? bellMarkup() : ""}<span class="demo-pill">${page === "Integrations" ? "Prototype workspace" : "Demo experience"}</span>${workspace === "student" && (state.student.onboarded || state.student.name) ? `<button type="button" class="student-signout" id="student-signout">Sign out</button>` : ""}${workspace === "student" ? `<button class="avatar" data-page="Profile" aria-label="Open profile">${esc(state.student.name[0] || "Y")}</button>` : ""}</div></header>${workspaceSwitcher()}${workspace === "student" && state.student.onboarded && step < 0 ? invitationMarkup() : ""}${body}<footer>Made for your next meaningful moment. <span>Broward & Miami-Dade ♡</span></footer></main><div class="mobile-nav">${navigationEntries()
+  app.innerHTML = `${nav()}<main class="${page === "Command Center" ? "cc-shell" : ""}"><header><span>GOOD THINGS START WITH YOU <span class="tiny-star">✦</span></span><div class="header-right">${workspace === "nonprofit" ? coordinatorTools() : ""}${workspace === "nonprofit" ? `<details class="cc-workspace-picker"><summary>Nonprofit workspace ⌄</summary>${workspaceSwitcher()}</details>` : ""}${workspace === "student" ? bellMarkup() : ""}<span class="demo-pill">${page === "Integrations" ? "Prototype workspace" : "Demo experience"}</span>${workspace === "student" && (state.student.onboarded || state.student.name) ? `<button type="button" class="student-signout" id="student-signout">Sign out</button>` : ""}${workspace === "student" ? `<button class="avatar" data-page="Profile" aria-label="Open profile">${esc(state.student.name[0] || "Y")}</button>` : ""}</div></header>${workspace === "nonprofit" ? "" : workspaceSwitcher()}${herwellContextMarkup(workspace)}${workspace === "student" && state.student.onboarded && step < 0 ? invitationMarkup() : ""}${body}<footer>Made for your next meaningful moment. <span>Broward & Miami-Dade ♡</span></footer></main><div class="mobile-nav">${navigationEntries()
     .map(
       ([n, i]) =>
-        `<button data-page="${n}" class="${page === n ? "active" : ""}">${i}<small>${n}</small></button>`,
+        `<button data-page="${n}" class="${(workspace === "nonprofit" ? coordinatorDestination(page) === n : page === n) ? "active" : ""}">${i}<small>${n}</small></button>`,
     )
     .join("")}</div>`;
   if (workspace === "student")
@@ -210,23 +293,46 @@ function shell(body) {
   bind();
 }
 function welcome() {
-  shell(
-    `<section class="welcome">${invitationMarkup()}<div class="eyebrow">YOUR TIME. YOUR COMMUNITY. YOUR IMPACT.</div><h1>Find your cause.<br><em>Make your impact.</em></h1><p>Big change starts with a little of your time. Find volunteer opportunities that feel like you.</p><button class="primary" id="start">Find my opportunities <span>↗</span></button>${
-      savedStudentProfiles().length
-        ? `<details class="saved-student-profiles"><summary>Resume a saved demo profile</summary><p>Profiles are saved on this device only. This demo does not require a password.</p>${savedStudentProfiles()
-            .map(
-              (profile) =>
-                `<button type="button" class="secondary" data-resume-student="${esc(profile.student.id)}">Resume ${esc(profile.student.name)}</button>`,
-            )
-            .join("")}</details>`
-        : ""
-    }<div class="welcome-tags"><span>♡ Causes you care about</span><span>✧ A fit for your schedule</span></div><div class="welcome-art"><span>✦</span><div>YOU +<br> A LITTLE TIME<br><b>= A BIG DIFFERENCE</b></div><span>♡</span></div><p class="demo-notice">Explore demo listings and a separate directory of real potential organizations. No partnerships or placements are confirmed. Applications stay on this device.</p></section>`,
+  const savedProfiles = savedStudentProfiles();
+  const ownWorkspace = `<section class="vu-own-workspace"><h3>Ready to make it yours?</h3><p class="vu-small vu-muted">The accounts above are pre-filled for presentations. Open your own workspace below.</p><button class="vu-button primary vu-setup-button" id="start">Find my opportunities →</button><button class="vu-button vu-setup-button" id="public-account-login" data-page="Integrations">Account sign in</button>${savedProfiles.length ? `<details class="saved-student-profiles"><summary>Resume a saved demo profile</summary><p>Profiles are saved on this device only. This demo does not require a password.</p>${savedProfiles.map((profile) => `<button type="button" class="secondary" data-resume-student="${esc(profile.student.id)}">Resume ${esc(profile.student.name)}</button>`).join("")}</details>` : ""}${workspaceSwitcher()}</section>`;
+  app.innerHTML = publicHomeMarkup()
+    .replace(
+      '<main id="vu-preview-main" class="vu-site-main">',
+      '<main id="vu-preview-main" class="vu-site-main">' + invitationMarkup(),
+    )
+    .replace("</main>", ownWorkspace + "</main>");
+  document
+    .querySelector("#vu-photo-preview")
+    .style.setProperty("--vu-plant-image", 'url("/images/bloom-stages.png")');
+  bind();
+  document.querySelectorAll("[data-vu]").forEach(
+    (button) =>
+      (button.onclick = () => {
+        const action = button.dataset.vu;
+        if (["student", "nonprofit", "school"].includes(action)) {
+          location.assign(`/demo.html?role=${action}`);
+        } else if (action === "accounts" || action === "how") {
+          document
+            .querySelector(action === "accounts" ? "#vu-accounts" : "#vu-how")
+            .scrollIntoView({ block: "start", behavior: "smooth" });
+        } else if (action === "home") {
+          window.scrollTo(0, 0);
+        }
+      }),
   );
   document.querySelector("#start").onclick = () => {
+    workspace = "student";
+    page = "Discover";
     step = 0;
+    const url = new URL(location.href);
+    url.searchParams.delete("home");
+    url.searchParams.set("view", "student");
+    history.replaceState(null, "", url);
     render();
+    window.scrollTo(0, 0);
   };
 }
+
 const questions = [
   [
     "interests",
@@ -380,7 +486,69 @@ function discover() {
   });
 }
 function render() {
+  ensureFlowersWorkspace();
   refreshOpportunities();
+  if (page === "Volunteer invite") {
+    const params = new URLSearchParams(location.search),
+      training = params.has("training"),
+      id = params.get(training ? "training" : "outreach");
+    let d;
+    try {
+      d = JSON.parse(localStorage.getItem("volunteeru.herwell.v1"));
+    } catch {
+      d = null;
+    }
+    app.innerHTML = `<div class="out-public-shell"><a class="brand" href="/?home=1" aria-label="VolunteerU home"><span class="brandmark">v<span>✦</span></span>Volunteer<span class="purple">U</span></a>${publicOutreachMarkup(d, id, training)}</div>`;
+    bindPublicOutreach(id, training, saveDemoParticipant);
+    return;
+  }
+  if (page === "Events") {
+    shell(eventsCalendarMarkup());
+    bindEventsCalendar(render, (id) => {
+      selectCommandEvent(id);
+      page = "Command Center";
+      syncCoordinatorUrl();
+      render();
+      window.scrollTo(0, 0);
+    });
+    return;
+  }
+  if (page === "Reporting") {
+    shell(
+      reportingTabs(reportingView) +
+        (reportingView === "schools"
+          ? herwellMarkup("School Reports")
+          : reportsMarkup()),
+    );
+    if (reportingView === "schools") bindHerwell(render);
+    else bindReports(render);
+    return;
+  }
+  if (page === "Home") return welcome();
+  if (page === "Event Check-in") {
+    let demo;
+    try {
+      demo = JSON.parse(localStorage.getItem("volunteeru.herwell.v1"));
+    } catch {
+      demo = null;
+    }
+    const event = new URLSearchParams(location.search).get("eventAccess");
+    shell(studentEventAccessMarkup(demo, event));
+    bindStudentEventAccess(demo, event);
+    return;
+  }
+  if (
+    [
+      "Command Center",
+      "Volunteer Directory",
+      "School Reports",
+      "Demo Tour",
+    ].includes(page)
+  ) {
+    shell(herwellMarkup(page));
+    bindHerwell(render);
+    return;
+  }
   if (page === "Integrations") {
     shell(integrationsMarkup());
     bindIntegrations(render);
@@ -402,13 +570,13 @@ function render() {
     return;
   }
   if (page === "Nonprofit Portal") {
-    shell(nonprofitMarkup());
+    shell(herwellEntryMarkup() + nonprofitMarkup());
     bindNonprofit(render);
     return;
   }
   syncSchoolStudent();
   if (page === "School Portal") {
-    shell(schoolPortalMarkup() + schoolRecordsMarkup());
+    shell(herwellEntryMarkup() + schoolPortalMarkup() + schoolRecordsMarkup());
     bindSchoolPortal(render);
     bindSchoolRecords(render);
     return;
@@ -479,7 +647,44 @@ function render() {
     };
   }
 }
+function syncCoordinatorUrl() {
+  if (workspace !== "nonprofit") return;
+  const url = new URL(location.href);
+  url.searchParams.set("view", "nonprofit");
+  url.searchParams.set("page", page);
+  for (const key of ["home", "demo", "eventAccess"])
+    url.searchParams.delete(key);
+  history.replaceState(null, "", url);
+}
 function bind() {
+  document.querySelectorAll("[data-co-report]").forEach(
+    (b) =>
+      (b.onclick = () => {
+        reportingView = b.dataset.coReport;
+        render();
+      }),
+  );
+  document.querySelectorAll("[data-co-command]").forEach(
+    (b) =>
+      (b.onclick = () => {
+        selectCommandEvent(b.dataset.coCommand);
+        page = "Command Center";
+        syncCoordinatorUrl();
+        render();
+        window.scrollTo(0, 0);
+      }),
+  );
+  document.querySelectorAll("[data-co-manage]").forEach(
+    (b) =>
+      (b.onclick = () => {
+        selectNonprofitEvent(b.dataset.coManage);
+        page = "Nonprofit Portal";
+        syncCoordinatorUrl();
+        render();
+        window.scrollTo(0, 0);
+      }),
+  );
+
   document
     .querySelector("#student-signout")
     ?.addEventListener("click", async (event) => {
@@ -538,6 +743,7 @@ function bind() {
     (b) =>
       (b.onclick = () => {
         page = b.dataset.page;
+        syncCoordinatorUrl();
         step = -1;
         editing = false;
         render();
@@ -633,3 +839,10 @@ render();
 
 window.addEventListener("volunteeru:nonprofit-change", refreshOpportunities);
 startStudentUpdates(render);
+
+setInterval(() => {
+  if (document.visibilityState === "visible" && runDueDemoReminders()) render();
+}, 30000);
+window.addEventListener("focus", () => {
+  if (runDueDemoReminders()) render();
+});

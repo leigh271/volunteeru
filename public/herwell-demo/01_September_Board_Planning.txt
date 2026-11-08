@@ -1,0 +1,54 @@
+Platform: VolunteerU
+Nonprofit organization: HerWell Community Alliance
+
+September Board and Program Planning
+HerWell Community Alliance
+SYNTHETIC DEMO ONLY — fictional organization, people, schools, venues, and records.
+Meeting date: 2026-09-10 | Time zone: America/New_York
+Format: fictional AI meeting summary and timestamped transcript; not an export from a real note-taking service.
+
+Summary
+Board planning established two November events, four program categories, 100 needed student places, a 150-person recruitment target, October outreach, and a December review. Procurement and student assignments require confirmation.
+
+Transcript
+
+[00:00] Susie Bennett | Executive Director
+We are planning two November events under HerWell Community Alliance. Our four categories are period health, cancer support, maternal health, and mental health. October is recruitment month. Today is planning, not authorization for the AI to send messages or assign people.
+
+[01:15] Jane Ellis | Board Chair
+Approve the event concept and a combined 100 student shift places. Our outreach target is 150 unique students, but that is a recruitment goal, not a confirmed roster. Each student should hold one primary event shift in this demo.
+
+[02:30] Manny Cruz | Volunteer Coordinator
+Event E001, HerWell Community Care Day, is November 14 at the fictional Cypress Community Garden in Broward. It is outdoors. We need 60 students: setup 12, period health kit packing 14, maternal health supplies 12, welcome and wayfinding 10, and cleanup 12. Setup starts at 6:30 a.m.; public hours are 9 a.m. to noon.
+
+[04:10] Priya Shah | Programs Lead
+Event E002, HerWell Support and Connection Fair, is November 21 at the fictional Bayview Community Hall in Miami-Dade. We need 40 students: setup 8, cancer support resource packs 10, mental health welcome desk 10, and cleanup 12. Setup starts at 8 a.m.; public hours are 10 a.m. to 1 p.m. Students support logistics; qualified staff handle counseling and health questions.
+
+[06:00] Lena Brooks | Logistics Lead
+I can request 20 tables, 60 chairs, two banners, four canopies, and drinking water for E001. That is a request, not a supplier confirmation. I will get quantities and delivery windows by September 24. E002 needs 12 tables and 40 chairs; the venue inventory is still unconfirmed.
+
+[07:40] Jane Ellis | Board Chair
+Lena, please also obtain an indoor backup quote for the outdoor event. Susie will approve the final weather contingency by October 23. Do not assume we already booked a backup venue.
+
+[09:10] Amina Cole | Grants and Evaluation Lead
+I need counts of registered students, unique attendees, approved hours, and resource packs distributed by category for the December 4 review. Registration is not attendance. Keep supply outputs separate from volunteer hours and do not put recipient names or medical details in student notes.
+
+[10:45] Diego Rivera | Communications Lead
+I will draft the October campaign by September 28. We will share links by website, email, LinkedIn, Eventbrite, and Luma, plus school invitations. Every link should open our central signup form with a campaign tag. We are not claiming live imports from those services.
+
+[12:20] Manny Cruz | Volunteer Coordinator
+Schools will create VolunteerU accounts and receive school-specific invitation links. Students select high school, undergraduate, or graduate, enter their required hours and deadline, and give available days, time windows, interests, and role preferences. School requirements come from the school account; extra personal targets can be separate.
+
+[14:05] Susie Bennett | Executive Director
+Manny, send school onboarding information by September 25 after I approve the draft. Before assigning students, check availability, age restrictions, consent, and training. Students under 18 need recorded guardian consent and an adult lead. Do not assign clinical work.
+
+[15:30] Manny Cruz | Volunteer Coordinator
+I will propose shifts after recruitment. The AI may draft tasks with an owner, deadline, and transcript evidence. I approve assignments and outgoing reminders. If a deadline is missing, flag it instead of making one up.
+
+[17:00] Priya Shah | Programs Lead
+If a family leaves without a kit, the volunteer can record an anonymous operational concern and notify the staff lead. They should not diagnose the reason. We need the coordinator to review service issues before treating them as resolved.
+
+[18:30] Susie Bennett | Executive Director
+Decisions confirmed: two events, 100 planned shift places, October recruitment, and December 4 review. Supply orders, backup venue, student assignments, and reminders remain pending the responsible person’s confirmation.
+
+End of mock transcript. Task extraction is intentionally left for the platform AI; the discussion contains confirmed decisions, commitments, tentative suggestions, and unresolved items.

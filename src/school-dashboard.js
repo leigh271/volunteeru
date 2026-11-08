@@ -22,7 +22,7 @@ const bands = [
   { id: "not-started", label: "Not started", color: "#c6bdd9" },
   { id: "below-half", label: "Below halfway", color: "#b58bba" },
   { id: "halfway", label: "Halfway or more", color: "#8b78ca" },
-  { id: "complete", label: "Hours goal met", color: "#66845c" },
+  { id: "complete", label: "Hours goal met", color: "#7454df" },
 ];
 let rosterQuery = "",
   rosterBand = "all",
@@ -36,6 +36,9 @@ export function schoolDashboardModel(
   records = state,
   now = new Date(),
 ) {
+  // Only this explicitly tagged fictional scenario uses a future as-of date.
+  if (school.fixtureId === "herwell")
+    now = new Date("2026-12-18T12:00:00-05:00");
   const goal = number(school.requiredHours);
   const students = distinct(school.students || [])
     .map((s) => {
@@ -123,7 +126,7 @@ export function schoolDashboardModel(
       status: "needs_corrections",
       color: "#bd8a50",
     },
-    { label: "School approved", status: "approved", color: "#66845c" },
+    { label: "School approved", status: "approved", color: "#7454df" },
   ].map((r) => ({
     ...r,
     value: submissions.filter((s) => s.status === r.status).length,
@@ -179,7 +182,7 @@ export function schoolDashboardMarkup(school) {
       : "—";
   return `<section class="school-dashboard" aria-label="School analytics dashboard"><div class="school-dashboard-heading"><div><h2>School overview</h2><p>All connected students · ${model.goal > 0 ? `${fmt(model.goal)}-hour goal` : "No hours goal set"}</p></div><a class="secondary" href="#school-review-queue">Review school submissions (${model.pendingReviews}) →</a></div>
     <div class="school-kpis"><article><strong>${model.students.length}</strong><span>Connected students</span></article><article><strong>${rate}</strong><span>Hours goal met · ${model.completed} students</span></article><article><strong>${fmt(model.totalHours)}</strong><span>Coordinator-approved hours</span></article><article><strong>${model.pendingReviews}</strong><span>School submissions awaiting review</span></article></div>
-    <div class="school-charts"><section class="school-chart"><h3>Student goal progress</h3>${donut(model)}</section><section class="school-chart"><h3>Approved service hours by month</h3><p class="school-chart-note">${esc(model.months[0].fullLabel)}–${esc(model.months[5].fullLabel)} · service date</p>${monthlyBars(model)}<p class="school-chart-note">Dated, school-linked records for connected students only; roster summaries may include additional history.${model.undatedApproved ? ` ${fmt(model.undatedApproved)} approved hours have no valid service date and are excluded.` : ""}</p></section></div>
+    <div class="school-charts"><section class="school-chart"><h3>Student goal progress</h3>${donut(model)}</section><section class="school-chart"><h3>Approved service hours by month</h3>${school.fixtureId === "herwell" ? '<p class="demo-notice">HerWell future-data scenario · chart as of December 18, 2026.</p>' : ""}<p class="school-chart-note">${esc(model.months[0].fullLabel)}–${esc(model.months[5].fullLabel)} · service date</p>${monthlyBars(model)}<p class="school-chart-note">Dated, school-linked records for connected students only; roster summaries may include additional history.${model.undatedApproved ? ` ${fmt(model.undatedApproved)} approved hours have no valid service date and are excluded.` : ""}</p></section></div>
     <section class="school-chart school-review-chart"><h3>School submission workload</h3><p class="school-chart-note">Capstone and service learning submissions linked to this school, including former students.</p><div class="school-review-bars">${model.reviews.map((r) => `<div><span>${r.label}</span><div class="review-bar-track"><span style="width:${(r.value / Math.max(1, ...model.reviews.map((x) => x.value))) * 100}%;background:${r.color}"></span></div><strong>${r.value}</strong></div>`).join("")}</div><a href="#school-review-queue">Open submission reviews →</a></section>
     <details class="school-metric-definitions"><summary>What these numbers include</summary><p>Student counts, total hours, and goal progress use this school’s connected roster summaries. Goal progress is approved hours divided by the school’s configured target, capped at 100%. Pending hours do not count. The monthly chart uses available dated approved hour records joined to matching student applications and the application-time school connection. It covers only the six displayed calendar months, through today. The workload chart counts school submissions by review status. These are browser-local demo records, not a live district feed.</p></details></section>`;
 }

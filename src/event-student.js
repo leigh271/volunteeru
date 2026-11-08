@@ -66,6 +66,12 @@ export function eventStudentMarkup() {
     assigned.length
       ? assigned
           .map(({ application, event }) => {
+            if (event.id.startsWith("herwell:")) {
+              const shift = state.shifts.find(
+                (s) => s.applicationId === application.id,
+              );
+              return `<article class="event-student-event"><h3>${esc(event.title)}</h3><p class="demo-notice">HerWell future-data simulation · imported shift and readiness facts.</p><p>${esc(shift?.role)} · ${esc(dateLabel(shift?.startsAt))} – ${esc(dateLabel(shift?.endsAt))}</p><p>${esc(event.city)} · ${esc(event.location)}</p><p>Source training status: ${esc(application.sourceTrainingStatus || "Not supplied")}. Module content and assessment evidence were not supplied.</p><p>Nonclinical support only. Guardian consent and adult supervision are required for minors.</p></article>`;
+            }
             const title =
               event.title ||
               published.find((opportunity) => opportunity.id === event.id)

@@ -9,3 +9,5 @@ work/
 !.env.example
 
 server/data/
+
+.tools/

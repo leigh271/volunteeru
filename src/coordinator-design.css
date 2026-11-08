@@ -1,0 +1,472 @@
+/* VolunteerU tokens matched to the Maya Chen presentation at upstream 56883d2. */
+:root {
+  --co-primary: #7454df;
+  --co-soft: #f3efff;
+  --co-ink: #292a38;
+  --co-muted: #777281;
+  --co-line: #eeedf2;
+}
+.co-sidebar {
+  padding: 34px 24px 24px;
+  background: #fff;
+  border-color: var(--co-line);
+}
+.co-sidebar .brand {
+  font-size: 25px;
+}
+.co-nav-label {
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  color: #9892a3;
+  margin: 48px 14px 22px;
+  font-weight: 500;
+}
+.co-sidebar nav {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.co-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  border: 0;
+  background: none;
+  width: 100%;
+  min-height: 52px;
+  border-radius: 12px;
+  padding: 15px 16px;
+  color: #777281;
+  text-align: left;
+  font-size: 13px;
+  font-weight: 400;
+}
+.co-nav-item:hover {
+  background: #faf8ff;
+}
+.co-nav-item.active {
+  background: var(--co-soft);
+  color: var(--co-primary);
+  font-weight: 600;
+}
+.co-nav-icon {
+  width: 20px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.co-nav-icon svg {
+  width: 20px;
+  height: 20px;
+}
+.co-sidebar-account {
+  margin-top: auto;
+  border-top: 1px solid var(--co-line);
+  padding: 22px 2px 0;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.co-org-avatar {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  background: var(--co-soft);
+  color: #967ecb;
+  border-radius: 10px;
+  font-size: 10px;
+  font-weight: 500;
+  flex-shrink: 0;
+}
+.co-sidebar-account strong {
+  display: block;
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 1.7;
+  color: #696174;
+}
+.co-sidebar-account small {
+  display: block;
+  color: #aaa3b3;
+  font-size: 9px;
+  margin-top: 3px;
+}
+.co-tools {
+  position: relative;
+  z-index: 40;
+  font-size: 10px;
+  letter-spacing: 0;
+}
+.co-tools summary {
+  list-style: none;
+  cursor: pointer;
+  white-space: nowrap;
+  color: #918999;
+}
+.co-tools summary::-webkit-details-marker {
+  display: none;
+}
+.co-tools > div {
+  position: absolute;
+  right: 0;
+  top: 25px;
+  display: flex;
+  flex-direction: column;
+  width: 220px;
+  background: #fff;
+  border: 1px solid #eeedf2;
+  border-radius: 12px;
+  box-shadow: 0 12px 45px #3f286715;
+  padding: 9px;
+}
+.co-tools button,
+.co-tools a {
+  font-size: 11px;
+  color: #777281;
+  text-align: left;
+  border: 0;
+  background: none;
+  padding: 12px;
+  border-radius: 7px;
+  text-decoration: none;
+  letter-spacing: 0;
+}
+.co-tools button:hover,
+.co-tools a:hover {
+  background: #f3efff;
+  color: #7454df;
+}
+.co-hub {
+  padding-top: 29px;
+  color: var(--co-ink);
+}
+.co-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 30px;
+}
+.co-eyebrow {
+  font-size: 9px;
+  letter-spacing: 1.6px;
+  color: #9b8db6;
+  margin-bottom: 15px;
+}
+.co-heading h1 {
+  font:
+    700 31px Manrope,
+    sans-serif;
+  letter-spacing: -1px;
+  margin: 0 0 11px;
+}
+.co-heading p {
+  font-size: 12px;
+  color: var(--co-muted);
+  line-height: 1.8;
+  margin: 0;
+}
+.co-button {
+  border: 1px solid #e5dff1;
+  background: white;
+  color: #8f7ab3;
+  padding: 12px 16px;
+  border-radius: 9px;
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.co-button.primary {
+  background: #7454df;
+  color: white;
+  border-color: #7454df;
+}
+.co-event-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+.co-event-card {
+  border: 1px solid var(--co-line);
+  border-radius: 20px;
+  padding: 27px;
+  background: white;
+  min-width: 0;
+}
+.co-event-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 25px;
+}
+.co-date-icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 53px;
+  height: 60px;
+  border: 1px solid #e7e0f4;
+  background: #f8f5ff;
+  color: #8a70c5;
+  font:
+    700 22px Manrope,
+    sans-serif;
+  border-radius: 12px;
+}
+.co-date-icon small {
+  font: 400 9px "DM Sans";
+  margin-top: 4px;
+  color: #aa98c8;
+}
+.co-badge {
+  border-radius: 6px;
+  background: #f3efff;
+  color: #9c87bd;
+  font-size: 9px;
+  padding: 6px 9px;
+}
+.co-event-card h2 {
+  font:
+    700 20px Manrope,
+    sans-serif;
+  letter-spacing: -0.5px;
+  margin: 0 0 12px;
+  line-height: 1.6;
+}
+.co-event-card > p {
+  font-size: 11px;
+  color: #a29aaa;
+  line-height: 1.7;
+}
+.co-event-meta {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  border-block: 1px solid #f0ecf5;
+  padding: 16px 0;
+  margin: 23px 0;
+  font-size: 10px;
+  color: #a497b2;
+}
+.co-event-actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.co-text-button {
+  background: none;
+  border: 0;
+  color: #957fb5;
+  font-size: 10px;
+  padding: 10px 0;
+  text-align: left;
+  cursor: pointer;
+}
+.co-hub-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+  padding: 24px;
+  background: #f7f4fd;
+  border: 1px solid #ede7f8;
+  border-radius: 14px;
+  margin-top: 27px;
+}
+.co-hub-note > span {
+  font-size: 29px;
+  color: #b5a2d9;
+}
+.co-hub-note strong {
+  font-size: 12px;
+  font-weight: 500;
+  color: #91809f;
+}
+.co-hub-note p {
+  font-size: 11px;
+  color: #b0a3bc;
+  line-height: 1.9;
+  margin: 8px 0 0;
+}
+.co-report-tabs {
+  display: flex;
+  gap: 25px;
+  border-bottom: 1px solid #eeedf2;
+  margin: 28px 0 26px;
+}
+.co-report-tabs button {
+  padding: 13px 0;
+  background: none;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  color: #ada2b8;
+  font-size: 12px;
+  cursor: pointer;
+}
+.co-report-tabs button[aria-selected="true"] {
+  border-bottom-color: #7454df;
+  color: #7454df;
+}
+.co-report-tabs + .hw {
+  padding-top: 0;
+}
+.hw {
+  --hw-green: #7454df;
+  --hw-soft: #f3efff;
+  color: #292a38;
+}
+.hw .primary {
+  background: #7454df;
+  border-color: #7454df;
+}
+.hw .hw-panel,
+.hw .hw-stat {
+  border-color: #eeedf2;
+  border-radius: 20px;
+}
+.hw .hw-stat {
+  background: #faf8ff;
+}
+.hw .hw-stat strong {
+  color: #7454df;
+}
+.hw .hw-chip.green {
+  background: #f3efff;
+  color: #9578bd;
+}
+.hw .hw-track i {
+  background: #baa7e7;
+}
+.hw .hw-filters {
+  background: #faf8ff;
+}
+.hw .hw-link,
+.hw .hw-person {
+  color: #967bb7;
+}
+.hw .hw-note {
+  background: #f8f5ff;
+  color: #a08bb8;
+}
+.cc .cc-primary {
+  border-radius: 9px;
+}
+.cc .cc-card {
+  border-radius: 20px;
+}
+.cc .cc-top h1,
+.cc .cc-stage-heading h2,
+.cc .cc-card h3 {
+  color: #292a38;
+}
+.cc .cc-top h1 > span {
+  color: #b7a3df;
+}
+.cc .cc-pill.amber {
+  background: #f8f0df;
+  color: #ac9367;
+}
+.cc .cc-pill.green {
+  background: #f3efff;
+  color: #997bc0;
+}
+.co-sidebar button:focus-visible,
+.co-tools a:focus-visible,
+.co-tools button:focus-visible,
+.co-button:focus-visible {
+  outline: 2px solid #b9a5ef;
+  outline-offset: 3px;
+}
+.co-legacy-caption {
+  color: #9c8aad;
+  font-size: 11px;
+}
+.co-hub ~ footer {
+  margin-top: 45px;
+}
+@media (max-width: 1100px) {
+  .co-sidebar {
+    padding-inline: 18px;
+  }
+  .co-nav-item {
+    gap: 11px;
+    padding-inline: 13px;
+  }
+  .co-sidebar-account strong {
+    font-size: 9px;
+  }
+  .co-event-grid {
+    gap: 18px;
+  }
+  .co-event-card {
+    padding: 22px;
+  }
+}
+@media (max-width: 800px) {
+  .co-sidebar {
+    display: none;
+  }
+  .co-event-grid {
+    grid-template-columns: 1fr;
+  }
+  .co-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .co-tools summary {
+    font-size: 9px;
+  }
+  .co-heading h1 {
+    font-size: 27px;
+  }
+  .co-hub {
+    padding-top: 25px;
+  }
+  .co-tools > div {
+    max-width: calc(100vw - 30px);
+  }
+  .mobile-nav svg {
+    width: 21px;
+    height: 21px;
+  }
+  .mobile-nav button {
+    font-size: 13px;
+  }
+  .cc-workspace-picker > summary {
+    font-size: 9px;
+  }
+}
+@media print {
+  .co-sidebar,
+  .co-tools {
+    display: none !important;
+  }
+}
+.co-linked-roster {
+  border-top: 1px solid #eeedf2;
+  margin: 16px 0;
+  padding-top: 14px;
+  font-size: 11px;
+  color: #8b779f;
+}
+.co-linked-roster > summary {
+  cursor: pointer;
+  font-weight: 500;
+}
+.co-roster-person {
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  padding: 13px 0;
+  border-bottom: 1px solid #f1edf7;
+  font-size: 10px;
+}
+.co-roster-person > a {
+  color: #8f70b8;
+  text-decoration: none;
+}

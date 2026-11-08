@@ -49,6 +49,10 @@ function eventForm(event = {}) {
   )}</select></label><label>Schedule<select name="availability">${options(choices.availability, event.availability || "Weekends")}</select></label><label>Minimum age<input name="minAge" type="number" min="13" max="100" required value="${esc(event.minAge || 13)}"></label><label>Attendee venue capacity<input name="capacity" type="number" min="1" max="100000" required value="${esc(event.capacity || 100)}"></label><label>Volunteer recruitment target<input name="volunteerTarget" type="number" min="1" max="10000" required value="${esc(event.volunteerTarget || event.volunteers || 10)}"></label><label>Primary strength<select name="skill">${options(choices.skills, event.skills?.[0])}</select></label><label>Venue latitude (optional)<input name="latitude" type="number" min="24.9" max="26.5" step="any" value="${esc(event.latitude ?? "")}"></label><label>Venue longitude (optional)<input name="longitude" type="number" min="-80.9" max="-79.9" step="any" value="${esc(event.longitude ?? "")}"></label><label class="nonprofit-wide">What volunteers will do<textarea name="description" required minlength="10" maxlength="2000" rows="3">${esc(event.description || event.goals)}</textarea></label><label class="nonprofit-wide">Requirements and venue instructions<textarea name="requirements" required minlength="10" maxlength="2000" rows="3">${esc(event.requirements || (event.venue ? `Venue to confirm: ${event.venue}. Coordinator orientation required.` : "Coordinator orientation required. Guardian consent for students under 18."))}</textarea></label></div><p class="demo-notice">Save a draft first, then review and publish it. Published opportunities are visible only in this browser demo.</p><div class="nonprofit-actions"><button type="submit" class="primary">Save event draft</button>${event.id ? '<button type="button" class="secondary" data-new-nonprofit-event>Create another event</button>' : ""}</div></form>`;
 }
 function eventManagement(event) {
+  if (event.id.startsWith("herwell:")) {
+    const apps = appsFor(event);
+    return `<section class="nonprofit-panel"><h2>${esc(event.title)}</h2><p>HerWell synthetic scenario · ${esc(event.date)} · ${esc(event.city)}.</p><p>${apps.length} imported registrations. Per-shift schedules, training status, attendance corrections, and source-linked tasks are managed together in the command center.</p><button class="primary" data-page="Command Center">Open HerWell command center →</button></section>${coordinatorDayMarkup(event)}`;
+  }
   const applications = appsFor(event),
     approved = applications.filter(accepted),
     pending = applications.filter((a) => a.status === "pending");
@@ -113,7 +117,7 @@ export function nonprofitMarkup() {
   let selected = events.find((e) => e.id === selectedId);
   if (!selected && !planDraft) selected = events[0];
   if (selected) selectedId = selected.id;
-  return `${heading}<section class="nonprofit-panel"><div class="nonprofit-section-heading"><div><h2>${esc(org.name)}</h2><p>${esc(org.coordinator)} · ${esc(org.email)}</p></div><button class="secondary" id="nonprofit-switch">Switch / register nonprofit</button></div><p id="nonprofit-feedback" role="status"></p><div class="nonprofit-actions"><label>Manage event<select id="nonprofit-event-select"><option value="">Create a new event</option>${events.map((e) => `<option value="${esc(e.id)}" ${selected?.id === e.id ? "selected" : ""}>${esc(e.title)} · ${esc(e.status)}</option>`).join("")}</select></label><button class="secondary" id="new-nonprofit-event">New event</button></div></section>${selected ? `<nav class="workflow-shortcuts" aria-label="Nonprofit quick actions"><a href="#nonprofit-registrations">Review registrations ↓</a><a href="#nonprofit-hour-review">Verify attendance & hours ↓</a><a href="#nonprofit-event-form">Edit event details ↓</a></nav>${eventManagement(selected)}` : `<section class="nonprofit-panel">${eventForm(planDraft || {})}</section>`}${plannerMarkup(org)}`;
+  return `${heading}<section class="nonprofit-panel"><div class="nonprofit-section-heading"><div><h2>${esc(org.name)}</h2><p>${esc(org.coordinator)} · ${esc(org.email)}</p></div><button class="secondary" id="nonprofit-switch">Switch / register nonprofit</button></div><p id="nonprofit-feedback" role="status"></p><div class="nonprofit-actions"><label>Manage event<select id="nonprofit-event-select"><option value="">Create a new event</option>${events.map((e) => `<option value="${esc(e.id)}" ${selected?.id === e.id ? "selected" : ""}>${esc(e.title)} · ${esc(e.status)}</option>`).join("")}</select></label><button class="secondary" id="new-nonprofit-event">New event</button></div></section>${selected ? `<nav class="workflow-shortcuts" aria-label="Nonprofit quick actions"><a href="#nonprofit-registrations">Review registrations ↓</a><a href="#nonprofit-hour-review">Verify attendance & hours ↓</a><a href="#nonprofit-event-form">Edit event details ↓</a></nav>${eventManagement(selected)}` : `<section class="nonprofit-panel">${eventForm(planDraft || {})}</section>`}${org.id === "herwell-demo" ? '<section class="nonprofit-panel"><h2>September meeting sources</h2><p>The command center uses your supplied board and operations transcripts. Review source-linked preparation tasks there.</p><button class="secondary" data-page="Command Center">Review September preparation →</button></section>' : plannerMarkup(org)}`;
 }
 function mutateEvent(change, rerender) {
   const data = readNonprofits(),
@@ -567,4 +571,10 @@ export function bindNonprofit(rerender) {
       );
     });
   if (org) bindPlanner(org, rerender);
+}
+
+export function selectNonprofitEvent(id) {
+  const d = readNonprofits();
+  if (d.events.some((e) => e.id === id && e.organizationId === d.activeId))
+    selectedId = id;
 }

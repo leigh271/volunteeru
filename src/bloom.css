@@ -4,9 +4,9 @@
   gap: 28px;
   padding: 26px 32px;
   margin: 0 0 28px;
-  border: 1px solid #e8dfdd;
+  border: 1px solid #e7dff5;
   border-radius: 24px;
-  background: linear-gradient(115deg, #fff8ef, #fff3f7 65%, #f4f5ed);
+  background: linear-gradient(115deg, #f7f4ff, #fff5fb 65%, #f1edff);
 }
 .bloom-art {
   width: 180px;
@@ -22,7 +22,7 @@
   min-width: 0;
 }
 .bloom-card .mini-label {
-  color: #607956;
+  color: #7454df;
   letter-spacing: 1.8px;
 }
 .bloom-card h2 {
@@ -30,7 +30,7 @@
   font-size: 25px;
   line-height: 1.3;
   margin: 10px 0 18px;
-  color: #414b3d;
+  color: #342b48;
 }
 .bloom-total {
   display: flex;
@@ -42,11 +42,11 @@
 }
 .bloom-total > span {
   font-weight: 700;
-  color: #607956;
+  color: #7454df;
 }
 .bloom-meter {
   height: 10px;
-  background: #e8e5de;
+  background: #e9e2f5;
   border-radius: 20px;
   overflow: hidden;
 }
@@ -54,7 +54,7 @@
   display: block;
   height: 100%;
   border-radius: inherit;
-  background: linear-gradient(90deg, #a8bc8e, #6d9469);
+  background: linear-gradient(90deg, #b39be9, #7454df);
   transition: width 500ms ease;
 }
 .bloom-message,
@@ -103,14 +103,14 @@
   font-size: 12px;
 }
 .bloom-milestones .reached {
-  color: #47663d;
+  color: #6241bc;
 }
 .bloom-milestones .reached .bloom-dot {
-  border-color: #799867;
-  background: #dbe6ce;
+  border-color: #9b7cdd;
+  background: #e5dbfa;
 }
 .bloom-milestones [aria-current="step"] .bloom-dot {
-  box-shadow: 0 0 0 4px #dbe6ce80;
+  box-shadow: 0 0 0 4px #e5dbfa80;
 }
 .bloom-compact {
   gap: 22px;
