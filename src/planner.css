@@ -1,0 +1,134 @@
+.planner-panel {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  padding: 28px;
+  margin: 22px 0;
+  min-width: 0;
+}
+.planner-panel h2 {
+  margin: 8px 0 12px;
+  font-size: 25px;
+}
+.planner-panel p {
+  color: #77717f;
+  line-height: 1.7;
+}
+.planner-title {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: start;
+  flex-wrap: wrap;
+}
+.planner-samples,
+.planner-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 20px 0;
+}
+.planner-panel textarea {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px;
+  background: #faf9fc;
+  resize: vertical;
+  line-height: 1.65;
+}
+.planner-upload {
+  border: 1px dashed #c9bce9;
+  border-radius: 14px;
+  padding: 16px;
+  margin-top: 18px;
+}
+.planner-upload input {
+  border: 0;
+  padding: 12px 0 0;
+  background: none;
+  max-width: 100%;
+}
+.planner-analysis {
+  margin-top: 28px;
+  border-top: 1px solid var(--border);
+  padding-top: 20px;
+}
+.planner-evidence-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+.planner-evidence-grid article {
+  background: #f7f4fd;
+  padding: 18px;
+  border-radius: 14px;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.planner-evidence-grid h4 {
+  color: #584384;
+  margin: 0 0 12px;
+}
+.planner-evidence-grid ul {
+  padding-left: 18px;
+  margin: 0;
+}
+.planner-evidence-grid li {
+  font-size: 13px;
+  line-height: 1.7;
+  margin-bottom: 12px;
+}
+.planner-evidence-grid small {
+  display: block;
+  color: #877c97;
+  margin-top: 4px;
+}
+.planner-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px 22px;
+  margin: 22px 0;
+}
+.planner-form-grid label {
+  min-width: 0;
+  margin: 0;
+}
+.planner-form-grid input {
+  width: 100%;
+}
+.planner-wide {
+  grid-column: 1/-1;
+}
+.planner-recommendation,
+.planner-review {
+  padding: 22px;
+  border-radius: 16px;
+  margin-top: 24px;
+  background: #f2ecfc;
+  border: 1px solid #e4d9f6;
+  overflow-wrap: anywhere;
+}
+.planner-recommendation h3 {
+  color: var(--purple);
+  margin-top: 0;
+}
+.planner-review {
+  background: #fbf9f3;
+  border-color: #eee4d4;
+}
+@media (max-width: 760px) {
+  .planner-panel {
+    padding: 20px;
+  }
+  .planner-form-grid,
+  .planner-evidence-grid {
+    grid-template-columns: 1fr;
+  }
+  .planner-title h2 {
+    font-size: 22px;
+  }
+  .planner-samples > * {
+    width: 100%;
+  }
+}

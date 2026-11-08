@@ -58,7 +58,7 @@ test("complete student journey persists and prevents duplicates", async ({
     .fill("I love helping children explore new creative activities.");
   await page.getByRole("button", { name: "Send application" }).click();
   await expect(page.getByRole("status")).toHaveText(
-    "Application sent! Waiting for nonprofit approval.",
+    "Demo application saved. Waiting for nonprofit approval.",
   );
   await expect(page.locator(".application")).toContainText(
     "Waiting for nonprofit approval",
@@ -98,13 +98,13 @@ test("complete student journey persists and prevents duplicates", async ({
 test("age eligibility and filters", async ({ page }) => {
   await onboard(page, 14);
   await expect(
-    page.getByRole("heading", { name: "Community campaign creator" }),
+    page.getByRole("heading", { name: "Period care kit event support" }),
   ).toBeVisible();
   await page.getByLabel("Filter by cause").selectOption("Animals");
   await expect(page.getByText("No matches with these filters.")).toBeVisible();
   await page.getByRole("button", { name: "Reset discovery" }).click();
   await expect(
-    page.getByRole("heading", { name: "Community campaign creator" }),
+    page.getByRole("heading", { name: "Period care kit event support" }),
   ).toBeVisible();
 });
 test("right swipe saves without applying and skip advances", async ({

@@ -1,0 +1,136 @@
+.journey-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  margin: 24px 0;
+}
+.journey-stats article,
+.journey-panel {
+  background: #fff;
+  border: 1px solid #e9e5f0;
+  border-radius: 22px;
+  padding: 26px;
+}
+.journey-stats article > span {
+  color: #7258e8;
+  font-size: 24px;
+}
+.journey-stats strong {
+  display: block;
+  font-size: 36px;
+  margin-top: 10px;
+  color: #312748;
+}
+.journey-stats p {
+  margin: 4px 0 0;
+  color: #716b7e;
+}
+.journey-panel {
+  margin: 20px 0;
+  min-width: 0;
+}
+.journey-panel h2 {
+  font-size: 23px;
+  margin: 0 0 12px;
+}
+.journey-panel p {
+  color: #716b7e;
+  line-height: 1.65;
+}
+.journey-columns {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+.journey-columns .journey-panel {
+  margin: 0;
+}
+.journey-record {
+  padding: 18px 0;
+  border-top: 1px solid #eeeaf4;
+  overflow-wrap: anywhere;
+}
+.journey-record h3 {
+  font-size: 16px;
+  margin: 0 0 7px;
+}
+.journey-record .primary,
+.journey-record .secondary {
+  margin-top: 7px;
+}
+.journey-empty {
+  background: #f7f5fc;
+  padding: 20px;
+  border-radius: 14px;
+  color: #716b7e;
+  line-height: 1.7;
+}
+.journey-meter {
+  height: 12px;
+  background: #efebf8;
+  overflow: hidden;
+  border-radius: 20px;
+  margin-top: 20px;
+}
+.journey-meter > span {
+  display: block;
+  background: #7258e8;
+  height: 100%;
+  border-radius: 20px;
+}
+.journey-requirements {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+.journey-hours-form {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 16px;
+  align-items: end;
+}
+.journey-hours-form label {
+  min-width: 0;
+}
+.journey-hours-form select,
+.journey-hours-form input,
+.journey-hours-form textarea {
+  width: 100%;
+  box-sizing: border-box;
+}
+.journey-note {
+  grid-column: 1/-1;
+}
+.journey-hours-form > button {
+  justify-self: start;
+  grid-column: 1/-1;
+}
+.journey-hours-form > p {
+  grid-column: 1/-1;
+  margin: 0;
+}
+.journey-hours-list {
+  margin-top: 24px;
+}
+@media (max-width: 760px) {
+  .journey-columns,
+  .journey-requirements,
+  .journey-hours-form {
+    grid-template-columns: 1fr;
+  }
+  .journey-stats {
+    gap: 8px;
+  }
+  .journey-stats article {
+    padding: 15px 10px;
+  }
+  .journey-stats strong {
+    font-size: 27px;
+  }
+  .journey-stats p {
+    font-size: 12px;
+  }
+  .journey-panel {
+    padding: 20px;
+  }
+}

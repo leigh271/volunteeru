@@ -7,3 +7,5 @@ work/
 .env
 .env.*
 !.env.example
+
+server/data/

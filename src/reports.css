@@ -1,0 +1,143 @@
+.report-panel {
+  padding: 26px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: white;
+  margin: 22px 0;
+  min-width: 0;
+}
+.report-panel h2 {
+  font-size: 23px;
+  margin: 0 0 14px;
+}
+.report-panel p {
+  color: #77717f;
+  line-height: 1.7;
+}
+.report-filters {
+  display: grid;
+  grid-template-columns: 1fr 2fr auto;
+  gap: 18px;
+  align-items: end;
+}
+.report-filters label {
+  margin: 0;
+  min-width: 0;
+}
+.report-filters select,
+.report-filters input {
+  width: 100%;
+}
+.report-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 15px;
+  margin: 24px 0;
+}
+.report-stats article {
+  padding: 24px;
+  background: #f4f0fc;
+  border: 1px solid #e9e0f8;
+  border-radius: 18px;
+}
+.report-stats strong {
+  display: block;
+  font-size: 35px;
+  color: var(--purple);
+  margin-bottom: 8px;
+}
+.report-stats span {
+  font-size: 13px;
+  color: #70697c;
+}
+.report-table {
+  overflow-x: auto;
+}
+.report-table table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 13px;
+}
+.report-table th,
+.report-table td {
+  padding: 16px 12px;
+  border-bottom: 1px solid var(--border);
+  min-width: 85px;
+}
+.report-table th:first-child {
+  min-width: 160px;
+}
+.report-table small {
+  display: block;
+  color: #8b8197;
+  font-weight: 400;
+  line-height: 1.6;
+  margin-top: 6px;
+}
+.report-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  margin: 18px 0;
+}
+.report-form-grid input,
+.report-form-grid textarea {
+  width: 100%;
+}
+.report-form-grid textarea {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px;
+  background: #faf9fc;
+  resize: vertical;
+}
+.report-wide {
+  grid-column: 1/-1;
+}
+.report-narrative,
+.report-ai-draft {
+  background: #f6f2fc;
+  border-radius: 14px;
+  padding: 22px;
+  overflow-wrap: anywhere;
+}
+.report-downloads {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 24px 0;
+}
+.report-empty {
+  padding: 24px;
+  background: #faf8fd;
+  border-radius: 14px;
+  color: #77717f;
+}
+.report-panel details {
+  font-size: 13px;
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+}
+@media (max-width: 760px) {
+  .report-panel {
+    padding: 20px;
+  }
+  .report-filters,
+  .report-form-grid {
+    grid-template-columns: 1fr;
+  }
+  .report-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+  .report-stats article {
+    padding: 18px;
+  }
+  .report-stats strong {
+    font-size: 30px;
+  }
+  .report-downloads > * {
+    width: 100%;
+  }
+}

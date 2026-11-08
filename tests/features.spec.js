@@ -396,6 +396,9 @@ test("authenticated backend changes drive notifications without fabricated event
   });
   await begin(page);
   await finish(page);
+  await expect(
+    page.getByRole("button", { name: "Notifications, 2 unread" }),
+  ).toBeVisible();
   await page.reload();
   await expect(
     page.getByRole("button", { name: "Notifications, 2 unread" }),

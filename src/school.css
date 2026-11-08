@@ -1,0 +1,116 @@
+.school-portal {
+  margin-bottom: 24px;
+}
+.school-portal h2 {
+  margin-top: 0;
+}
+.school-portal p {
+  color: #74717f;
+  line-height: 1.65;
+}
+.school-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px 24px;
+  margin: 24px 0;
+}
+.school-form-grid label {
+  min-width: 0;
+  margin: 0;
+}
+.school-form-grid textarea {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px;
+  background: #faf9fc;
+  resize: vertical;
+}
+.school-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.school-title h2 {
+  margin: 10px 0;
+}
+.school-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin: 24px 0;
+}
+.school-stats article {
+  padding: 22px;
+  background: #f5f1ff;
+  border-radius: 16px;
+}
+.school-stats strong {
+  display: block;
+  color: var(--purple);
+  font-size: 30px;
+  font-family: Manrope, sans-serif;
+}
+.school-stats span {
+  display: block;
+  font-size: 12px;
+  margin-top: 8px;
+  line-height: 1.6;
+}
+.school-invite-card {
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 24px;
+  margin: 24px 0;
+}
+.school-invite-card input {
+  width: 100%;
+  min-width: 0;
+}
+.school-table-wrap {
+  overflow-x: auto;
+}
+.school-table {
+  border-collapse: collapse;
+  width: 100%;
+  text-align: left;
+  font-size: 14px;
+}
+.school-table th,
+.school-table td {
+  padding: 18px 12px;
+  border-bottom: 1px solid var(--border);
+}
+.school-table th {
+  font-weight: 600;
+}
+.school-table progress {
+  accent-color: var(--purple);
+  width: 110px;
+  max-width: 100%;
+  margin-right: 12px;
+}
+.school-link-invitation {
+  margin: 20px 0;
+}
+@media (max-width: 700px) {
+  .school-form-grid {
+    grid-template-columns: 1fr;
+  }
+  .school-stats {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .school-stats article {
+    padding: 16px;
+  }
+  .school-title .secondary {
+    width: 100%;
+  }
+  .school-invite-card {
+    padding: 16px;
+  }
+}

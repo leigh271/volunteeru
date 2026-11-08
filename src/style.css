@@ -1,4 +1,67 @@
-@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap");
+@font-face {
+  font-family: "DM Sans";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(./fonts/dm-sans-400.ttf) format("truetype");
+}
+@font-face {
+  font-family: "DM Sans";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(./fonts/dm-sans-500.ttf) format("truetype");
+}
+@font-face {
+  font-family: "DM Sans";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(./fonts/dm-sans-600.ttf) format("truetype");
+}
+@font-face {
+  font-family: "DM Sans";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(./fonts/dm-sans-700.ttf) format("truetype");
+}
+@font-face {
+  font-family: "Manrope";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(./fonts/manrope-400.ttf) format("truetype");
+}
+@font-face {
+  font-family: "Manrope";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(./fonts/manrope-500.ttf) format("truetype");
+}
+@font-face {
+  font-family: "Manrope";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(./fonts/manrope-600.ttf) format("truetype");
+}
+@font-face {
+  font-family: "Manrope";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(./fonts/manrope-700.ttf) format("truetype");
+}
+@font-face {
+  font-family: "Manrope";
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url(./fonts/manrope-800.ttf) format("truetype");
+}
+
 :root {
   font-family: "DM Sans", sans-serif;
   color: #292a38;
@@ -51,6 +114,7 @@ a {
   text-decoration: none;
 }
 aside {
+  overflow-y: auto;
   position: fixed;
   width: 244px;
   inset: 0 auto 0 0;
@@ -1420,5 +1484,30 @@ form > small {
   }
   .organization-section h2 {
     font-size: 22px;
+  }
+}
+
+@media (max-width: 760px) {
+  .mobile-nav {
+    gap: 0;
+  }
+  .mobile-nav button {
+    min-width: 0;
+    flex: 1;
+    padding: 3px 1px;
+  }
+  .mobile-nav small {
+    font-size: 8px;
+  }
+}
+
+@media (max-width: 760px) {
+  .mobile-nav {
+    overflow-x: auto;
+    justify-content: flex-start;
+  }
+  .mobile-nav button {
+    min-width: 68px;
+    flex: 1 0 68px;
   }
 }

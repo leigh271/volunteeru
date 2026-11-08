@@ -1,3 +1,5 @@
+import { eventDayNotifications } from "./event-day.js";
+import { eventNotificationItems } from "./event-student.js";
 import { state } from "./store.js";
 import { opportunities } from "./data.js";
 export function notificationItems(now = Date.now()) {
@@ -75,7 +77,11 @@ export function notificationItems(now = Date.now()) {
       opportunityId: o?.id,
     });
   }
-  return items.reverse();
+  return [
+    ...items,
+    ...eventNotificationItems(),
+    ...eventDayNotifications(now),
+  ].reverse();
 }
 export function unreadCount() {
   return notificationItems().filter(

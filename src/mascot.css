@@ -1,0 +1,91 @@
+.sunny-guide {
+  margin: 20px 0 28px;
+}
+.sunny-body {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 18px 22px;
+  background: #f0ecfc;
+  border: 1px solid #e2d9f7;
+  border-radius: 20px;
+  position: relative;
+}
+.sunny-body > svg {
+  width: 86px;
+  height: 86px;
+  flex-shrink: 0;
+  animation: sunny-grow 0.6s ease-out;
+}
+.sunny-body > div {
+  padding-right: 18px;
+}
+.sunny-body strong {
+  display: block;
+  margin: 5px 0;
+  font-size: 18px;
+  color: #423264;
+}
+.sunny-body p {
+  margin: 0;
+  line-height: 1.65;
+  font-size: 14px;
+  color: #625975;
+}
+.sunny-dismiss {
+  position: absolute;
+  right: 12px;
+  top: 8px;
+  background: transparent;
+  border: 0;
+  font-size: 24px;
+  color: #625975;
+  cursor: pointer;
+  padding: 4px 8px;
+}
+.sunny-reopen {
+  display: none;
+  align-items: center;
+  gap: 10px;
+}
+.sunny-reopen svg {
+  width: 36px;
+  height: 36px;
+}
+.sunny-collapsed .sunny-body {
+  display: none;
+}
+.sunny-collapsed .sunny-reopen {
+  display: flex;
+}
+@keyframes sunny-grow {
+  from {
+    transform: translateY(8px) rotate(-5deg);
+    opacity: 0.2;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+@media (max-width: 600px) {
+  .sunny-body {
+    padding: 16px 14px;
+    gap: 10px;
+  }
+  .sunny-body > svg {
+    width: 60px;
+    height: 60px;
+  }
+  .sunny-body strong {
+    font-size: 16px;
+  }
+  .sunny-body p {
+    font-size: 13px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sunny-body > svg {
+    animation: none;
+  }
+}

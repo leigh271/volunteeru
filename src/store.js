@@ -1,4 +1,9 @@
-import { emptyStudent, choices, opportunities } from "./data.js";
+import {
+  emptyStudent,
+  choices,
+  opportunities,
+  refreshOpportunities,
+} from "./data.js";
 export const STORAGE_KEY = "volunteeru.shared.v1";
 const freshState = () => ({
   version: 1,
@@ -6,6 +11,10 @@ const freshState = () => ({
   saved: [],
   applications: [],
   hours: [],
+  trainingRecords: [],
+  attendanceRecords: [],
+  eventDayRecords: [],
+  requirementSubmissions: [],
   shifts: [],
   readNotificationIds: [],
 });
@@ -57,6 +66,51 @@ export function read() {
     return {
       version: 1,
       student,
+      requirementSubmissions: Array.isArray(raw.requirementSubmissions)
+        ? raw.requirementSubmissions.filter(
+            (r) =>
+              r &&
+              typeof r.id === "string" &&
+              typeof r.schoolId === "string" &&
+              typeof r.studentId === "string" &&
+              ["capstone", "serviceLearning"].includes(r.kind) &&
+              typeof r.evidence === "string" &&
+              ["pending", "approved", "needs_corrections"].includes(r.status),
+          )
+        : [],
+      eventDayRecords: Array.isArray(raw.eventDayRecords)
+        ? raw.eventDayRecords.filter(
+            (r) =>
+              r &&
+              typeof r.id === "string" &&
+              typeof r.studentId === "string" &&
+              typeof r.applicationId === "string" &&
+              typeof r.eventId === "string" &&
+              Number.isFinite(Date.parse(r.checkInAt)),
+          )
+        : [],
+      trainingRecords: Array.isArray(raw.trainingRecords)
+        ? raw.trainingRecords.filter(
+            (r) =>
+              r &&
+              typeof r.id === "string" &&
+              typeof r.studentId === "string" &&
+              typeof r.applicationId === "string" &&
+              typeof r.trainingId === "string" &&
+              ["read", "verified"].includes(r.status),
+          )
+        : [],
+      attendanceRecords: Array.isArray(raw.attendanceRecords)
+        ? raw.attendanceRecords.filter(
+            (r) =>
+              r &&
+              typeof r.id === "string" &&
+              typeof r.studentId === "string" &&
+              typeof r.applicationId === "string" &&
+              typeof r.eventId === "string" &&
+              ["present", "absent"].includes(r.status),
+          )
+        : [],
       hours: Array.isArray(raw.hours)
         ? raw.hours.filter(
             (h) =>
@@ -113,11 +167,15 @@ export function refresh() {
 export function apply(opportunityId, interest) {
   // Re-read before writing so another tab's application is not duplicated.
   refresh();
+  refreshOpportunities();
   const opportunity = opportunities.find((o) => o.id === opportunityId);
   if (
     !opportunity ||
     !state.student.onboarded ||
     state.student.age < opportunity.minAge ||
+    (opportunity.publishedByNonprofit &&
+      Date.parse(opportunity.startsAt) + Number(opportunity.hours) * 3600000 <=
+        Date.now()) ||
     typeof interest !== "string" ||
     interest.trim().length < 10 ||
     interest.trim().length > 1000 ||
@@ -133,6 +191,7 @@ export function apply(opportunityId, interest) {
     opportunityId,
     status: "pending",
     isDemo: opportunity.isDemo === true,
+    opportunitySnapshot: structuredClone(opportunity),
     interest: interest.trim(),
     availabilityConfirmed: true,
     submittedAt: new Date().toISOString(),
@@ -140,6 +199,9 @@ export function apply(opportunityId, interest) {
       name: state.student.name,
       school: state.student.school,
       age: state.student.age,
+      schoolConnection: state.student.schoolConnection
+        ? structuredClone(state.student.schoolConnection)
+        : null,
     },
   });
   return persist();

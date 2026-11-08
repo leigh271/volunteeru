@@ -1,3 +1,4 @@
+import { getPublishedOpportunities } from "./nonprofit-store.js";
 export const choices = {
   interests: [
     "Women’s health",
@@ -20,7 +21,7 @@ export const choices = {
   availability: ["Weekday daytime", "Weekday evenings", "Weekends", "Flexible"],
   locations: ["Broward", "Miami-Dade", "Either county", "Remote"],
 };
-export const opportunities = [
+const demoOpportunities = [
   {
     id: "demo-1",
     title: "Little moments. Big possibilities.",
@@ -69,6 +70,7 @@ export const opportunities = [
     role: "Community campaign creator",
     nonprofit: "Her Tomorrow Initiative",
     cause: "Women’s health",
+    womensHealthCategory: "Mental Health & Emotional Wellness",
     location: "Remote",
     city: "From anywhere",
     date: "2026-12-15",
@@ -104,7 +106,46 @@ export const opportunities = [
       "Welcome visitors and help a sample community resource fair run smoothly.",
     requirements: "Ages 18+. Comfortable talking with community members.",
   },
+  ...choices.womensHealth.map((category, index) => ({
+    id: `demo-health-${index + 1}`,
+    title: "A little care. A stronger community.",
+    role: [
+      "Period care kit event support",
+      "Cancer support campaign creator",
+      "Maternal care supply organizer",
+      "Mental wellness outreach helper",
+    ][index],
+    nonprofit: "Community Care Studio (fictional)",
+    cause: "Women’s health",
+    womensHealthCategory: category,
+    location: index === 1 ? "Remote" : index === 2 ? "Miami-Dade" : "Broward",
+    city:
+      index === 1 ? "From anywhere" : index === 2 ? "Miami" : "Fort Lauderdale",
+    date: "2026-12-19",
+    time: "10:00 AM – 12:00 PM",
+    hours: 2,
+    minAge: 13,
+    skills: [choices.skills[index]],
+    availability: "Weekends",
+    art: "community",
+    emoji: ["🌸", "🎗️", "🤱", "💛"][index],
+    description: `Explore a fictional ${category.toLowerCase()} project with a coordinator. Help with supplies, awareness materials, or welcoming the community; no clinical or counseling work is involved.`,
+    requirements:
+      "Ages 13+. Coordinator orientation and guardian consent for volunteers under 18. This is a fictional demo, not an available placement.",
+  })),
 ].map((o) => ({ ...o, isDemo: true, website: null, publicContact: null }));
+export const opportunities = [
+  ...demoOpportunities,
+  ...getPublishedOpportunities(),
+];
+export function refreshOpportunities() {
+  opportunities.splice(
+    0,
+    opportunities.length,
+    ...demoOpportunities,
+    ...getPublishedOpportunities(),
+  );
+}
 export const emptyStudent = {
   id: crypto.randomUUID(),
   name: "",

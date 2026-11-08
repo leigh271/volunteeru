@@ -1,4 +1,4 @@
-name: Student experience checks
+name: Volunteer platform checks
 on:
   push:
   pull_request:
@@ -18,3 +18,4 @@ jobs:
       - run: npm run build
       - run: npx playwright install --with-deps chromium
       - run: npm test
+      - run: npm run test:server

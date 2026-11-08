@@ -1,7 +1,7 @@
 // No credentials belong in frontend configuration. The backend uses its own
 // session and resolves school membership and designated nonprofit recipients.
 const configuredBase =
-  window.__VOLUNTEERU_API__ || import.meta.env.VITE_STUDENT_API_URL || "";
+  window.__VOLUNTEERU_API__ || import.meta.env?.VITE_STUDENT_API_URL || "";
 export const apiBase =
   configuredBase &&
   configuredBase.startsWith("/") &&
