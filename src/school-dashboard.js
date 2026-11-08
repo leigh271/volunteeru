@@ -22,7 +22,7 @@ const bands = [
   { id: "not-started", label: "Not started", color: "#c6bdd9" },
   { id: "below-half", label: "Below halfway", color: "#b58bba" },
   { id: "halfway", label: "Halfway or more", color: "#8b78ca" },
-  { id: "complete", label: "Hours goal met", color: "#66845c" },
+  { id: "complete", label: "Hours goal met", color: "#7454df" },
 ];
 let rosterQuery = "",
   rosterBand = "all",
@@ -123,7 +123,7 @@ export function schoolDashboardModel(
       status: "needs_corrections",
       color: "#bd8a50",
     },
-    { label: "School approved", status: "approved", color: "#66845c" },
+    { label: "School approved", status: "approved", color: "#7454df" },
   ].map((r) => ({
     ...r,
     value: submissions.filter((s) => s.status === r.status).length,

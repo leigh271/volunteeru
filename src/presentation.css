@@ -1,16 +1,44 @@
+@font-face {
+  font-family: "DM Sans";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("./fonts/dm-sans-400.ttf") format("truetype");
+}
+@font-face {
+  font-family: "DM Sans";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("./fonts/dm-sans-500.ttf") format("truetype");
+}
+@font-face {
+  font-family: "Manrope";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("./fonts/manrope-700.ttf") format("truetype");
+}
+@font-face {
+  font-family: "Manrope";
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url("./fonts/manrope-800.ttf") format("truetype");
+}
 #vu-photo-preview {
-  --vu-bg: light-dark(#fffdf9, #171c18);
-  --vu-panel: light-dark(#fff, #222a24);
-  --vu-ink: light-dark(#263e32, #edf3eb);
-  --vu-muted: light-dark(#68776b, #b3c0b3);
-  --vu-line: light-dark(#e4e8de, #39453c);
-  --vu-green: light-dark(#356349, #a7cba9);
-  --vu-green-ink: light-dark(#fff, #17271a);
-  --vu-soft: light-dark(#edf3e8, #2b3b2d);
+  --vu-bg: light-dark(#ffffff, #181520);
+  --vu-panel: light-dark(#fff, #24202f);
+  --vu-ink: light-dark(#292a38, #f4f0fc);
+  --vu-muted: light-dark(#777281, #bbb2cb);
+  --vu-line: light-dark(#eeedf2, #3c344b);
+  --vu-primary: light-dark(#7454df, #c5b4ff);
+  --vu-primary-foreground: light-dark(#fff, #25193f);
+  --vu-soft: light-dark(#f3efff, #302641);
   --vu-pink: light-dark(#fae8e7, #482f36);
-  --vu-purple: light-dark(#8d7aba, #bdabe0);
+  --vu-purple: light-dark(#aa96ed, #bdabe0);
   --vu-gold: light-dark(#f4eed9, #403d29);
-  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+  font-family: "DM Sans", sans-serif;
   color: var(--vu-ink);
   background: var(--vu-bg);
   border-radius: 18px;
@@ -90,8 +118,8 @@
   width: 31px;
   height: 34px;
   border-radius: 12px;
-  background: var(--vu-green);
-  color: var(--vu-green-ink);
+  background: var(--vu-primary);
+  color: var(--vu-primary-foreground);
   font-size: 20px;
 }
 #vu-photo-preview .vu-head {
@@ -130,9 +158,9 @@
   text-decoration: none;
 }
 #vu-photo-preview .vu-button.primary {
-  background: var(--vu-green);
-  border-color: var(--vu-green);
-  color: var(--vu-green-ink);
+  background: var(--vu-primary);
+  border-color: var(--vu-primary);
+  color: var(--vu-primary-foreground);
 }
 #vu-photo-preview .vu-button.pink {
   background: var(--vu-pink);
@@ -145,7 +173,7 @@
   padding: 5px 10px;
   border-radius: 30px;
   background: var(--vu-soft);
-  color: var(--vu-green);
+  color: var(--vu-primary);
   font-size: 11px;
 }
 #vu-photo-preview .vu-hero {
@@ -160,7 +188,7 @@
 }
 #vu-photo-preview .vu-hero h1 em {
   font-style: normal;
-  color: var(--vu-green);
+  color: var(--vu-primary);
 }
 #vu-photo-preview .vu-hero-copy {
   max-width: 360px;
@@ -202,7 +230,7 @@
   height: 9px;
   width: 9px;
   border-radius: 100%;
-  background: var(--vu-green);
+  background: var(--vu-primary);
 }
 #vu-photo-preview .vu-flow {
   margin: 0 38px;
@@ -298,7 +326,7 @@
   gap: 12px;
   flex-wrap: wrap;
   font-size: 11px;
-  color: var(--vu-green);
+  color: var(--vu-primary);
 }
 #vu-photo-preview .vu-role-switch {
   display: flex;
@@ -342,7 +370,7 @@
 }
 #vu-photo-preview .vu-sidebar .vu-navitem.active {
   background: var(--vu-soft);
-  color: var(--vu-green);
+  color: var(--vu-primary);
 }
 #vu-photo-preview .vu-account {
   margin-top: auto;
@@ -413,7 +441,7 @@
 #vu-photo-preview .vu-progress span {
   display: block;
   height: 100%;
-  background: var(--vu-green);
+  background: var(--vu-primary);
   border-radius: inherit;
 }
 #vu-photo-preview .vu-statusline {
@@ -529,7 +557,7 @@
   background: conic-gradient(
     var(--vu-purple) 0deg 90deg,
     var(--vu-pink) 90deg 270deg,
-    var(--vu-green) 270deg 360deg
+    var(--vu-primary) 270deg 360deg
   );
 }
 #vu-photo-preview .vu-ring span {
@@ -579,7 +607,7 @@
 #vu-photo-preview .vu-bars i {
   display: block;
   width: 100%;
-  background: var(--vu-green);
+  background: var(--vu-primary);
   border-radius: 5px 5px 0 0;
 }
 #vu-photo-preview .vu-toast {
@@ -608,7 +636,7 @@
   padding: 0;
   border: 0;
   background: none;
-  color: var(--vu-green);
+  color: var(--vu-primary);
   font-size: 12px;
 }
 @media (max-width: 720px) {
@@ -736,14 +764,13 @@
   }
 }
 #vu-photo-preview {
-  --vu-bg: light-dark(#f5f5f7, #111314);
-  --vu-panel: light-dark(#ffffff, #1c2021);
-  --vu-ink: light-dark(#1d1d1f, #f5f5f7);
-  --vu-muted: light-dark(#6e6e73, #afb3b4);
-  --vu-line: light-dark(#e3e4e6, #353a3b);
-  --vu-soft: light-dark(#eef3ef, #25322a);
-  font-family:
-    -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
+  --vu-bg: light-dark(#ffffff, #181520);
+  --vu-panel: light-dark(#ffffff, #24202f);
+  --vu-ink: light-dark(#292a38, #ffffff);
+  --vu-muted: light-dark(#777281, #bbb2cb);
+  --vu-line: light-dark(#eeedf2, #3c344b);
+  --vu-soft: light-dark(#f3efff, #302641);
+  font-family: "DM Sans", sans-serif;
   letter-spacing: -0.2px;
   border-radius: 20px;
 }
@@ -767,7 +794,7 @@
   gap: 24px;
 }
 #vu-photo-preview .vu-button {
-  border-radius: 30px;
+  border-radius: 9px;
   padding: 10px 18px;
   box-shadow: none;
   letter-spacing: -0.1px;
@@ -789,7 +816,7 @@
 #vu-photo-preview .vu-eyebrow {
   font-size: 11px;
   font-weight: 500;
-  color: var(--vu-green);
+  color: var(--vu-primary);
   letter-spacing: 2px;
 }
 #vu-photo-preview .vu-hero h1 {
@@ -878,7 +905,7 @@
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
   border-radius: 30px;
-  color: #303a33;
+  color: #40364f;
   font-size: 11px;
   padding: 8px 13px;
   letter-spacing: -0.1px;
@@ -1171,6 +1198,113 @@
   }
   #vu-photo-preview .vu-mobile-tabs [aria-pressed="true"] {
     background: var(--vu-soft);
-    color: var(--vu-green);
+    color: var(--vu-primary);
+  }
+}
+
+/* One VolunteerU identity across the public site and presentation workspaces. */
+#vu-photo-preview .vu-brand {
+  font-family: "Manrope", sans-serif;
+  font-weight: 800;
+  font-size: 25px;
+  gap: 10px;
+  letter-spacing: -1px;
+}
+#vu-photo-preview .vu-mark {
+  position: relative;
+  width: 35px;
+  height: 35px;
+  border-radius: 12px;
+  font-size: 27px;
+  font-weight: 500;
+  overflow: visible;
+}
+#vu-photo-preview .vu-brand-star {
+  position: absolute;
+  top: -7px;
+  right: -5px;
+  font-size: 15px;
+}
+#vu-photo-preview .vu-brand-u {
+  color: var(--vu-primary);
+}
+#vu-photo-preview .vu-wordmark {
+  display: inline;
+}
+#vu-photo-preview h1,
+#vu-photo-preview h2,
+#vu-photo-preview h3 {
+  font-family: "Manrope", sans-serif;
+  font-weight: 700;
+}
+#vu-photo-preview .vu-button {
+  border-radius: 9px;
+}
+#vu-photo-preview .vu-pill {
+  background: var(--vu-soft);
+  color: var(--vu-primary);
+}
+#vu-photo-preview .vu-demo-top {
+  background: var(--vu-soft);
+  color: var(--vu-primary);
+}
+#vu-photo-preview .vu-bloom {
+  background: linear-gradient(115deg, var(--vu-soft), var(--vu-panel));
+}
+#vu-photo-preview .vu-entry-art {
+  background: var(--vu-soft);
+}
+#vu-photo-preview .vu-queue {
+  background: var(--vu-soft);
+}
+#vu-photo-preview .vu-panel,
+#vu-photo-preview .vu-entry {
+  border-radius: 20px;
+}
+#vu-photo-preview .vu-app {
+  grid-template-columns: 208px minmax(0, 1fr);
+}
+#vu-photo-preview .vu-sidebar .vu-navitem {
+  padding: 12px 14px;
+  border-radius: 12px;
+  font-size: 13px;
+}
+#vu-photo-preview .vu-sidebar .vu-navitem.active {
+  background: var(--vu-soft);
+  color: var(--vu-primary);
+}
+@media (min-width: 1100px) {
+  #vu-photo-preview .vu-app {
+    grid-template-columns: 244px minmax(0, 1fr);
+  }
+}
+@media (max-width: 760px) {
+  #vu-photo-preview .vu-app {
+    grid-template-columns: 1fr;
+  }
+  #vu-photo-preview .vu-sidebar {
+    display: none;
+  }
+  #vu-photo-preview .vu-mobile-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin-bottom: 20px;
+  }
+}
+@media (max-width: 500px) {
+  #vu-photo-preview .vu-brand {
+    font-size: 20px;
+    gap: 8px;
+  }
+  #vu-photo-preview .vu-mark {
+    width: 30px;
+    height: 30px;
+    font-size: 23px;
+  }
+  #vu-photo-preview .vu-brand-star {
+    font-size: 13px;
+    top: -6px;
+    right: -4px;
   }
 }
