@@ -22,6 +22,7 @@ async function seed(page, hours) {
         id: "bloom-app",
         studentId: "bloom-student",
         opportunityId: "demo",
+        submittedAt: new Date().toISOString(),
         status: "approved",
       },
     ];
