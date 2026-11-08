@@ -1,3 +1,4 @@
+import { seedEventAttendanceDemo } from "./event-attendance-demo.js";
 import { processDemoTrainingReminder } from "./outreach-demo-model.js";
 import { linkFlowersEvent } from "./flowers-event.js";
 import { commandCenterMarkup, bindCommandCenter } from "./command-center.js";
@@ -636,7 +637,7 @@ function reviewHours(d, id, render) {
   const a = d.attendance.find((a) => a.attendance_id === id);
   const p = d.profiles.find((p) => p.volunteer_id === a.volunteer_id);
   const modal = showModal(
-    `<h2>Review ${esc(p.name)}’s hours</h2><p>Fictional attendance correction. Original source values stay in the audit record. Only actual shift time minus unpaid breaks is eligible.</p><form><label>Actual check-out (Eastern time)<input type="datetime-local" name="checkout" required min="${esc(a.actual_check_in.slice(0, 16))}" max="${esc(a.scheduled_end.slice(0, 16))}" value="${esc(a.actual_check_out.slice(0, 16))}"></label><label>Unpaid break minutes<input type="number" name="break" min="0" max="480" required value="${a.unpaid_break_minutes}"></label><label>Correction / approval reason<textarea name="reason" required maxlength="1000"></textarea></label><p id="hw-review-error" role="status"></p><button class="primary">Approve demo hours</button></form>`,
+    `<h2>Review ${esc(p.name)}’s hours</h2><p>Fictional attendance correction. Original source values stay in the audit record. Only actual shift time minus unpaid breaks is eligible.</p><form><label>Actual check-out (Eastern time)<input type="datetime-local" name="checkout" required min="${esc(a.actual_check_in.slice(0, 16))}" max="${esc(a.scheduled_end.slice(0, 16))}" value="${esc((a.actual_check_out || "").slice(0, 16))}"></label><label>Unpaid break minutes<input type="number" name="break" min="0" max="480" required value="${a.unpaid_break_minutes}"></label><label>Correction / approval reason<textarea name="reason" required maxlength="1000"></textarea></label><p id="hw-review-error" role="status"></p><button class="primary">Approve demo hours</button></form>`,
   );
   modal.querySelector("form").onsubmit = (e) => {
     e.preventDefault();
@@ -661,6 +662,9 @@ function reviewHours(d, id, render) {
     }
     try {
       approveAttendance(d, id, checkout, breaks, reason);
+      a.checkout_approved_at = a.reviewed_at;
+      a.checkout_approved_by = "Demo coordinator";
+      if (a.checkout_reminder) a.checkout_reminder.status = "resolved";
     } catch (err) {
       modal.querySelector("#hw-review-error").textContent = err.message;
       return;
@@ -678,7 +682,11 @@ function reviewHours(d, id, render) {
 
 export function ensureFlowersWorkspace() {
   const d = get();
-  if (d && linkFlowersEvent(d)) bridge(d);
+  if (d) {
+    const linked = linkFlowersEvent(d);
+    const seeded = seedEventAttendanceDemo(d);
+    if (linked || seeded) bridge(d);
+  }
 }
 
 export function saveDemoParticipant(d) {
