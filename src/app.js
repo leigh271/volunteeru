@@ -14,6 +14,7 @@ import {
   bindStudentEventAccess,
 } from "./command-center.js";
 import {
+  initializeNonprofitDemo,
   herwellMarkup,
   bindHerwell,
   herwellEntryMarkup,
@@ -310,7 +311,11 @@ function welcome() {
       (button.onclick = () => {
         const action = button.dataset.vu;
         if (["student", "nonprofit", "school"].includes(action)) {
-          location.assign(`/demo.html?role=${action}`);
+          location.assign(
+            action === "nonprofit"
+              ? "/?view=nonprofit&page=Events&demo=herwell"
+              : `/demo.html?role=${action}`,
+          );
         } else if (action === "accounts" || action === "how") {
           document
             .querySelector(action === "accounts" ? "#vu-accounts" : "#vu-how")
@@ -835,7 +840,7 @@ window.addEventListener("storage", (event) => {
   refresh();
   render();
 });
-render();
+initializeNonprofitDemo().catch(console.error).finally(render);
 
 window.addEventListener("volunteeru:nonprofit-change", refreshOpportunities);
 startStudentUpdates(render);
