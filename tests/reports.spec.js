@@ -1,10 +1,7 @@
 import { test, expect } from "@playwright/test";
 import fs from "node:fs/promises";
-const nav = (page) =>
-  page
-    .locator("aside:visible,.mobile-nav:visible")
-    .getByRole("button", { name: "Impact Reports" })
-    .click();
+import { navigate } from "./navigation.js";
+const nav = (page) => navigate(page, "Impact Reports");
 const errors = new WeakMap();
 test.beforeEach(({ page }) => {
   const list = [];
