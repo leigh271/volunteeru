@@ -69,6 +69,10 @@ export function eventDayMarkup() {
     list.length
       ? list
           .map((a) => {
+            if (a.event.id.startsWith("herwell:")) {
+              const record = ownRecord(a);
+              return `<article class="event-day-card"><h3>${esc(a.event.title)}</h3><p class="demo-notice">Imported future-data simulation. Live check-in is disabled for fixture records.</p><p>${esc(a.shift.role)} · ${esc(dateLabel(a.shift.startsAt))} – ${esc(dateLabel(a.shift.endsAt))}</p><p>${record ? esc(summary(record)) : "Simulated no-show · zero credited hours"}</p><p>Attendance corrections and approvals are handled by the coordinator command center.</p></article>`;
+            }
             const record = ownRecord(a),
               start = Date.parse(a.event.startsAt),
               end = windowEnd(a.event),

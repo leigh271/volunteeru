@@ -157,6 +157,7 @@ export function buildImpactReport(
   const groupedSchools = [...schools.values()].map((s) => ({
     ...s,
     students: s.students.size,
+    hours: Math.round(s.hours * 100) / 100,
   }));
   const eventRows = events.map((e) => {
     const own = acceptedApplications.filter((a) => a.opportunityId === e.id),
@@ -171,9 +172,12 @@ export function buildImpactReport(
       approvedRegistrations: own.length,
       attendance: [...presentApps].filter((id) => ownIds.has(id)).length,
       completedShifts: [...completedApps].filter((id) => ownIds.has(id)).length,
-      approvedHours: hours
-        .filter((h) => ownIds.has(h.applicationId))
-        .reduce((sum, h) => sum + number(h.hours), 0),
+      approvedHours:
+        Math.round(
+          hours
+            .filter((h) => ownIds.has(h.applicationId))
+            .reduce((sum, h) => sum + number(h.hours), 0) * 100,
+        ) / 100,
       reach: number(e.impact?.reach),
       suppliesDistributed: number(e.impact?.suppliesDistributed),
       outcomes: typeof e.impact?.outcomes === "string" ? e.impact.outcomes : "",
@@ -182,7 +186,8 @@ export function buildImpactReport(
         typeof e.impact?.reportedAt === "string" ? e.impact.reportedAt : null,
     };
   });
-  const totalHours = hours.reduce((sum, h) => sum + number(h.hours), 0);
+  const totalHours =
+    Math.round(hours.reduce((sum, h) => sum + number(h.hours), 0) * 100) / 100;
   const evidenceRecordIds = [
     ...new Set(
       [

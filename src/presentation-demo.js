@@ -1,3 +1,4 @@
+import { MAYA_EVENT, FLOWERS_NAME } from "./flowers-event.js";
 import { publicHomeMarkup } from "./presentation-home.js";
 document.querySelector("#app").innerHTML = publicHomeMarkup();
 
@@ -177,7 +178,7 @@ document.querySelector("#app").innerHTML = publicHomeMarkup();
       photos.students +
       '" alt="Two women students collaborating outdoors">' +
       pill("YOUR NEXT SHIFT") +
-      `<h3>Community wellness day</h3><p class="vu-small vu-muted">Flowers for Women · Fort Lauderdale<br>Nov 21 · 10 AM–12 PM · 2 hours</p><div class="vu-bottom-link"><span class="vu-small">✓ You’re registered</span><button data-vu="student-detail">View instructions →</button></div></section><section class="vu-panel"><h3>Your latest service record</h3><div class="vu-record"><div><strong>Period-kit packing</strong><p>Nov 7 · Flowers for Women · ${submittedHours} hours</p></div></div><div style="margin-top:15px">` +
+      `<h3>Community Wellness Day</h3><p class="vu-small vu-muted">Flowers for Women · Fort Lauderdale<br>Nov 21 · 10 AM–12 PM · 2 hours</p><div class="vu-bottom-link"><span class="vu-small">✓ You’re registered</span><button data-vu="student-detail">View instructions →</button></div><a class="vu-link" href="/?view=nonprofit&page=Events&amp;event=FFW-CWD-2026-11-21" style="display:inline-block;margin-top:14px;font-size:11px">View in nonprofit workspace ↗</a></section><section class="vu-panel"><h3>Your latest service record</h3><div class="vu-record"><div><strong>Period-kit packing</strong><p>Nov 7 · Flowers for Women · ${submittedHours} hours</p></div></div><div style="margin-top:15px">` +
       pill(
         accepted
           ? "School accepted"
@@ -228,7 +229,7 @@ document.querySelector("#app").innerHTML = publicHomeMarkup();
       photos.volunteers +
       '" alt="Volunteers sorting donated clothing">' +
       pill("UPCOMING EVENT") +
-      '<h3>Community wellness day</h3><p class="vu-small vu-muted">Nov 21 · Fort Lauderdale · 10 AM–12 PM</p><div class="vu-record"><span>4 registered volunteers</span><strong>4 spaces left</strong></div><button class="vu-button" data-vu="nonprofit-detail">View event & roster →</button></section><section class="vu-panel"><h3>Ready for the day</h3><div class="vu-record"><span>Volunteer instructions</span><strong>Ready ✓</strong></div><div class="vu-record"><span>Coordinator assigned</span><strong>Taylor</strong></div><div class="vu-record"><span>Check-in list</span><strong>4 people</strong></div><p class="vu-context">Each verified record goes to the student’s school for acceptance.</p></section></div>'
+      '<h3>Community Wellness Day</h3><p class="vu-small vu-muted">Nov 21 · Fort Lauderdale · 10 AM–12 PM</p><div class="vu-record"><span>4 registered volunteers</span><strong>4 spaces left</strong></div><button class="vu-button" data-vu="nonprofit-detail">View event & roster →</button></section><section class="vu-panel"><h3>Ready for the day</h3><div class="vu-record"><span>Volunteer instructions</span><strong>Ready ✓</strong></div><div class="vu-record"><span>Coordinator assigned</span><strong>Taylor</strong></div><div class="vu-record"><span>Check-in list</span><strong>4 people</strong></div><p class="vu-context">Each verified record goes to the student’s school for acceptance.</p></section></div>'
     );
   }
   function school() {
@@ -323,7 +324,7 @@ document.querySelector("#app").innerHTML = publicHomeMarkup();
           "Find your next good thing.",
           "Pre-filled opportunities near Fort Lauderdale.",
         ) +
-        `<div class="vu-two"><section class="vu-panel vu-event"><img class="vu-event-photo" src="${photos.volunteers}" alt="Volunteers packing donations"><h3>Food pantry packing</h3><p class="vu-small vu-muted">Nov 28 · 10 AM–12 PM · 2 hours · Ages 16+</p><p class="vu-context">Pack groceries and help prepare donation boxes with a community team.</p><button class="vu-button primary" data-vu="join">${joined ? "Saved ✓" : "Save opportunity"}</button></section><section class="vu-panel vu-event"><img class="vu-event-photo" src="${photos.students}" alt="Students working together"><h3>Community wellness day</h3><p class="vu-small vu-muted">Nov 21 · Fort Lauderdale · 2 hours</p><p class="vu-context">Welcome guests, prepare resource tables, and help with event check-in.</p>${pill("Already registered")}<button class="vu-button" data-vu="student-detail">View shift instructions →</button></section></div>`
+        `<div class="vu-two"><section class="vu-panel vu-event"><img class="vu-event-photo" src="${photos.volunteers}" alt="Volunteers packing donations"><h3>Food pantry packing</h3><p class="vu-small vu-muted">Nov 28 · 10 AM–12 PM · 2 hours · Ages 16+</p><p class="vu-context">Pack groceries and help prepare donation boxes with a community team.</p><button class="vu-button primary" data-vu="join">${joined ? "Saved ✓" : "Save opportunity"}</button></section><section class="vu-panel vu-event"><img class="vu-event-photo" src="${photos.students}" alt="Students working together"><h3>Community Wellness Day</h3><p class="vu-small vu-muted">Nov 21 · Fort Lauderdale · 2 hours</p><p class="vu-context">Welcome guests, prepare resource tables, and help with event check-in.</p>${pill("Already registered")}<button class="vu-button" data-vu="student-detail">View shift instructions →</button></section></div>`
       );
     if (screen === "student" && activeTab === 2)
       return (
@@ -332,7 +333,7 @@ document.querySelector("#app").innerHTML = publicHomeMarkup();
           "Your registration, shift details, and latest service record are ready.",
         ) +
         submissionForm() +
-        `<section class="vu-panel"><h3>Community wellness day</h3><p class="vu-context">Nov 21 · 10 AM–12 PM · Fort Lauderdale · Coordinator: Taylor</p><div class="vu-record"><span>Registration</span>${pill("Confirmed")}</div><div class="vu-record"><span>Preparation</span><span>Read the instructions · bring water</span></div><div class="vu-record"><span>Arrival</span><span>9:50 AM · check in with Taylor</span></div><p class="vu-context">Sample venue: Community Center front desk. Help set up the resource tables, welcome guests, and support cleanup.</p></section><section class="vu-panel" style="margin-top:18px"><h3>Completed: period-kit packing</h3><p class="vu-context">Nov 7 · ${submittedHours} submitted hours · Flowers for Women</p>${pill(accepted ? "School accepted" : verified ? "Nonprofit verified · awaiting school" : submittedHours ? "Awaiting nonprofit verification" : "Not submitted")}</section>`
+        `<section class="vu-panel"><h3>Community Wellness Day</h3><p class="vu-context">Nov 21 · 10 AM–12 PM · Fort Lauderdale · Coordinator: Taylor</p><div class="vu-record"><span>Registration</span>${pill("Confirmed")}</div><div class="vu-record"><span>Preparation</span><span>Read the instructions · bring water</span></div><div class="vu-record"><span>Arrival</span><span>9:50 AM · check in with Taylor</span></div><p class="vu-context">Sample venue: Community Center front desk. Help set up the resource tables, welcome guests, and support cleanup.</p></section><section class="vu-panel" style="margin-top:18px"><h3>Completed: period-kit packing</h3><p class="vu-context">Nov 7 · ${submittedHours} submitted hours · Flowers for Women</p>${pill(accepted ? "School accepted" : verified ? "Nonprofit verified · awaiting school" : submittedHours ? "Awaiting nonprofit verification" : "Not submitted")}</section>`
       );
     if (screen === "student" && activeTab === 3)
       return (
@@ -349,7 +350,7 @@ document.querySelector("#app").innerHTML = publicHomeMarkup();
           "Events & volunteers",
           "Flowers for Women · two sample events, with the next roster ready.",
         ) +
-        `<section class="vu-panel vu-event"><img class="vu-event-photo" src="${photos.volunteers}" alt="Volunteers organizing donations"><h3>Community wellness day</h3><p class="vu-context">Nov 21 · 10 AM–12 PM · Fort Lauderdale · 4 of 8 places filled</p><div class="vu-table-wrap"><table><thead><tr><th>Volunteer</th><th>Registration</th><th>Shift</th></tr></thead><tbody>${students()
+        `<section class="vu-panel vu-event"><img class="vu-event-photo" src="${photos.volunteers}" alt="Volunteers organizing donations"><h3>Community Wellness Day</h3><p class="vu-context">Nov 21 · 10 AM–12 PM · Fort Lauderdale · 4 of 8 places filled</p><div class="vu-table-wrap"><table><thead><tr><th>Volunteer</th><th>Registration</th><th>Shift</th></tr></thead><tbody>${students()
           .map(
             (s) =>
               `<tr><td>${s.name}</td><td>Confirmed</td><td>10 AM–12 PM</td></tr>`,
@@ -485,6 +486,15 @@ document.querySelector("#app").innerHTML = publicHomeMarkup();
                 ? nonprofit()
                 : school()) +
           "</section></div>";
+    main.innerHTML = main.innerHTML
+      .replaceAll("Community Wellness Day", escape(MAYA_EVENT.title))
+      .replaceAll("Flowers for Women", escape(FLOWERS_NAME))
+      .replaceAll("Nov 21 · 10 AM–12 PM", "Nov 21 · " + escape(MAYA_EVENT.time))
+      .replaceAll(
+        "Nov 21 · Fort Lauderdale · 10 AM–12 PM",
+        "Nov 21 · " + escape(MAYA_EVENT.city) + " · " + escape(MAYA_EVENT.time),
+      )
+      .replaceAll("FFW-CWD-2026-11-21", encodeURIComponent(MAYA_EVENT.id));
     try {
       sessionStorage.setItem(
         storageKey,

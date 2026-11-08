@@ -1,0 +1,57 @@
+Platform: VolunteerU
+Nonprofit organization: HerWell Community Alliance
+
+September Volunteer Operations and Outreach
+HerWell Community Alliance
+SYNTHETIC DEMO ONLY — fictional organization, people, schools, venues, and records.
+Meeting date: 2026-09-24 | Time zone: America/New_York
+Format: fictional AI meeting summary and timestamped transcript; not an export from a real note-taking service.
+
+Summary
+Operations confirmed table and chair quantities, defined shifts, school onboarding, source tracking, deduplication, and approval rules. Canopies, weather backup, and optional purchases remain unresolved.
+
+Transcript
+
+[00:00] Manny Cruz | Volunteer Coordinator
+This is our operations follow-up for the November 14 and November 21 events. School outreach opens October 1 and closes October 31. We still target 150 unique students against 100 needed places. The actual roster may be smaller.
+
+[01:20] Lena Brooks | Logistics Lead
+The supplier confirmed 20 tables and 60 chairs for E001, arriving November 14 at 6 a.m. The two banners are ordered for November 6 delivery. Canopies are still pending; do not mark them received. E002 confirmed 12 tables and 40 chairs in the hall.
+
+[03:00] Manny Cruz | Volunteer Coordinator
+E001 shifts are setup 06:30–09:00, period health kit packing 08:30–12:00, maternal health supplies 08:30–12:00, welcome and wayfinding 08:30–12:00, and cleanup 12:00–14:00. E002 shifts are setup 08:00–10:00, cancer support resource packs 09:30–13:00, mental health welcome desk 09:30–13:00, and cleanup 13:00–15:00. All times are America/New_York.
+
+[05:10] Priya Shah | Programs Lead
+Keep the planned role counts from September 10. Period kits need inventory labels; maternal supplies need size checks. Cancer support volunteers assemble resource packs and guide visitors to staff. The mental health welcome desk handles directions and materials only, with no counseling or collection of health histories.
+
+[06:50] Diego Rivera | Communications Lead
+Campaign drafts are ready. Susie, please review them by September 28 so we can publish October 1. I will label referral channels separately from registration systems. A LinkedIn post or email click leads to the same central platform form.
+
+[08:10] Manny Cruz | Volunteer Coordinator
+We have ten fictional partner schools for testing. Each has a school ID and invitation token. Match students using their school account and normalized email. A repeat form submission through another campaign should not create another person. Never merge two different emails based only on a shared name.
+
+[09:45] Nora James | School Partnerships Lead
+I will verify each school requirement by September 30: hours required, December deadline, and whether the student seeks service hours or a capstone. Capstone eligibility needs the school’s approval; attending one event does not complete a capstone. High school profiles need guardian consent before assignment.
+
+[11:30] Lena Brooks | Logistics Lead
+I will confirm the canopies by October 9 and the E001 rain plan by October 23 with Susie. Food and decorations have not been ordered. We can ask for a quote, but nobody has accepted that task yet.
+
+[12:40] Susie Bennett | Executive Director
+Flag food and decoration quotes as unassigned with no agreed deadline. Manny should decide whether they are needed before assigning work. Do not turn a suggestion into an approved purchase.
+
+[14:05] Manny Cruz | Volunteer Coordinator
+Draft confirmations November 2, publish approved shifts November 6, and propose reminders 48 hours before each event. Capture actual check-in and checkout per shift. No-shows receive zero hours. A missing checkout leaves hours blank and pending review, not zero and not the planned shift length.
+
+[16:00] Amina Cole | Grants and Evaluation Lead
+Subtract recorded unpaid breaks. Keep calculated hours separate from approved hours. If someone leaves early, use their actual departure. Coordinator corrections need a reason and review date. Only approved hours go to school reports.
+
+[17:30] Priya Shah | Programs Lead
+For anonymous service issues, include event, time, category, what was observed, immediate staff notification, and unresolved follow-up. Example: 10:20 a.m., maternal health station ran out of size 1 diapers; one visitor left without supplies; staff lead notified. Do not record the visitor’s identity.
+
+[19:00] Manny Cruz | Volunteer Coordinator
+December 1 we can draft feedback requests; December 4 is the review meeting; school verification is due by December 11 before the December 18 student deadline. Send requests only after coordinator approval. These are plans, and attendance evidence will come from November.
+
+[20:20] Susie Bennett | Executive Director
+Confirmed logistics are distinct from pending supplies. AI task suggestions stay drafts until Manny approves them. Please keep transcript timestamps attached so he can check why each task was proposed.
+
+End of mock transcript. Task extraction is intentionally left for the platform AI; the discussion contains confirmed decisions, commitments, tentative suggestions, and unresolved items.
