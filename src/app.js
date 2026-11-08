@@ -28,9 +28,57 @@ import { contactMarkup } from "./contact.js";
 import { choices, opportunities, refreshOpportunities } from "./data.js";
 import { state, persist, apply, refresh, STORAGE_KEY } from "./store.js";
 const app = document.querySelector("#app");
+const initialView = new URLSearchParams(location.search).get("view");
+let workspace = ["nonprofit", "school"].includes(initialView)
+  ? initialView
+  : "student";
+const workspacePages = {
+  student: [
+    "Discover",
+    "Saved",
+    "My Applications",
+    "My Progress",
+    "Nearby",
+    "Event Day",
+    "Profile",
+    "Integrations",
+  ],
+  nonprofit: ["Nonprofit Portal", "Impact Reports", "Integrations"],
+  school: ["School Portal", "Integrations"],
+};
+const workspaceHome = {
+  student: "Discover",
+  nonprofit: "Nonprofit Portal",
+  school: "School Portal",
+};
+const workspaceLabels = {
+  student: "Student",
+  nonprofit: "Nonprofit",
+  school: "School",
+};
+const navigationEntries = () =>
+  workspacePages[workspace].map((name) => [name, icons[name]]);
+function workspaceSwitcher() {
+  return `<section class="workspace-bar" aria-label="Workspace switcher"><div><strong>Choose your space</strong><p>${workspace === "student" ? "For high school and college students" : workspace === "nonprofit" ? "For nonprofit organizers and coordinators" : "For school administrators and coordinators"}</p></div><div class="workspace-options"><div class="workspace-tabs" role="group" aria-label="View as"><button type="button" data-workspace="student" aria-pressed="${workspace === "student"}">Student</button><button type="button" data-workspace="nonprofit" aria-pressed="${workspace === "nonprofit"}">Nonprofit</button></div><button type="button" class="workspace-school" data-workspace="school" aria-pressed="${workspace === "school"}">School admin</button></div></section>`;
+}
+function changeWorkspace(next) {
+  if (!workspacePages[next]) return;
+  workspace = next;
+  page = workspaceHome[next];
+  step = -1;
+  editing = false;
+  modal?.remove();
+  modal = null;
+  const url = new URL(location.href);
+  url.searchParams.set("view", next);
+  history.replaceState(null, "", url);
+  render();
+  window.scrollTo(0, 0);
+  document.querySelector(`[data-workspace="${next}"]`)?.focus();
+}
 let page = new URLSearchParams(location.search).has("invite")
     ? "Integrations"
-    : "Discover",
+    : workspaceHome[workspace],
   step = -1,
   editing = false,
   filter = "All causes",
@@ -102,16 +150,14 @@ function notify(t) {
   toastTimer = setTimeout(() => el.remove(), 4000);
 }
 function nav() {
-  return `<aside><a class="brand" href="#" aria-label="VolunteerU home"><span class="brandmark">v<span>✦</span></span>Volunteer<span class="purple">U</span></a><div class="workspace">${page === "Nonprofit Portal" ? "NONPROFIT SPACE" : page === "School Portal" ? "SCHOOL SPACE" : "STUDENT SPACE"}</div><nav>${Object.entries(
-    icons,
-  )
+  return `<aside><a class="brand" href="#" aria-label="VolunteerU home"><span class="brandmark">v<span>✦</span></span>Volunteer<span class="purple">U</span></a><div class="workspace">${workspaceLabels[workspace].toUpperCase()} SPACE</div><nav>${navigationEntries()
     .map(
       ([n, i]) =>
         `<button data-page="${n}" class="nav-item ${page === n ? "active" : ""}"><span>${i}</span>${n}${n === "Saved" && state.saved.length ? `<b>${state.saved.length}</b>` : ""}</button>`,
     )
     .join(
       "",
-    )}</nav><div class="sidebar-note"><span>✳︎</span><strong>Small acts.<br>Real impact.</strong><p>Your next chapter starts with showing up.</p></div><div class="user"><div class="avatar">${esc(state.student.name[0] || "Y")}</div><div><strong>${esc(state.student.name || "Your student space")}</strong><small>${esc(state.student.school || "Let’s get started")}</small></div></div></aside>`;
+    )}</nav><div class="sidebar-note"><span>✳︎</span><strong>Small acts.<br>Real impact.</strong><p>Your next chapter starts with showing up.</p></div><div class="user"><div class="avatar">${workspace === "student" ? esc(state.student.name[0] || "Y") : icons[workspaceHome[workspace]]}</div><div><strong>${workspace === "student" ? esc(state.student.name || "Your student space") : `${workspaceLabels[workspace]} workspace`}</strong><small>${workspace === "student" ? esc(state.student.school || "Let’s get started") : "Coordinate your community"}</small></div></div></aside>`;
 }
 function shell(body) {
   const approvedHours = state.hours
@@ -131,23 +177,22 @@ function shell(body) {
           : 0),
       0,
     );
-  app.innerHTML = `${nav()}<main><header><span>GOOD THINGS START WITH YOU <span class="tiny-star">✦</span></span><div class="header-right">${bellMarkup()}<span class="demo-pill">${page === "Integrations" ? "Prototype workspace" : "Demo experience"}</span><button class="avatar" data-page="Profile" aria-label="Open profile">${esc(state.student.name[0] || "Y")}</button></div></header>${state.student.onboarded && step < 0 && page !== "School Portal" ? invitationMarkup() : ""}${body}<footer>Made for your next meaningful moment. <span>Broward & Miami-Dade ♡</span></footer></main><div class="mobile-nav">${Object.entries(
-    icons,
-  )
+  app.innerHTML = `${nav()}<main><header><span>GOOD THINGS START WITH YOU <span class="tiny-star">✦</span></span><div class="header-right">${workspace === "student" ? bellMarkup() : ""}<span class="demo-pill">${page === "Integrations" ? "Prototype workspace" : "Demo experience"}</span>${workspace === "student" ? `<button class="avatar" data-page="Profile" aria-label="Open profile">${esc(state.student.name[0] || "Y")}</button>` : ""}</div></header>${workspaceSwitcher()}${workspace === "student" && state.student.onboarded && step < 0 ? invitationMarkup() : ""}${body}<footer>Made for your next meaningful moment. <span>Broward & Miami-Dade ♡</span></footer></main><div class="mobile-nav">${navigationEntries()
     .map(
       ([n, i]) =>
         `<button data-page="${n}" class="${page === n ? "active" : ""}">${i}<small>${n}</small></button>`,
     )
     .join("")}</div>`;
-  document.querySelector("main footer").insertAdjacentHTML(
-    "beforebegin",
-    mascotMarkup({
-      onboarding: step >= 0,
-      step,
-      student: state.student,
-      approvedHours,
-    }),
-  );
+  if (workspace === "student")
+    document.querySelector("main footer").insertAdjacentHTML(
+      "beforebegin",
+      mascotMarkup({
+        onboarding: step >= 0,
+        step,
+        student: state.student,
+        approvedHours,
+      }),
+    );
   bind();
 }
 function welcome() {
@@ -412,6 +457,9 @@ function render() {
   }
 }
 function bind() {
+  document.querySelectorAll("[data-workspace]").forEach((button) => {
+    button.onclick = () => changeWorkspace(button.dataset.workspace);
+  });
   bindMascot();
   bindInvitation(render);
   bindSchoolButtons();
@@ -421,13 +469,17 @@ function bind() {
     (b) =>
       (b.onclick = () => {
         page = b.dataset.page;
+        step = -1;
+        editing = false;
         render();
         window.scrollTo(0, 0);
       }),
   );
   document.querySelector(".brand").onclick = (e) => {
     e.preventDefault();
-    page = "Discover";
+    page = workspaceHome[workspace];
+    step = -1;
+    editing = false;
     render();
   };
   document.querySelectorAll("[data-save]").forEach(

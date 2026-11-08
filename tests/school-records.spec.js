@@ -1,11 +1,6 @@
 import { test, expect } from "@playwright/test";
 const key = "volunteeru.shared.v1";
-const nav = (page, name) =>
-  page
-    .locator("aside:visible,.mobile-nav:visible")
-    .getByRole("button", { name, exact: false })
-    .first()
-    .click();
+import { navigate as nav } from "./navigation.js";
 const errors = new WeakMap();
 test.beforeEach(async ({ page }) => {
   const list = [];

@@ -14,12 +14,7 @@ test.afterEach(async ({ page }) => {
   expect(overflow).toBe(false);
 });
 
-const nav = (page, name) =>
-  page
-    .locator("aside:visible,.mobile-nav:visible")
-    .getByRole("button", { name, exact: false })
-    .first()
-    .click();
+import { navigate as nav } from "./navigation.js";
 async function seedStudent(page, records = {}) {
   await page.goto("/");
   await page.evaluate(
