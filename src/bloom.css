@@ -1,0 +1,175 @@
+.bloom-card {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  padding: 26px 32px;
+  margin: 0 0 28px;
+  border: 1px solid #e8dfdd;
+  border-radius: 24px;
+  background: linear-gradient(115deg, #fff8ef, #fff3f7 65%, #f4f5ed);
+}
+.bloom-art {
+  width: 180px;
+  aspect-ratio: 3 / 5;
+  flex: 0 0 auto;
+  background-image: url("/images/bloom-stages.png");
+  background-size: 500% 100%;
+  background-repeat: no-repeat;
+  background-position: var(--bloom-position) center;
+}
+.bloom-content {
+  flex: 1;
+  min-width: 0;
+}
+.bloom-card .mini-label {
+  color: #607956;
+  letter-spacing: 1.8px;
+}
+.bloom-card h2 {
+  font-family: Manrope, sans-serif;
+  font-size: 25px;
+  line-height: 1.3;
+  margin: 10px 0 18px;
+  color: #414b3d;
+}
+.bloom-total {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 14px;
+  color: #51495a;
+  margin: 0 0 10px;
+}
+.bloom-total > span {
+  font-weight: 700;
+  color: #607956;
+}
+.bloom-meter {
+  height: 10px;
+  background: #e8e5de;
+  border-radius: 20px;
+  overflow: hidden;
+}
+.bloom-meter > span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #a8bc8e, #6d9469);
+  transition: width 500ms ease;
+}
+.bloom-message,
+.bloom-pending {
+  font-size: 13px;
+  line-height: 1.6;
+  margin: 12px 0 0;
+  color: #6b626d;
+}
+.bloom-pending {
+  color: #77567d;
+}
+.bloom-note {
+  font-size: 11px;
+  line-height: 1.6;
+  color: #756c76;
+  margin: 14px 0 0;
+}
+.bloom-milestones {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  list-style: none;
+  margin: 24px 0 0;
+  padding: 0;
+  gap: 8px;
+}
+.bloom-milestones li {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  color: #817681;
+  text-align: center;
+}
+.bloom-milestones strong {
+  font-size: 13px;
+}
+.bloom-dot {
+  display: grid;
+  place-items: center;
+  height: 22px;
+  width: 22px;
+  border: 2px solid #c8c2bd;
+  border-radius: 50%;
+  font-size: 12px;
+}
+.bloom-milestones .reached {
+  color: #47663d;
+}
+.bloom-milestones .reached .bloom-dot {
+  border-color: #799867;
+  background: #dbe6ce;
+}
+.bloom-milestones [aria-current="step"] .bloom-dot {
+  box-shadow: 0 0 0 4px #dbe6ce80;
+}
+.bloom-compact {
+  gap: 22px;
+  padding: 16px 28px;
+}
+.bloom-compact .bloom-art {
+  width: 95px;
+}
+.bloom-compact h2 {
+  font-size: 20px;
+  margin: 8px 0 12px;
+}
+.bloom-compact .text-button {
+  margin-top: 10px;
+  font-size: 12px;
+}
+@media (max-width: 760px) {
+  .bloom-card {
+    padding: 20px;
+    gap: 14px;
+  }
+  .bloom-full {
+    flex-direction: column;
+  }
+  .bloom-full .bloom-art {
+    width: 130px;
+  }
+  .bloom-full .bloom-content {
+    width: 100%;
+  }
+  .bloom-card h2 {
+    font-size: 21px;
+  }
+  .bloom-compact {
+    padding: 16px 12px;
+    gap: 10px;
+  }
+  .bloom-compact .bloom-art {
+    width: 68px;
+  }
+  .bloom-compact h2 {
+    font-size: 17px;
+  }
+  .bloom-total {
+    font-size: 12px;
+  }
+  .bloom-card .mini-label {
+    font-size: 8px;
+    letter-spacing: 1px;
+  }
+  .bloom-milestones {
+    gap: 3px;
+  }
+  .bloom-milestones li {
+    font-size: 10px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bloom-meter > span {
+    transition: none;
+  }
+}
