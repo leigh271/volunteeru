@@ -132,9 +132,42 @@ document.querySelector("#app").innerHTML = publicHomeMarkup();
     if (!serviceClock) return "";
     return `<p class="vu-context">${serviceClock.sample ? "Sample attendance" : "Recorded attendance"} · Check-in: ${formatTime(serviceClock.start)} · ${serviceClock.end ? `Check-out: ${formatTime(serviceClock.end)}` : "Currently checked in"}</p>`;
   }
+  const clockNow = () =>
+    new Date().toLocaleTimeString("en-US", {
+      timeZone: "America/New_York",
+      hour: "numeric",
+      minute: "2-digit",
+      second: "2-digit",
+    });
+  const clockDate = () =>
+    new Date().toLocaleDateString("en-US", {
+      timeZone: "America/New_York",
+      weekday: "long",
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+    });
+  function elapsedTime() {
+    const seconds = serviceClock
+      ? Math.max(
+          0,
+          Math.floor(
+            ((serviceClock.end ?? Date.now()) - serviceClock.start) / 1000,
+          ),
+        )
+      : 0;
+    return `${String(Math.floor(seconds / 3600)).padStart(2, "0")}:${String(Math.floor(seconds / 60) % 60).padStart(2, "0")}:${String(seconds % 60).padStart(2, "0")}`;
+  }
   function clockCard() {
     const active = serviceClock && !serviceClock.end;
-    return `<section class="vu-panel" style="margin:18px 0"><span class="vu-small vu-muted">YOUR SERVICE CLOCK</span><h3>Period-kit packing</h3><p class="vu-context">Flowers for Women · Scheduled Nov 7, 2026 · 9 AM–1 PM ET · 4-hour shift</p>${attendanceDetails()}${active ? '<p class="vu-statusline"><strong>Checked in · timer running</strong><span id="vu-clock-elapsed" role="timer"></span></p>' : ""}${serviceClock?.end ? `<p role="status"><strong>Thank you, Maya! You completed your service.</strong></p><p>${clockHours()} hours recorded${clockHours() === 0 ? " · Less than a minute elapsed. Enter your completed hours below or try the sample shift." : ". Review your hours below and submit for verification. This sample event allows up to 4 credited hours."}</p>` : ""}<button class="vu-button primary" data-vu="${active ? "clock-out" : "clock-in"}" ${submittedHours || serviceClock?.end ? "disabled" : ""}>${serviceClock?.end ? "Checked out ✓" : active ? "Check out" : "Check in"}</button>${!serviceClock && !submittedHours ? '<button class="vu-button" data-vu="clock-sample" style="margin:8px">Try a 4-hour sample shift</button><p class="vu-context">Check in/out uses your device’s current date and time. For a quick presentation, the sample shift uses Nov 7, 9 AM–1 PM Eastern Time.</p>' : ""}</section>`;
+    const complete = !!serviceClock?.end;
+    return `<section class="vu-panel vu-timeclock" aria-label="Service time clock">
+      <div class="vu-clock-profile"><div class="vu-clock-avatar" aria-hidden="true">MC</div><div><strong>Maya Chen</strong><span>Student volunteer · Flowers for Women</span></div><span class="vu-clock-status ${active ? "is-active" : ""}"><i aria-hidden="true"></i>${complete ? "Shift completed" : active ? "Checked in" : "Ready to volunteer"}</span></div>
+      <div class="vu-clock-layout"><div class="vu-clock-face"><span class="vu-small vu-muted">CURRENT TIME · EASTERN</span><strong id="vu-clock-now">${clockNow()}</strong><span id="vu-clock-date">${clockDate()}</span><div class="vu-clock-event"><span class="vu-clock-pin" aria-hidden="true">⌖</span><div><strong>Period-kit packing</strong><span>Flowers for Women · Fort Lauderdale</span><span>Nov 7, 2026 · 9 AM–1 PM ET · 4-hour shift</span></div></div><div class="vu-clock-actions"><button class="vu-button primary" data-vu="clock-in" ${serviceClock || submittedHours ? "disabled" : ""}><span aria-hidden="true">◷</span> Check in</button><button class="vu-button" data-vu="clock-out" ${!active || submittedHours ? "disabled" : ""}><span aria-hidden="true">◴</span> ${complete ? "Checked out ✓" : "Check out"}</button></div></div>
+      <div class="vu-clock-summary"><div class="vu-clock-tracked"><span class="vu-small vu-muted">TIME TRACKED</span><strong id="vu-clock-elapsed" role="timer" aria-label="Elapsed service time">${elapsedTime()}</strong><span>${active ? "Timer running · check out when you finish" : complete ? "Shift recorded · ready for review" : "Your service time will appear here"}</span></div><div class="vu-clock-stamps"><div><span>Check-in</span><strong>${serviceClock ? formatTime(serviceClock.start) : "Not checked in"}</strong></div><div><span>Check-out</span><strong>${complete ? formatTime(serviceClock.end) : "Not checked out"}</strong></div></div><p class="vu-context">${submittedHours ? "Hours submitted for verification. Track approval below." : active ? "Your check-in is saved in this demo session, even if you refresh." : "Check in/out records the current date and time. Review and submit your hours after checkout."}</p></div></div>
+      ${complete ? `<div class="vu-clock-thanks" role="status"><strong>Thank you, Maya! You completed your service.</strong><p>${clockHours()} hours recorded${clockHours() === 0 ? " · Less than a minute elapsed. Enter your completed hours below or try the sample shift." : ". Review your hours below and submit for verification. This sample event allows up to 4 credited hours."}</p>${serviceClock.sample ? '<span class="vu-small">Sample attendance · Nov 7, 9 AM–1 PM Eastern Time</span>' : ""}</div>` : ""}
+      ${!serviceClock && !submittedHours ? '<div class="vu-clock-demo"><button class="vu-button" data-vu="clock-sample">Try a 4-hour sample shift</button><span class="vu-context">Presenting? Complete a clearly labeled sample shift instantly.</span></div>' : ""}
+    </section>`;
   }
   function submissionForm() {
     return (
@@ -658,13 +691,12 @@ document.querySelector("#app").innerHTML = publicHomeMarkup();
     root.querySelector("#vu-roster-rows").innerHTML = rosterRows();
   });
   function updateTimer() {
-    const el = root.querySelector("#vu-clock-elapsed");
-    if (!el || !serviceClock || serviceClock.end) return;
-    const seconds = Math.max(
-      0,
-      Math.floor((Date.now() - serviceClock.start) / 1000),
-    );
-    el.textContent = `${String(Math.floor(seconds / 3600)).padStart(2, "0")}:${String(Math.floor(seconds / 60) % 60).padStart(2, "0")}:${String(seconds % 60).padStart(2, "0")}`;
+    const now = root.querySelector("#vu-clock-now");
+    if (now) now.textContent = clockNow();
+    const date = root.querySelector("#vu-clock-date");
+    if (date) date.textContent = clockDate();
+    const elapsed = root.querySelector("#vu-clock-elapsed");
+    if (elapsed) elapsed.textContent = elapsedTime();
   }
   setInterval(updateTimer, 1000);
   render();

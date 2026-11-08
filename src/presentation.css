@@ -1308,3 +1308,192 @@
     right: -4px;
   }
 }
+
+/* Student service time clock */
+#vu-photo-preview .vu-timeclock {
+  margin: 18px 0;
+  padding: 28px;
+  border: 1px solid #e9e2fb;
+  background: #fff;
+  color: #292435;
+  box-shadow: 0 12px 40px #7454df0a;
+}
+#vu-photo-preview .vu-clock-profile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 22px;
+  border-bottom: 1px solid #eee9f6;
+}
+#vu-photo-preview .vu-clock-avatar {
+  display: grid;
+  place-items: center;
+  flex: 0 0 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: #eee7ff;
+  color: #7454df;
+  font-weight: 700;
+}
+#vu-photo-preview .vu-clock-profile > div:nth-child(2) {
+  display: grid;
+  gap: 4px;
+}
+#vu-photo-preview .vu-clock-profile span:not(.vu-clock-status) {
+  color: #777083;
+  font-size: 12px;
+}
+#vu-photo-preview .vu-clock-status {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  border-radius: 30px;
+  padding: 8px 12px;
+  background: #f3effc;
+  color: #7454df;
+  font-size: 12px;
+  white-space: nowrap;
+}
+#vu-photo-preview .vu-clock-status i {
+  width: 7px;
+  height: 7px;
+  background: #9478df;
+  border-radius: 50%;
+}
+#vu-photo-preview .vu-clock-status.is-active i {
+  background: #329567;
+}
+#vu-photo-preview .vu-clock-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  gap: 28px;
+  margin-top: 24px;
+}
+#vu-photo-preview .vu-clock-face {
+  text-align: center;
+  min-width: 0;
+}
+#vu-photo-preview #vu-clock-now {
+  display: block;
+  font-size: clamp(28px, 3.5vw, 44px);
+  font-weight: 700;
+  letter-spacing: -1.4px;
+  font-variant-numeric: tabular-nums;
+  margin: 10px 0 5px;
+  white-space: nowrap;
+}
+#vu-photo-preview #vu-clock-date {
+  font-size: 12px;
+  color: #777083;
+}
+#vu-photo-preview .vu-clock-event {
+  display: flex;
+  text-align: left;
+  align-items: center;
+  gap: 12px;
+  background: #faf8fe;
+  border: 1px solid #eee9f6;
+  border-radius: 16px;
+  padding: 16px;
+  margin: 24px 0 16px;
+}
+#vu-photo-preview .vu-clock-pin {
+  font-size: 27px;
+  color: #7454df;
+}
+#vu-photo-preview .vu-clock-event > div {
+  display: grid;
+  gap: 6px;
+}
+#vu-photo-preview .vu-clock-event span:not(.vu-clock-pin) {
+  font-size: 12px;
+  color: #777083;
+  line-height: 1.5;
+}
+#vu-photo-preview .vu-clock-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+#vu-photo-preview .vu-clock-actions button {
+  min-height: 48px;
+  justify-content: center;
+}
+#vu-photo-preview .vu-clock-actions button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+#vu-photo-preview .vu-clock-summary {
+  border-radius: 20px;
+  background: #f8f5ff;
+  padding: 22px;
+  min-width: 0;
+}
+#vu-photo-preview .vu-clock-tracked {
+  display: grid;
+  gap: 10px;
+}
+#vu-photo-preview .vu-clock-tracked > strong {
+  font-size: 34px;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -1px;
+  color: #7454df;
+}
+#vu-photo-preview .vu-clock-tracked > span:last-child {
+  color: #777083;
+  font-size: 12px;
+}
+#vu-photo-preview .vu-clock-stamps > div {
+  display: grid;
+  gap: 6px;
+  padding: 15px 0;
+  border-bottom: 1px solid #e8e0f6;
+  font-size: 12px;
+}
+#vu-photo-preview .vu-clock-stamps span {
+  color: #777083;
+}
+#vu-photo-preview .vu-clock-stamps strong {
+  font-weight: 500;
+  line-height: 1.5;
+}
+#vu-photo-preview .vu-clock-thanks {
+  border-radius: 16px;
+  background: #f3edff;
+  padding: 18px;
+  margin-top: 20px;
+}
+#vu-photo-preview .vu-clock-thanks p {
+  font-size: 13px;
+  line-height: 1.6;
+  margin-bottom: 0;
+}
+#vu-photo-preview .vu-clock-demo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  padding-top: 20px;
+  margin-top: 22px;
+  border-top: 1px solid #eee9f6;
+}
+@media (max-width: 1000px) {
+  #vu-photo-preview .vu-clock-layout {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 520px) {
+  #vu-photo-preview .vu-timeclock {
+    padding: 18px;
+  }
+  #vu-photo-preview .vu-clock-profile {
+    flex-wrap: wrap;
+  }
+  #vu-photo-preview .vu-clock-status {
+    margin-left: 58px;
+  }
+  #vu-photo-preview #vu-clock-now {
+    font-size: 35px;
+  }
+}
