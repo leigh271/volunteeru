@@ -1,3 +1,8 @@
+import {
+  schoolDashboardMarkup,
+  schoolRosterMarkup,
+  bindSchoolDashboard,
+} from "./school-dashboard.js";
 import { state, persist } from "./store.js";
 
 const KEY = "volunteeru.schools.v1";
@@ -129,28 +134,13 @@ export function schoolPortalMarkup() {
   const heading = `<section class="page-heading"><div><div class="eyebrow">GROW GOOD TOGETHER</div><h1>Your school’s <em>impact.</em></h1><p>Give students a clear path from their first event to their graduation goal.</p></div></section><p class="demo-notice">School administrator demo · no authentication or cross-device sharing. Registration records your authorization declaration; it does not verify your role. Use sample information only.</p>`;
   if (!school)
     return `${heading}<section class="profile-card school-portal"><h2>Register your school</h2><p>Set the goals. Share the invitation. See the good add up.</p><form id="register-school"><div class="school-form-grid"><label>School name<input name="schoolName" required maxlength="120" autocomplete="organization"></label><label>Administrator or coordinator name<input name="adminName" required maxlength="80" autocomplete="name"></label><label>Work email<input name="adminEmail" required type="email" maxlength="160" autocomplete="email"></label>${requirementFields()}</div><label class="checkbox"><input name="authorized" type="checkbox" required> I am authorized to coordinate volunteering for this school.</label><button class="primary" type="submit">Create demo school →</button><p id="school-feedback" role="status"></p></form>${data.schools.length ? `<label>Or reopen a demo school on this device<select id="select-school"><option value="">Choose a school</option>${data.schools.map((item) => `<option value="${esc(item.id)}">${esc(item.name)}</option>`).join("")}</select></label>` : ""}</section>`;
-  const students = school.students || [],
-    total = students.reduce((sum, item) => sum + Number(item.hours || 0), 0);
   const url = new URL(window.location.pathname, window.location.origin);
   url.searchParams.set("school", school.id);
-  return `${heading}<section class="profile-card school-portal"><div class="school-title"><div><span class="eyebrow">DEMO SCHOOL WORKSPACE</span><h2>${esc(school.name)}</h2><p>Coordinator: ${esc(school.adminName)}</p></div><button class="secondary" id="switch-school">Switch / register school</button></div><div class="school-stats"><article><strong>${students.length}</strong><span>Connected students</span></article><article><strong>${esc(total)}</strong><span>Approved volunteer hours</span></article><article><strong>${esc(school.requiredHours)}</strong><span>Graduation hours per student</span></article></div><section class="school-invite-card"><h3>Your student registration link</h3><p>Students review your school and confirm the connection before joining. This demo link works only in the browser where the school was created.</p><label>Unique school link<input id="school-link" readonly value="${esc(url.href)}"></label><button class="secondary" id="copy-school-link">Copy registration link</button><p id="school-copy-status" role="status"></p></section><h3>School requirements</h3><form id="school-requirements"><div class="school-form-grid">${requirementFields(school)}</div><button class="primary" type="submit">Save requirements</button><p id="school-feedback" role="status"></p></form></section><section class="profile-card school-portal"><h2>Student participation</h2><p>Only approved hours count toward the goal. Attendance and hours must be verified by the nonprofit integration.</p>${
-    students.length
-      ? `<div class="school-table-wrap"><table class="school-table"><thead><tr><th scope="col">Student</th><th scope="col">Applications</th><th scope="col">Approved hours</th><th scope="col">Graduation progress</th></tr></thead><tbody>${students
-          .map((student) => {
-            const percent =
-              school.requiredHours > 0
-                ? Math.min(
-                    100,
-                    Math.round((student.hours / school.requiredHours) * 100),
-                  )
-                : 100;
-            return `<tr><th scope="row">${esc(student.name)}</th><td>${esc(student.applications)}</td><td>${esc(student.hours)} / ${esc(school.requiredHours)}</td><td><progress max="100" value="${percent}" aria-label="${esc(student.name)} graduation hours progress"></progress><span>${percent}%</span></td></tr>`;
-          })
-          .join("")}</tbody></table></div>`
-      : `<div class="empty"><h3>Your first student is one invitation away.</h3><p>Share the school link and complete a student profile to see participation here.</p></div>`
-  }</section>`;
+  return `${heading}<section class="profile-card school-portal"><div class="school-title"><div><h2>${esc(school.name)}</h2><p>Coordinator: ${esc(school.adminName)}</p></div><button class="secondary" id="switch-school">Switch / register school</button></div></section>${schoolDashboardMarkup(school)}${schoolRosterMarkup()}<details class="school-settings"><summary>School settings & invitations</summary><section class="school-invite-card"><h3>Your student registration link</h3><p>Students review your school and confirm the connection before joining. This demo link works only in the browser where the school was created.</p><label>Unique school link<input id="school-link" readonly value="${esc(url.href)}"></label><button class="secondary" id="copy-school-link">Copy registration link</button><p id="school-copy-status" role="status"></p></section><h3>School requirements</h3><form id="school-requirements"><div class="school-form-grid">${requirementFields(school)}</div><button class="primary" type="submit">Save requirements</button><p id="school-feedback" role="status"></p></form></details>`;
 }
+
 export function bindSchoolPortal(rerender) {
+  bindSchoolDashboard();
   document
     .querySelector("#register-school")
     ?.addEventListener("submit", (event) => {

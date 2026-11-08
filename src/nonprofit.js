@@ -57,7 +57,7 @@ function eventManagement(event) {
     updates = event.updates || [];
   const gap = Math.max(0, event.volunteerTarget - approved.length);
   return `<section class="nonprofit-panel"><div class="nonprofit-section-heading"><div><span class="chip">${event.status === "published" ? "Published · DEMO" : "Draft · not recruiting"}</span><h2>${esc(event.title)}</h2><p>${esc(event.date)} · ${esc(event.time)} · ${esc(event.city)}</p></div><button class="${event.status === "published" ? "secondary" : "primary"}" id="toggle-publication">${event.status === "published" ? "Unpublish opportunity" : "Publish opportunity"}</button></div><div class="nonprofit-stats"><article><strong>${approved.length} / ${esc(event.volunteerTarget)}</strong><span>Approved volunteers</span></article><article><strong>${pending.length}</strong><span>Pending registrations</span></article><article><strong>${gap}</strong><span>Remaining staffing gap</span></article></div>${eventForm(event)}</section>
-  <section class="nonprofit-panel"><h2>Volunteer registrations</h2><p>Approval confirms a demo shift. Declining an application cancels its shift. Check required training before the event.</p>${
+  <section class="nonprofit-panel" id="nonprofit-registrations"><h2>Volunteer registrations</h2><p>Approval confirms a demo shift. Declining an application cancels its shift. Check required training before the event.</p>${
     applications.length
       ? applications
           .map((a) => {
@@ -81,7 +81,7 @@ function eventManagement(event) {
           .join("")
       : '<div class="nonprofit-empty">No registrations yet. Publish this opportunity so students can apply.</div>'
   }</section>
-  ${coordinatorDayMarkup(event)}<section class="nonprofit-panel"><h2>Attendance and hour review</h2><p>Only approve submitted hours after checking actual participation. These are browser-local demo decisions.</p>${
+  ${coordinatorDayMarkup(event)}<section class="nonprofit-panel" id="nonprofit-hour-review"><h2>Attendance and hour review</h2><p>Only approve submitted hours after checking actual participation. These are browser-local demo decisions.</p>${
     eventRecords(event).length
       ? eventRecords(event)
           .map((h) => {
@@ -113,7 +113,7 @@ export function nonprofitMarkup() {
   let selected = events.find((e) => e.id === selectedId);
   if (!selected && !planDraft) selected = events[0];
   if (selected) selectedId = selected.id;
-  return `${heading}<section class="nonprofit-panel"><div class="nonprofit-section-heading"><div><h2>${esc(org.name)}</h2><p>${esc(org.coordinator)} · ${esc(org.email)}</p></div><button class="secondary" id="nonprofit-switch">Switch / register nonprofit</button></div><p id="nonprofit-feedback" role="status"></p><div class="nonprofit-actions"><label>Manage event<select id="nonprofit-event-select"><option value="">Create a new event</option>${events.map((e) => `<option value="${esc(e.id)}" ${selected?.id === e.id ? "selected" : ""}>${esc(e.title)} · ${esc(e.status)}</option>`).join("")}</select></label><button class="secondary" id="new-nonprofit-event">New event</button></div></section>${selected ? eventManagement(selected) : `<section class="nonprofit-panel">${eventForm(planDraft || {})}</section>`}${plannerMarkup(org)}`;
+  return `${heading}<section class="nonprofit-panel"><div class="nonprofit-section-heading"><div><h2>${esc(org.name)}</h2><p>${esc(org.coordinator)} · ${esc(org.email)}</p></div><button class="secondary" id="nonprofit-switch">Switch / register nonprofit</button></div><p id="nonprofit-feedback" role="status"></p><div class="nonprofit-actions"><label>Manage event<select id="nonprofit-event-select"><option value="">Create a new event</option>${events.map((e) => `<option value="${esc(e.id)}" ${selected?.id === e.id ? "selected" : ""}>${esc(e.title)} · ${esc(e.status)}</option>`).join("")}</select></label><button class="secondary" id="new-nonprofit-event">New event</button></div></section>${selected ? `<nav class="workflow-shortcuts" aria-label="Nonprofit quick actions"><a href="#nonprofit-registrations">Review registrations ↓</a><a href="#nonprofit-hour-review">Verify attendance & hours ↓</a><a href="#nonprofit-event-form">Edit event details ↓</a></nav>${eventManagement(selected)}` : `<section class="nonprofit-panel">${eventForm(planDraft || {})}</section>`}${plannerMarkup(org)}`;
 }
 function mutateEvent(change, rerender) {
   const data = readNonprofits(),
