@@ -1594,3 +1594,49 @@ form > small {
     padding: 10px 14px;
   }
 }
+
+.student-signout {
+  border: 1px solid #e1d9ed;
+  border-radius: 10px;
+  background: #fff;
+  padding: 8px 12px;
+  color: #68577e;
+  cursor: pointer;
+  font: inherit;
+  font-size: 11px;
+  letter-spacing: 0;
+  white-space: nowrap;
+}
+.student-signout:focus-visible {
+  outline: 2px solid #7258e8;
+  outline-offset: 3px;
+}
+.student-signout:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+.saved-student-profiles {
+  margin: 20px 0;
+  max-width: 440px;
+  font-size: 12px;
+  text-align: left;
+}
+.saved-student-profiles summary {
+  cursor: pointer;
+  color: #7258e8;
+  font-weight: 600;
+}
+.saved-student-profiles p {
+  font-size: 12px;
+}
+.saved-student-profiles button {
+  margin: 8px 8px 0 0;
+}
+@media (max-width: 760px) {
+  .header-right:has(.student-signout) .demo-pill {
+    display: none;
+  }
+  .student-signout {
+    padding: 7px 9px;
+  }
+}

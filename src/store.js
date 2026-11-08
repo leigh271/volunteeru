@@ -206,3 +206,57 @@ export function apply(opportunityId, interest) {
   });
   return persist();
 }
+
+const PROFILE_ARCHIVE_KEY = "volunteeru.student-profiles.v1";
+export function savedStudentProfiles() {
+  try {
+    const profiles = JSON.parse(localStorage.getItem(PROFILE_ARCHIVE_KEY));
+    return Array.isArray(profiles)
+      ? profiles.filter(
+          (p) =>
+            p?.student?.onboarded &&
+            typeof p.student.id === "string" &&
+            typeof p.student.name === "string" &&
+            Array.isArray(p.saved),
+        )
+      : [];
+  } catch {
+    return [];
+  }
+}
+export function signOutStudent() {
+  refresh();
+  const previous = structuredClone(state);
+  try {
+    if (state.student.onboarded) {
+      const profiles = savedStudentProfiles().filter(
+        (p) => p.student.id !== state.student.id,
+      );
+      profiles.push({
+        student: structuredClone(state.student),
+        saved: [...state.saved],
+      });
+      localStorage.setItem(PROFILE_ARCHIVE_KEY, JSON.stringify(profiles));
+    }
+    state.student = {
+      ...structuredClone(emptyStudent),
+      id: crypto.randomUUID(),
+    };
+    state.saved = [];
+    if (persist()) return true;
+  } catch {
+    alert(
+      "Your browser could not save your profile before signing out. Please enable local storage and try again.",
+    );
+  }
+  state = previous;
+  return false;
+}
+export function resumeStudentProfile(id) {
+  const profile = savedStudentProfiles().find((p) => p.student.id === id);
+  if (!profile) return false;
+  refresh();
+  state.student = structuredClone(profile.student);
+  state.saved = [...profile.saved];
+  return persist();
+}

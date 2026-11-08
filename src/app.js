@@ -2,7 +2,11 @@ import { bloomMarkup } from "./bloom.js";
 import { schoolRecordsMarkup, bindSchoolRecords } from "./school-records.js";
 import { eventDayMarkup, bindEventDay } from "./event-day.js";
 import { reportsMarkup, bindReports } from "./reports.js";
-import { integrationsMarkup, bindIntegrations } from "./integrations.js";
+import {
+  integrationsMarkup,
+  bindIntegrations,
+  signOutStudentIntegration,
+} from "./integrations.js";
 import { nearbyMarkup, bindNearby } from "./nearby.js";
 import { nonprofitMarkup, bindNonprofit } from "./nonprofit.js";
 import {
@@ -27,7 +31,16 @@ import {
 } from "./features.js";
 import { contactMarkup } from "./contact.js";
 import { choices, opportunities, refreshOpportunities } from "./data.js";
-import { state, persist, apply, refresh, STORAGE_KEY } from "./store.js";
+import {
+  state,
+  persist,
+  apply,
+  refresh,
+  STORAGE_KEY,
+  signOutStudent,
+  savedStudentProfiles,
+  resumeStudentProfile,
+} from "./store.js";
 const app = document.querySelector("#app");
 const initialView = new URLSearchParams(location.search).get("view");
 let workspace = ["nonprofit", "school"].includes(initialView)
@@ -178,7 +191,7 @@ function shell(body) {
           : 0),
       0,
     );
-  app.innerHTML = `${nav()}<main><header><span>GOOD THINGS START WITH YOU <span class="tiny-star">✦</span></span><div class="header-right">${workspace === "student" ? bellMarkup() : ""}<span class="demo-pill">${page === "Integrations" ? "Prototype workspace" : "Demo experience"}</span>${workspace === "student" ? `<button class="avatar" data-page="Profile" aria-label="Open profile">${esc(state.student.name[0] || "Y")}</button>` : ""}</div></header>${workspaceSwitcher()}${workspace === "student" && state.student.onboarded && step < 0 ? invitationMarkup() : ""}${body}<footer>Made for your next meaningful moment. <span>Broward & Miami-Dade ♡</span></footer></main><div class="mobile-nav">${navigationEntries()
+  app.innerHTML = `${nav()}<main><header><span>GOOD THINGS START WITH YOU <span class="tiny-star">✦</span></span><div class="header-right">${workspace === "student" ? bellMarkup() : ""}<span class="demo-pill">${page === "Integrations" ? "Prototype workspace" : "Demo experience"}</span>${workspace === "student" && (state.student.onboarded || state.student.name) ? `<button type="button" class="student-signout" id="student-signout">Sign out</button>` : ""}${workspace === "student" ? `<button class="avatar" data-page="Profile" aria-label="Open profile">${esc(state.student.name[0] || "Y")}</button>` : ""}</div></header>${workspaceSwitcher()}${workspace === "student" && state.student.onboarded && step < 0 ? invitationMarkup() : ""}${body}<footer>Made for your next meaningful moment. <span>Broward & Miami-Dade ♡</span></footer></main><div class="mobile-nav">${navigationEntries()
     .map(
       ([n, i]) =>
         `<button data-page="${n}" class="${page === n ? "active" : ""}">${i}<small>${n}</small></button>`,
@@ -198,7 +211,16 @@ function shell(body) {
 }
 function welcome() {
   shell(
-    `<section class="welcome">${invitationMarkup()}<div class="eyebrow">YOUR TIME. YOUR COMMUNITY. YOUR IMPACT.</div><h1>Find your cause.<br><em>Make your impact.</em></h1><p>Big change starts with a little of your time. Find volunteer opportunities that feel like you.</p><button class="primary" id="start">Find my opportunities <span>↗</span></button><div class="welcome-tags"><span>♡ Causes you care about</span><span>✧ A fit for your schedule</span></div><div class="welcome-art"><span>✦</span><div>YOU +<br> A LITTLE TIME<br><b>= A BIG DIFFERENCE</b></div><span>♡</span></div><p class="demo-notice">Explore demo listings and a separate directory of real potential organizations. No partnerships or placements are confirmed. Applications stay on this device.</p></section>`,
+    `<section class="welcome">${invitationMarkup()}<div class="eyebrow">YOUR TIME. YOUR COMMUNITY. YOUR IMPACT.</div><h1>Find your cause.<br><em>Make your impact.</em></h1><p>Big change starts with a little of your time. Find volunteer opportunities that feel like you.</p><button class="primary" id="start">Find my opportunities <span>↗</span></button>${
+      savedStudentProfiles().length
+        ? `<details class="saved-student-profiles"><summary>Resume a saved demo profile</summary><p>Profiles are saved on this device only. This demo does not require a password.</p>${savedStudentProfiles()
+            .map(
+              (profile) =>
+                `<button type="button" class="secondary" data-resume-student="${esc(profile.student.id)}">Resume ${esc(profile.student.name)}</button>`,
+            )
+            .join("")}</details>`
+        : ""
+    }<div class="welcome-tags"><span>♡ Causes you care about</span><span>✧ A fit for your schedule</span></div><div class="welcome-art"><span>✦</span><div>YOU +<br> A LITTLE TIME<br><b>= A BIG DIFFERENCE</b></div><span>♡</span></div><p class="demo-notice">Explore demo listings and a separate directory of real potential organizations. No partnerships or placements are confirmed. Applications stay on this device.</p></section>`,
   );
   document.querySelector("#start").onclick = () => {
     step = 0;
@@ -458,6 +480,52 @@ function render() {
   }
 }
 function bind() {
+  document
+    .querySelector("#student-signout")
+    ?.addEventListener("click", async (event) => {
+      const button = event.currentTarget;
+      button.disabled = true;
+      try {
+        await signOutStudentIntegration();
+        if (!signOutStudent()) {
+          button.disabled = false;
+          return;
+        }
+        workspace = "student";
+        page = "Discover";
+        step = -1;
+        editing = false;
+        skipped.clear();
+        filter = "All causes";
+        county = "All locations";
+        modal?.remove();
+        modal = null;
+        const url = new URL(location.href);
+        for (const key of ["school", "invite"]) url.searchParams.delete(key);
+        url.searchParams.set("view", "student");
+        url.hash = "";
+        history.replaceState(null, "", url);
+        render();
+        window.scrollTo(0, 0);
+        document.querySelector("#start")?.focus();
+        notify("Signed out. Your demo profile is saved on this device.");
+      } catch {
+        button.disabled = false;
+        notify("Could not sign out of the server. Please try again.");
+      }
+    });
+  document.querySelectorAll("[data-resume-student]").forEach(
+    (button) =>
+      (button.onclick = () => {
+        if (resumeStudentProfile(button.dataset.resumeStudent)) {
+          page = "Discover";
+          step = -1;
+          editing = false;
+          render();
+          window.scrollTo(0, 0);
+        }
+      }),
+  );
   document.querySelectorAll("[data-workspace]").forEach((button) => {
     button.onclick = () => changeWorkspace(button.dataset.workspace);
   });

@@ -288,3 +288,12 @@ export async function restoreIntegrationSession(rerender) {
 
 export const integrationSession = () => session;
 export const requestIntegration = request;
+
+export async function signOutStudentIntegration() {
+  generation++;
+  if (session?.user?.role !== "student") return;
+  await request("/auth/logout", "POST", {});
+  session = null;
+  records = null;
+  feedback = "Signed out.";
+}
