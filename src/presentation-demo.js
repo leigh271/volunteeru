@@ -26,6 +26,7 @@ document.querySelector("#app").innerHTML = publicHomeMarkup();
   root.style.setProperty("--vu-plant-image", 'url("/images/bloom-stages.png")');
   let screen = "home",
     submittedHours = 0,
+    serviceClock = null,
     verified = false,
     accepted = false,
     joined = false,
@@ -107,8 +108,36 @@ document.querySelector("#app").innerHTML = publicHomeMarkup();
       " account</span></div></aside>"
     );
   }
+  const formatTime = (value) =>
+    new Date(value).toLocaleString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+      hour: "numeric",
+      minute: "2-digit",
+    });
+  const clockHours = () =>
+    serviceClock?.end
+      ? Math.min(
+          4,
+          Math.round(
+            ((serviceClock.end - serviceClock.start) / 3600000) * 100,
+          ) / 100,
+        )
+      : 0;
+  function attendanceDetails() {
+    if (!serviceClock) return "";
+    return `<p class="vu-context">${serviceClock.sample ? "Sample attendance" : "Recorded attendance"} · Check-in: ${formatTime(serviceClock.start)} · ${serviceClock.end ? `Check-out: ${formatTime(serviceClock.end)}` : "Currently checked in"}</p>`;
+  }
+  function clockCard() {
+    const active = serviceClock && !serviceClock.end;
+    return `<section class="vu-panel" style="margin:18px 0"><span class="vu-small vu-muted">YOUR SERVICE CLOCK</span><h3>Period-kit packing</h3><p class="vu-context">Flowers for Women · Scheduled Nov 7, 2026 · 9 AM–1 PM · 4-hour shift</p>${attendanceDetails()}${active ? '<p class="vu-statusline"><strong>Checked in · timer running</strong><span id="vu-clock-elapsed" role="timer"></span></p>' : ""}${serviceClock?.end ? `<p role="status"><strong>Thank you, Maya! You completed your service.</strong></p><p>${clockHours()} hours recorded${clockHours() === 0 ? " · Less than a minute elapsed. Enter your completed hours below or try the sample shift." : ". Review your hours below and submit for verification. This sample event allows up to 4 credited hours."}</p>` : ""}<button class="vu-button primary" data-vu="${active ? "clock-out" : "clock-in"}" ${submittedHours || serviceClock?.end ? "disabled" : ""}>${serviceClock?.end ? "Checked out ✓" : active ? "Check out" : "Check in"}</button>${!serviceClock && !submittedHours ? '<button class="vu-button" data-vu="clock-sample" style="margin:8px">Try a 4-hour sample shift</button><p class="vu-context">Check in/out uses your device’s current date and time. For a quick presentation, the sample shift uses Nov 7, 9 AM–1 PM.</p>' : ""}</section>`;
+  }
   function submissionForm() {
-    return `<section class="vu-panel" style="margin:18px 0"><h3>Log completed service</h3><p class="vu-context">Period-kit packing · Flowers for Women · Nov 7 · up to 4 hours</p><form id="vu-hours-form"><label class="vu-field">Hours completed<input name="hours" type="number" min="0.25" max="4" step="0.25" required value="${submittedHours || 4}" ${submittedHours ? "disabled" : ""} aria-describedby="vu-hours-help"></label><p id="vu-hours-help" class="vu-context">Enter 0.25–4 hours. Only school-accepted hours grow your plant.</p><button type="submit" class="vu-button primary" ${submittedHours ? "disabled" : ""}>${submittedHours ? "Hours submitted ✓" : "Submit hours"}</button></form><p class="vu-context" role="status">${submittedHours ? `${submittedHours} hours submitted · ${accepted ? "School accepted" : verified ? "Awaiting school acceptance" : "Awaiting nonprofit verification"}. Use Reset demo to try again.` : "Ready to submit. Your previous 26 accepted hours stay in your progress."}</p></section>`;
+    return (
+      clockCard() +
+      `<section class="vu-panel" style="margin:18px 0"><h3>Log completed service</h3><p class="vu-context">Period-kit packing · Flowers for Women · up to 4 hours</p><form id="vu-hours-form"><label class="vu-field">Hours completed<input name="hours" type="number" min="0.01" max="4" step="0.01" required value="${submittedHours || (serviceClock?.end ? clockHours() || "" : 4)}" ${submittedHours || (serviceClock && !serviceClock.end) ? "disabled" : ""} aria-describedby="vu-hours-help"></label><p id="vu-hours-help" class="vu-context">${serviceClock && !serviceClock.end ? "Check out to finish timing before submitting." : "Review or enter 0.01–4 hours. Only school-accepted hours grow your plant."}</p><button type="submit" class="vu-button primary" ${submittedHours || (serviceClock && !serviceClock.end) ? "disabled" : ""}>${submittedHours ? "Hours submitted ✓" : "Submit hours"}</button></form><p class="vu-context" role="status">${submittedHours ? `${submittedHours} hours submitted · ${accepted ? "School accepted" : verified ? "Awaiting school acceptance" : "Awaiting nonprofit verification"}. Use Reset demo to try again.` : "Ready to submit. Your previous 26 accepted hours stay in your progress."}</p></section>`
+    );
   }
   function student() {
     const hours = 26 + (accepted ? submittedHours : 0),
@@ -374,11 +403,27 @@ document.querySelector("#app").innerHTML = publicHomeMarkup();
       screen = roles[saved.screen] ? saved.screen : "home";
       submittedHours =
         Number.isFinite(saved.submittedHours) &&
-        saved.submittedHours >= 0.25 &&
+        saved.submittedHours >= 0.01 &&
         saved.submittedHours <= 4 &&
-        Number.isInteger(saved.submittedHours * 4)
+        Math.abs(
+          saved.submittedHours * 100 - Math.round(saved.submittedHours * 100),
+        ) < 0.000001
           ? saved.submittedHours
           : 0;
+      if (
+        saved.serviceClock &&
+        Number.isFinite(saved.serviceClock.start) &&
+        saved.serviceClock.start > 0 &&
+        (saved.serviceClock.end === null ||
+          (Number.isFinite(saved.serviceClock.end) &&
+            saved.serviceClock.end >= saved.serviceClock.start))
+      ) {
+        serviceClock = {
+          start: saved.serviceClock.start,
+          end: saved.serviceClock.end,
+          sample: saved.serviceClock.sample === true,
+        };
+      }
       verified = submittedHours > 0 && saved.verified === true;
       accepted = verified && saved.accepted === true;
       joined = saved.joined === true;
@@ -414,7 +459,7 @@ document.querySelector("#app").innerHTML = publicHomeMarkup();
         : screen === "nonprofit"
           ? "Next: review as School Admin →"
           : "Next: see Student progress →";
-    return `<nav class="vu-walkthrough" aria-label="Presentation walkthrough"><span>Demo story: submit → verify → school acceptance → plant growth</span><button class="vu-button" data-vu="${next}">${label}</button></nav><nav class="vu-mobile-tabs" aria-label="Demo pages">${(screen === "student" ? ["My dashboard", "Find opportunities", "My volunteering", "My progress"] : screen === "nonprofit" ? ["Overview", "Events & volunteers", "Verify hours", "Impact reports"] : ["Overview", "Students", "Review hours", "School settings"]).map((t, i) => `<button class="vu-button" data-vu="tab-${i}" aria-pressed="${activeTab === i}">${t}</button>`).join("")}</nav>`;
+    return `<nav class="vu-walkthrough" aria-label="Presentation walkthrough"><span>Demo story: check in/out → submit → verify → school acceptance → plant growth</span><button class="vu-button" data-vu="${next}">${label}</button></nav><nav class="vu-mobile-tabs" aria-label="Demo pages">${(screen === "student" ? ["My dashboard", "Find opportunities", "My volunteering", "My progress"] : screen === "nonprofit" ? ["Overview", "Events & volunteers", "Verify hours", "Impact reports"] : ["Overview", "Students", "Review hours", "School settings"]).map((t, i) => `<button class="vu-button" data-vu="tab-${i}" aria-pressed="${activeTab === i}">${t}</button>`).join("")}</nav>`;
   }
   function render() {
     toolbar.hidden = screen === "home";
@@ -427,6 +472,9 @@ document.querySelector("#app").innerHTML = publicHomeMarkup();
           sidebar() +
           '<section class="vu-main">' +
           walkthrough() +
+          (screen === "nonprofit" || screen === "school"
+            ? attendanceDetails()
+            : "") +
           (activeTab !== 0
             ? detailPage()
             : screen === "student"
@@ -441,6 +489,7 @@ document.querySelector("#app").innerHTML = publicHomeMarkup();
         JSON.stringify({
           screen,
           submittedHours,
+          serviceClock,
           verified,
           accepted,
           joined,
@@ -482,6 +531,24 @@ document.querySelector("#app").innerHTML = publicHomeMarkup();
       activeTab = 0;
       message = "";
       render();
+    } else if (["clock-in", "clock-out", "clock-sample"].includes(action)) {
+      if (screen !== "student" || submittedHours) return;
+      if (action === "clock-in" && !serviceClock) {
+        serviceClock = { start: Date.now(), end: null, sample: false };
+        message = "You’re checked in. Thank you for showing up!";
+      } else if (action === "clock-out" && serviceClock && !serviceClock.end) {
+        serviceClock.end = Math.max(serviceClock.start, Date.now());
+        message =
+          "Thank you, Maya! Review your recorded time and submit your hours.";
+      } else if (action === "clock-sample" && !serviceClock) {
+        serviceClock = {
+          start: Date.parse("2026-11-07T09:00:00-05:00"),
+          end: Date.parse("2026-11-07T13:00:00-05:00"),
+          sample: true,
+        };
+        message = "Sample shift completed: 4 hours. Review and submit below.";
+      } else return;
+      render();
     } else if (action === "verify") {
       if (screen !== "nonprofit" || !submittedHours || verified) return;
       verified = true;
@@ -495,6 +562,7 @@ document.querySelector("#app").innerHTML = publicHomeMarkup();
       }
     } else if (action === "reset") {
       submittedHours = 0;
+      serviceClock = null;
       verified = false;
       accepted = false;
       joined = false;
@@ -551,15 +619,20 @@ document.querySelector("#app").innerHTML = publicHomeMarkup();
   root.addEventListener("submit", (event) => {
     if (event.target.id !== "vu-hours-form") return;
     event.preventDefault();
-    if (screen !== "student" || submittedHours) return;
+    if (
+      screen !== "student" ||
+      submittedHours ||
+      (serviceClock && !serviceClock.end)
+    )
+      return;
     const input = event.target.elements.hours;
     const hours = input.valueAsNumber;
     if (
       !event.target.reportValidity() ||
       !Number.isFinite(hours) ||
-      hours < 0.25 ||
+      hours < 0.01 ||
       hours > 4 ||
-      !Number.isInteger(hours * 4)
+      Math.abs(hours * 100 - Math.round(hours * 100)) > 0.000001
     )
       return;
     submittedHours = hours;
@@ -572,5 +645,16 @@ document.querySelector("#app").innerHTML = publicHomeMarkup();
     rosterQuery = event.target.value;
     root.querySelector("#vu-roster-rows").innerHTML = rosterRows();
   });
+  function updateTimer() {
+    const el = root.querySelector("#vu-clock-elapsed");
+    if (!el || !serviceClock || serviceClock.end) return;
+    const seconds = Math.max(
+      0,
+      Math.floor((Date.now() - serviceClock.start) / 1000),
+    );
+    el.textContent = `${String(Math.floor(seconds / 3600)).padStart(2, "0")}:${String(Math.floor(seconds / 60) % 60).padStart(2, "0")}:${String(seconds % 60).padStart(2, "0")}`;
+  }
+  setInterval(updateTimer, 1000);
   render();
+  updateTimer();
 })();

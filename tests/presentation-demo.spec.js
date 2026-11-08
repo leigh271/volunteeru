@@ -214,3 +214,85 @@ test("editable hours follow submission, verification and acceptance without doub
     "26",
   );
 });
+
+test("service clock survives refresh and carries timed hours through both approvals", async ({
+  page,
+}) => {
+  await page.clock.install({ time: new Date("2026-11-07T14:00:00Z") });
+  await page.goto("/demo.html?role=student");
+  await page.getByRole("button", { name: "Check in", exact: true }).click();
+  await expect(
+    page.getByRole("button", { name: "Submit hours", exact: true }),
+  ).toBeDisabled();
+  await page.clock.fastForward(90 * 60 * 1000);
+  await page.reload();
+  await expect(
+    page.getByRole("button", { name: "Check out", exact: true }),
+  ).toBeVisible();
+  await expect(page.locator("#vu-clock-elapsed")).toHaveText("01:30:00");
+  await page.getByRole("button", { name: "Check out", exact: true }).click();
+  await expect(
+    page.getByText("Thank you, Maya! You completed your service.", {
+      exact: true,
+    }),
+  ).toBeVisible();
+  await expect(page.getByLabel("Hours completed", { exact: true })).toHaveValue(
+    "1.5",
+  );
+  await page.getByRole("button", { name: "Submit hours", exact: true }).click();
+  await role(page, "Nonprofit").click();
+  await expect(page.getByText(/Recorded attendance · Check-in:/)).toBeVisible();
+  await page
+    .getByRole("button", { name: "Verify 1.5 hours →", exact: true })
+    .click();
+  await role(page, "School Admin").click();
+  await expect(page.getByText(/Recorded attendance · Check-in:/)).toBeVisible();
+  await page
+    .getByRole("button", { name: "Accept verified hours", exact: true })
+    .click();
+  await role(page, "Student").click();
+  await expect(page.getByRole("progressbar")).toHaveAttribute(
+    "aria-valuenow",
+    "27.5",
+  );
+  await page.getByRole("button", { name: "Reset demo", exact: true }).click();
+  await expect(
+    page.getByRole("button", { name: "Check in", exact: true }),
+  ).toBeEnabled();
+});
+
+test("sample service clock is explicit and fills a four-hour completed shift", async ({
+  page,
+}) => {
+  await page.goto("/demo.html?role=student");
+  await tab(page, "My volunteering").click();
+  await page
+    .getByRole("button", { name: "Try a 4-hour sample shift", exact: true })
+    .click();
+  await expect(page.getByText(/Sample attendance · Check-in:/)).toBeVisible();
+  await expect(
+    page.getByRole("button", { name: "Checked out ✓", exact: true }),
+  ).toBeDisabled();
+  await expect(page.getByLabel("Hours completed", { exact: true })).toHaveValue(
+    "4",
+  );
+  await page.getByRole("button", { name: "Submit hours", exact: true }).click();
+  await role(page, "Nonprofit").click();
+  await page
+    .getByRole("button", { name: "Verify 4 hours →", exact: true })
+    .click();
+  await role(page, "School Admin").click();
+  await page
+    .getByRole("button", { name: "Accept verified hours", exact: true })
+    .click();
+  await role(page, "Student").click();
+  await expect(page.getByRole("progressbar")).toHaveAttribute(
+    "aria-valuenow",
+    "30",
+  );
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth + 1,
+    ),
+  ).toBe(true);
+});
