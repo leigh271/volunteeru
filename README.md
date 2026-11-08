@@ -200,3 +200,5 @@ Stock photographs: [volunteers packing donations](https://www.pexels.com/photo/v
 and [students working together](https://www.pexels.com/photo/cheerful-multiethnic-female-students-working-on-homework-together-5965707/),
 used under the [Pexels license](https://www.pexels.com/license/). The plant
 illustration is the previously approved VolunteerU mascot asset.
+
+Student demo hours are editable: open My dashboard or My volunteering, enter 0.25–4 hours for the completed sample shift, then select Submit hours. Switch to Nonprofit to verify the submitted amount and School Admin to accept it. Only acceptance adds those hours to the existing 26-hour progress. Reset demo clears the submission; refresh preserves it within the current browser session.

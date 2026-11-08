@@ -25,6 +25,7 @@ document.querySelector("#app").innerHTML = publicHomeMarkup();
   };
   root.style.setProperty("--vu-plant-image", 'url("/images/bloom-stages.png")');
   let screen = "home",
+    submittedHours = 0,
     verified = false,
     accepted = false,
     joined = false,
@@ -32,7 +33,7 @@ document.querySelector("#app").innerHTML = publicHomeMarkup();
     activeTab = 0,
     rosterQuery = "";
   const students = () => [
-    { name: "Maya Chen", hours: accepted ? 30 : 26 },
+    { name: "Maya Chen", hours: 26 + (accepted ? submittedHours : 0) },
     { name: "Jordan James", hours: 40 },
     { name: "Ana Ramirez", hours: 10 },
     { name: "Kai Thompson", hours: 30 },
@@ -106,16 +107,21 @@ document.querySelector("#app").innerHTML = publicHomeMarkup();
       " account</span></div></aside>"
     );
   }
+  function submissionForm() {
+    return `<section class="vu-panel" style="margin:18px 0"><h3>Log completed service</h3><p class="vu-context">Period-kit packing · Flowers for Women · Nov 7 · up to 4 hours</p><form id="vu-hours-form"><label class="vu-field">Hours completed<input name="hours" type="number" min="0.25" max="4" step="0.25" required value="${submittedHours || 4}" ${submittedHours ? "disabled" : ""} aria-describedby="vu-hours-help"></label><p id="vu-hours-help" class="vu-context">Enter 0.25–4 hours. Only school-accepted hours grow your plant.</p><button type="submit" class="vu-button primary" ${submittedHours ? "disabled" : ""}>${submittedHours ? "Hours submitted ✓" : "Submit hours"}</button></form><p class="vu-context" role="status">${submittedHours ? `${submittedHours} hours submitted · ${accepted ? "School accepted" : verified ? "Awaiting school acceptance" : "Awaiting nonprofit verification"}. Use Reset demo to try again.` : "Ready to submit. Your previous 26 accepted hours stay in your progress."}</p></section>`;
+  }
   function student() {
-    const hours = accepted ? 30 : 26,
+    const hours = 26 + (accepted ? submittedHours : 0),
       percent = Math.floor((hours / 40) * 100);
     return (
       '<div class="vu-greeting"><div><span class="vu-small vu-muted">YOUR STUDENT SPACE</span><h2>Good things grow with you, Maya.</h2><p>Your next meaningful moment starts here.</p></div><button class="vu-button" data-vu="home">Sign out</button></div><div class="vu-toast">' +
       message +
-      '</div><section class="vu-panel vu-bloom"><div class="vu-plant" style="--vu-stage:' +
-      (accepted ? 75 : 50) +
+      "</div>" +
+      submissionForm() +
+      '<section class="vu-panel vu-bloom"><div class="vu-plant" style="--vu-stage:' +
+      (26 + (accepted ? submittedHours : 0) >= 30 ? 75 : 50) +
       '%" role="img" aria-label="' +
-      (accepted ? "Budding plant" : "Leafy plant") +
+      (hours >= 30 ? "Budding plant" : "Leafy plant") +
       ": " +
       percent +
       '% of the 40-hour goal"></div><div class="vu-bloom-info"><span class="vu-small">YOUR IMPACT, IN BLOOM</span><h3>A little good. A little growth.</h3><div class="vu-statusline"><strong>' +
@@ -130,21 +136,25 @@ document.querySelector("#app").innerHTML = publicHomeMarkup();
       (40 - hours) +
       ' more hours to full bloom.</p><p class="vu-context">' +
       (accepted
-        ? "Your school accepted your latest 4 hours."
+        ? `Your school accepted your latest ${submittedHours} hours.`
         : verified
-          ? "4 verified hours awaiting school acceptance."
-          : "4 submitted hours awaiting nonprofit verification.") +
+          ? `${submittedHours} verified hours awaiting school acceptance.`
+          : submittedHours
+            ? `${submittedHours} submitted hours awaiting nonprofit verification.`
+            : "Log your completed service above to start the approval flow.") +
       '</p></div></section><div class="vu-two"><section class="vu-panel vu-event"><img class="vu-event-photo" src="' +
       photos.students +
       '" alt="Two women students collaborating outdoors">' +
       pill("YOUR NEXT SHIFT") +
-      '<h3>Community wellness day</h3><p class="vu-small vu-muted">Flowers for Women · Fort Lauderdale<br>Nov 21 · 10 AM–12 PM · 2 hours</p><div class="vu-bottom-link"><span class="vu-small">✓ You’re registered</span><button data-vu="student-detail">View instructions →</button></div></section><section class="vu-panel"><h3>Your latest service record</h3><div class="vu-record"><div><strong>Period-kit packing</strong><p>Nov 7 · Flowers for Women · 4 hours</p></div></div><div style="margin-top:15px">' +
+      `<h3>Community wellness day</h3><p class="vu-small vu-muted">Flowers for Women · Fort Lauderdale<br>Nov 21 · 10 AM–12 PM · 2 hours</p><div class="vu-bottom-link"><span class="vu-small">✓ You’re registered</span><button data-vu="student-detail">View instructions →</button></div></section><section class="vu-panel"><h3>Your latest service record</h3><div class="vu-record"><div><strong>Period-kit packing</strong><p>Nov 7 · Flowers for Women · ${submittedHours} hours</p></div></div><div style="margin-top:15px">` +
       pill(
         accepted
           ? "School accepted"
           : verified
             ? "Nonprofit verified"
-            : "Submitted",
+            : submittedHours
+              ? "Submitted"
+              : "Not submitted",
       ) +
       '</div><p class="vu-context">' +
       (accepted
@@ -162,21 +172,27 @@ document.querySelector("#app").innerHTML = publicHomeMarkup();
       '<div class="vu-greeting"><div><span class="vu-small vu-muted">NONPROFIT WORKSPACE · SAMPLE ACCOUNT</span><h2>Good work starts with good people.</h2><p>Flowers for Women · Coordinator: Taylor</p></div><button class="vu-button" data-vu="home">Sign out</button></div><div class="vu-toast">' +
       message +
       '</div><div class="vu-kpis"><article><strong>2</strong><span>Sample events</span></article><article><strong>4 / 8</strong><span>Next event registrations</span></article><article><strong>' +
-      (verified ? "0" : "1") +
+      (submittedHours && !verified ? "1" : "0") +
       '</strong><span>Hour records to verify</span></article></div><section class="vu-panel vu-queue"><div><span class="vu-small vu-muted">' +
-      (verified ? "VERIFICATION COMPLETE" : "NEEDS YOUR REVIEW") +
-      "</span><h3>Maya Chen · 4 service hours</h3><p>Period-kit packing · Nov 7<br>Attendance confirmed by the sample coordinator.</p>" +
+      (verified
+        ? "VERIFICATION COMPLETE"
+        : submittedHours
+          ? "NEEDS YOUR REVIEW"
+          : "NO SUBMISSIONS YET") +
+      `</span><h3>Maya Chen · ${submittedHours} service hours</h3><p>Period-kit packing · Nov 7<br>${submittedHours ? "Attendance confirmed by the sample coordinator." : "Waiting for Maya to submit hours in the Student dashboard."}</p>` +
       pill(
         accepted
           ? "School accepted"
           : verified
             ? "Verified · sent for school review"
-            : "Submitted · ready to verify",
+            : submittedHours
+              ? "Submitted · ready to verify"
+              : "Waiting for student submission",
       ) +
       '</div><button class="vu-button primary" data-vu="verify" ' +
-      (verified ? "disabled" : "") +
+      (!submittedHours || verified ? "disabled" : "") +
       ">" +
-      (verified ? "Verified ✓" : "Verify 4 hours →") +
+      (verified ? "Verified ✓" : `Verify ${submittedHours} hours →`) +
       '</button></section><div class="vu-two"><section class="vu-panel vu-event"><img class="vu-event-photo" src="' +
       photos.volunteers +
       '" alt="Volunteers sorting donated clothing">' +
@@ -227,19 +243,23 @@ document.querySelector("#app").innerHTML = publicHomeMarkup();
                 ? "Accepted"
                 : verified
                   ? "Ready for review"
-                  : "Awaiting verification"
+                  : submittedHours
+                    ? "Awaiting verification"
+                    : "Not submitted"
               : s.hours === 40
                 ? "Goal met"
                 : "Up to date") +
             "</td></tr>",
         )
         .join("") +
-      '</tbody></table></div><div class="vu-record"><div><strong>Maya Chen · Period-kit packing · 4 hours</strong><p>' +
+      `</tbody></table></div><div class="vu-record"><div><strong>Maya Chen · Period-kit packing · ${submittedHours} hours</strong><p>` +
       (accepted
         ? "Accepted. The student’s progress is updated."
         : verified
           ? "Nonprofit verification complete. Ready for school acceptance."
-          : "Waiting for nonprofit verification before school acceptance.") +
+          : submittedHours
+            ? "Waiting for nonprofit verification before school acceptance."
+            : "No new submission. Start in the Student dashboard.") +
       '</p></div><button class="vu-button primary" data-vu="accept" ' +
       (!verified || accepted ? "disabled" : "") +
       ">" +
@@ -251,8 +271,8 @@ document.querySelector("#app").innerHTML = publicHomeMarkup();
     return `<div class="vu-greeting"><div><span class="vu-small vu-muted">${roles[screen].toUpperCase()} · PRE-FILLED DEMO</span><h2>${title}</h2><p>${subtitle}</p></div><button class="vu-button" data-vu="home">Sign out</button></div><div class="vu-toast">${message}</div>`;
   }
   function progressCard() {
-    const hours = accepted ? 30 : 26;
-    return `<section class="vu-panel vu-bloom"><div class="vu-plant" style="--vu-stage:${accepted ? 75 : 50}%" role="img" aria-label="${accepted ? "Budding" : "Growing"} plant, ${Math.floor((hours / 40) * 100)}% of the service goal"></div><div class="vu-bloom-info"><span class="vu-small">YOUR IMPACT, IN BLOOM</span><h3>${hours} of 40 hours accepted</h3><div class="vu-progress" role="progressbar" aria-label="School-accepted service hours" aria-valuenow="${hours}" aria-valuemin="0" aria-valuemax="40"><span style="width:${(hours / 40) * 100}%"></span></div><p>${40 - hours} hours to full bloom.</p><p class="vu-context">${accepted ? "Your school accepted the latest 4 hours." : verified ? "4 verified hours await school acceptance." : "4 submitted hours await nonprofit verification."}</p></div></section>`;
+    const hours = 26 + (accepted ? submittedHours : 0);
+    return `<section class="vu-panel vu-bloom"><div class="vu-plant" style="--vu-stage:${hours >= 30 ? 75 : 50}%" role="img" aria-label="${hours >= 30 ? "Budding" : "Growing"} plant, ${Math.floor((hours / 40) * 100)}% of the service goal"></div><div class="vu-bloom-info"><span class="vu-small">YOUR IMPACT, IN BLOOM</span><h3>${hours} of 40 hours accepted</h3><div class="vu-progress" role="progressbar" aria-label="School-accepted service hours" aria-valuenow="${hours}" aria-valuemin="0" aria-valuemax="40"><span style="width:${(hours / 40) * 100}%"></span></div><p>${40 - hours} hours to full bloom.</p><p class="vu-context">${accepted ? `Your school accepted the latest ${submittedHours} hours.` : verified ? `${submittedHours} verified hours await school acceptance.` : submittedHours ? `${submittedHours} submitted hours await nonprofit verification.` : "No new hours submitted yet."}</p></div></section>`;
   }
   function rosterRows() {
     return (
@@ -260,7 +280,7 @@ document.querySelector("#app").innerHTML = publicHomeMarkup();
         .filter((s) => s.name.toLowerCase().includes(rosterQuery.toLowerCase()))
         .map(
           (s, i) =>
-            `<tr><td>${s.name}</td><td>${s.hours} / 40</td><td>${Math.floor((s.hours / 40) * 100)}%</td><td>${s.name === "Maya Chen" ? (accepted ? "Accepted" : verified ? "Ready for review" : "Awaiting verification") : s.hours >= 40 ? "Goal met" : "Up to date"}</td></tr>`,
+            `<tr><td>${s.name}</td><td>${s.hours} / 40</td><td>${Math.floor((s.hours / 40) * 100)}%</td><td>${s.name === "Maya Chen" ? (accepted ? "Accepted" : verified ? "Ready for review" : submittedHours ? "Awaiting verification" : "Not submitted") : s.hours >= 40 ? "Goal met" : "Up to date"}</td></tr>`,
         )
         .join("") || '<tr><td colspan="4">No matching students.</td></tr>'
     );
@@ -280,7 +300,8 @@ document.querySelector("#app").innerHTML = publicHomeMarkup();
           "Your volunteering, in one place.",
           "Your registration, shift details, and latest service record are ready.",
         ) +
-        `<section class="vu-panel"><h3>Community wellness day</h3><p class="vu-context">Nov 21 · 10 AM–12 PM · Fort Lauderdale · Coordinator: Taylor</p><div class="vu-record"><span>Registration</span>${pill("Confirmed")}</div><div class="vu-record"><span>Preparation</span><span>Read the instructions · bring water</span></div><div class="vu-record"><span>Arrival</span><span>9:50 AM · check in with Taylor</span></div><p class="vu-context">Sample venue: Community Center front desk. Help set up the resource tables, welcome guests, and support cleanup.</p></section><section class="vu-panel" style="margin-top:18px"><h3>Completed: period-kit packing</h3><p class="vu-context">Nov 7 · 4 submitted hours · Flowers for Women</p>${pill(accepted ? "School accepted" : verified ? "Nonprofit verified · awaiting school" : "Awaiting nonprofit verification")}</section>`
+        submissionForm() +
+        `<section class="vu-panel"><h3>Community wellness day</h3><p class="vu-context">Nov 21 · 10 AM–12 PM · Fort Lauderdale · Coordinator: Taylor</p><div class="vu-record"><span>Registration</span>${pill("Confirmed")}</div><div class="vu-record"><span>Preparation</span><span>Read the instructions · bring water</span></div><div class="vu-record"><span>Arrival</span><span>9:50 AM · check in with Taylor</span></div><p class="vu-context">Sample venue: Community Center front desk. Help set up the resource tables, welcome guests, and support cleanup.</p></section><section class="vu-panel" style="margin-top:18px"><h3>Completed: period-kit packing</h3><p class="vu-context">Nov 7 · ${submittedHours} submitted hours · Flowers for Women</p>${pill(accepted ? "School accepted" : verified ? "Nonprofit verified · awaiting school" : submittedHours ? "Awaiting nonprofit verification" : "Not submitted")}</section>`
       );
     if (screen === "student" && activeTab === 3)
       return (
@@ -289,7 +310,7 @@ document.querySelector("#app").innerHTML = publicHomeMarkup();
           "Maya Chen · 40-hour school service goal",
         ) +
         progressCard() +
-        `<section class="vu-panel"><h3>Your service history</h3><div class="vu-table-wrap"><table><thead><tr><th>Activity</th><th>Hours</th><th>Status</th></tr></thead><tbody><tr><td>Community food drive · Sep 12</td><td>10</td><td>School accepted</td></tr><tr><td>Wellness outreach · Oct 10</td><td>8</td><td>School accepted</td></tr><tr><td>Period-care preparation · Oct 24</td><td>8</td><td>School accepted</td></tr><tr><td>Period-kit packing · Nov 7</td><td>4</td><td>${accepted ? "School accepted" : verified ? "Awaiting school acceptance" : "Awaiting nonprofit verification"}</td></tr></tbody></table></div></section>`
+        `<section class="vu-panel"><h3>Your service history</h3><div class="vu-table-wrap"><table><thead><tr><th>Activity</th><th>Hours</th><th>Status</th></tr></thead><tbody><tr><td>Community food drive · Sep 12</td><td>10</td><td>School accepted</td></tr><tr><td>Wellness outreach · Oct 10</td><td>8</td><td>School accepted</td></tr><tr><td>Period-care preparation · Oct 24</td><td>8</td><td>School accepted</td></tr><tr><td>Period-kit packing · Nov 7</td><td>${submittedHours || "—"}</td><td>${accepted ? "School accepted" : verified ? "Awaiting school acceptance" : submittedHours ? "Awaiting nonprofit verification" : "Not submitted"}</td></tr></tbody></table></div></section>`
       );
     if (screen === "nonprofit" && activeTab === 1)
       return (
@@ -304,7 +325,7 @@ document.querySelector("#app").innerHTML = publicHomeMarkup();
           )
           .join(
             "",
-          )}</tbody></table></div></section><section class="vu-panel" style="margin-top:18px"><h3>Period-kit packing · completed Nov 7</h3><p class="vu-context">Maya Chen submitted a 4-hour service record.</p><button class="vu-button" data-vu="tab-2">Open hour verification →</button></section>`
+          )}</tbody></table></div></section><section class="vu-panel" style="margin-top:18px"><h3>Period-kit packing · completed Nov 7</h3><p class="vu-context">${submittedHours ? `Maya Chen submitted a ${submittedHours}-hour service record.` : "No service record submitted yet. Open Student to log completed hours."}</p><button class="vu-button" data-vu="tab-2">Open hour verification →</button></section>`
       );
     if (screen === "nonprofit" && activeTab === 2)
       return (
@@ -312,7 +333,7 @@ document.querySelector("#app").innerHTML = publicHomeMarkup();
           "Verify completed service.",
           "Attendance is already confirmed in this sample record.",
         ) +
-        `<section class="vu-panel vu-queue"><div><h3>Maya Chen · 4 hours</h3><p>Period-kit packing · Nov 7 · Attendance: present</p><p>Packed menstrual care kits and organized supplies for distribution.</p>${pill(verified ? "Verified" : "Submitted")}</div><button class="vu-button primary" data-vu="verify" ${verified ? "disabled" : ""}>${verified ? "Verified ✓" : "Verify 4 hours →"}</button></section>`
+        `<section class="vu-panel vu-queue"><div><h3>Maya Chen · ${submittedHours} hours</h3><p>Period-kit packing · Nov 7 · Attendance: present</p><p>Packed menstrual care kits and organized supplies for distribution.</p>${pill(verified ? "Verified" : submittedHours ? "Submitted" : "Not submitted")}</div><button class="vu-button primary" data-vu="verify" ${!submittedHours || verified ? "disabled" : ""}>${verified ? "Verified ✓" : `Verify ${submittedHours} hours →`}</button></section>`
       );
     if (screen === "nonprofit" && activeTab === 3)
       return (
@@ -320,7 +341,7 @@ document.querySelector("#app").innerHTML = publicHomeMarkup();
           "See your event’s impact.",
           "Period-kit packing · Nov 7 · sample service record only",
         ) +
-        `<div class="vu-kpis"><article><strong>${verified ? 4 : 0}</strong><span>Coordinator-verified hours</span></article><article><strong>${accepted ? 4 : 0}</strong><span>School-accepted hours</span></article><article><strong>${verified && !accepted ? 1 : 0}</strong><span>Records awaiting school review</span></article></div><section class="vu-panel"><h3>Service record</h3><div class="vu-table-wrap"><table><thead><tr><th>Student</th><th>Hours</th><th>Status</th></tr></thead><tbody><tr><td>Maya Chen</td><td>4</td><td>${accepted ? "School accepted" : verified ? "Nonprofit verified" : "Submitted"}</td></tr></tbody></table></div><div class="vu-bottom-link"><button data-vu="export">Download sample report CSV →</button></div></section>`
+        `<div class="vu-kpis"><article><strong>${verified ? submittedHours : 0}</strong><span>Coordinator-verified hours</span></article><article><strong>${accepted ? submittedHours : 0}</strong><span>School-accepted hours</span></article><article><strong>${verified && !accepted ? 1 : 0}</strong><span>Records awaiting school review</span></article></div><section class="vu-panel"><h3>Service record</h3><div class="vu-table-wrap"><table><thead><tr><th>Student</th><th>Hours</th><th>Status</th></tr></thead><tbody><tr><td>Maya Chen</td><td>${submittedHours || "—"}</td><td>${accepted ? "School accepted" : verified ? "Nonprofit verified" : submittedHours ? "Submitted" : "Not submitted"}</td></tr></tbody></table></div><div class="vu-bottom-link"><button data-vu="export">Download sample report CSV →</button></div></section>`
       );
     if (screen === "school" && activeTab === 1)
       return (
@@ -336,7 +357,7 @@ document.querySelector("#app").innerHTML = publicHomeMarkup();
           "Review verified service.",
           "Nonprofit verification must come before school acceptance.",
         ) +
-        `<section class="vu-panel vu-queue"><div><h3>Maya Chen · 4 hours</h3><p>Flowers for Women · Period-kit packing · Nov 7</p><p>${accepted ? "Accepted. Maya’s progress is now 30 of 40 hours." : verified ? "Attendance and hours verified by the nonprofit coordinator." : "Waiting for nonprofit verification. Switch to Nonprofit first."}</p>${pill(accepted ? "School accepted" : verified ? "Ready for school review" : "Awaiting verification")}</div><button class="vu-button primary" data-vu="accept" ${!verified || accepted ? "disabled" : ""}>${accepted ? "Accepted ✓" : "Accept verified hours"}</button></section>`
+        `<section class="vu-panel vu-queue"><div><h3>Maya Chen · ${submittedHours} hours</h3><p>Flowers for Women · Period-kit packing · Nov 7</p><p>${accepted ? `Accepted. Maya’s progress is now ${26 + submittedHours} of 40 hours.` : verified ? "Attendance and hours verified by the nonprofit coordinator." : submittedHours ? "Waiting for nonprofit verification. Switch to Nonprofit first." : "No new submission. Start in the Student dashboard."}</p>${pill(accepted ? "School accepted" : verified ? "Ready for school review" : submittedHours ? "Awaiting verification" : "Not submitted")}</div><button class="vu-button primary" data-vu="accept" ${!verified || accepted ? "disabled" : ""}>${accepted ? "Accepted ✓" : "Accept verified hours"}</button></section>`
       );
     return (
       heading(
@@ -346,12 +367,19 @@ document.querySelector("#app").innerHTML = publicHomeMarkup();
       `<section class="vu-panel"><h3>School information</h3><div class="vu-two"><label class="vu-field">School name<input value="Broward Community High" readonly></label><label class="vu-field">School administrator<input value="Alex Morgan" readonly></label><label class="vu-field">Service hours goal<input value="40 hours" readonly></label><label class="vu-field">Coordinator email<input value="school-demo@example.org" readonly></label></div><p class="vu-context">This is a fictional demonstration school. No invitations or emails are sent.</p></section>`
     );
   }
-  const storageKey = "volunteeru.presentation-demo.v1";
+  const storageKey = "volunteeru.presentation-demo.v2";
   try {
     const saved = JSON.parse(sessionStorage.getItem(storageKey));
     if (saved) {
       screen = roles[saved.screen] ? saved.screen : "home";
-      verified = saved.verified === true;
+      submittedHours =
+        Number.isFinite(saved.submittedHours) &&
+        saved.submittedHours >= 0.25 &&
+        saved.submittedHours <= 4 &&
+        Number.isInteger(saved.submittedHours * 4)
+          ? saved.submittedHours
+          : 0;
+      verified = submittedHours > 0 && saved.verified === true;
       accepted = verified && saved.accepted === true;
       joined = saved.joined === true;
       activeTab =
@@ -410,7 +438,14 @@ document.querySelector("#app").innerHTML = publicHomeMarkup();
     try {
       sessionStorage.setItem(
         storageKey,
-        JSON.stringify({ screen, verified, accepted, joined, activeTab }),
+        JSON.stringify({
+          screen,
+          submittedHours,
+          verified,
+          accepted,
+          joined,
+          activeTab,
+        }),
       );
     } catch {
       /* Demo works in memory if storage is blocked. */
@@ -448,18 +483,18 @@ document.querySelector("#app").innerHTML = publicHomeMarkup();
       message = "";
       render();
     } else if (action === "verify") {
+      if (screen !== "nonprofit" || !submittedHours || verified) return;
       verified = true;
-      message =
-        "Maya’s 4 hours are verified. Switch to School Admin to accept them.";
+      message = `Maya’s ${submittedHours} hours are verified. Switch to School Admin to accept them.`;
       render();
     } else if (action === "accept") {
-      if (verified) {
+      if (screen === "school" && verified && !accepted) {
         accepted = true;
-        message =
-          "4 hours accepted. Switch to Student to see Maya’s plant and progress update.";
+        message = `${submittedHours} hours accepted. Switch to Student to see Maya’s plant and progress update.`;
         render();
       }
     } else if (action === "reset") {
+      submittedHours = 0;
       verified = false;
       accepted = false;
       joined = false;
@@ -499,8 +534,10 @@ document.querySelector("#app").innerHTML = publicHomeMarkup();
         ? "School accepted"
         : verified
           ? "Nonprofit verified"
-          : "Submitted";
-      const csv = `Student,Event,Submitted hours,Nonprofit verified hours,School accepted hours,Status\r\nMaya Chen,Period-kit packing,4,${verified ? 4 : 0},${accepted ? 4 : 0},${status}\r\n`;
+          : submittedHours
+            ? "Submitted"
+            : "Not submitted";
+      const csv = `Student,Event,Submitted hours,Nonprofit verified hours,School accepted hours,Status\r\nMaya Chen,Period-kit packing,${submittedHours},${verified ? submittedHours : 0},${accepted ? submittedHours : 0},${status}\r\n`;
       const href = URL.createObjectURL(
         new Blob([csv], { type: "text/csv;charset=utf-8" }),
       );
@@ -510,6 +547,25 @@ document.querySelector("#app").innerHTML = publicHomeMarkup();
       a.click();
       setTimeout(() => URL.revokeObjectURL(href), 1000);
     }
+  });
+  root.addEventListener("submit", (event) => {
+    if (event.target.id !== "vu-hours-form") return;
+    event.preventDefault();
+    if (screen !== "student" || submittedHours) return;
+    const input = event.target.elements.hours;
+    const hours = input.valueAsNumber;
+    if (
+      !event.target.reportValidity() ||
+      !Number.isFinite(hours) ||
+      hours < 0.25 ||
+      hours > 4 ||
+      !Number.isInteger(hours * 4)
+    )
+      return;
+    submittedHours = hours;
+    message = `${hours} hours submitted to Flowers for Women. Switch to Nonprofit to verify them.`;
+    render();
+    root.querySelector("#vu-hours-form").scrollIntoView({ block: "nearest" });
   });
   root.addEventListener("input", (event) => {
     if (event.target.id !== "vu-roster-search") return;

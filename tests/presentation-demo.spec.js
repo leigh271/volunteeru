@@ -43,6 +43,7 @@ test("photo homepage opens pre-filled demo accounts without modifying personal r
   await expect(
     page.getByText("26 of 40 hours accepted", { exact: false }),
   ).toBeVisible();
+  await page.getByRole("button", { name: "Submit hours", exact: true }).click();
   await role(page, "School Admin").click();
   await expect(
     page.getByRole("button", { name: "Accept verified hours", exact: true }),
@@ -105,6 +106,7 @@ test("all presentation pages are pre-filled, usable, and export consistent sampl
   const errors = [];
   page.on("pageerror", (error) => errors.push(error.message));
   await page.goto("/demo.html?role=student");
+  await page.getByRole("button", { name: "Submit hours", exact: true }).click();
   await tab(page, "Find opportunities").click();
   await page
     .getByRole("button", { name: "Save opportunity", exact: true })
@@ -159,4 +161,56 @@ test("all presentation pages are pre-filled, usable, and export consistent sampl
     ),
   ).toBe(true);
   expect(errors).toEqual([]);
+});
+
+test("editable hours follow submission, verification and acceptance without double counting", async ({
+  page,
+}) => {
+  await page.goto("/demo.html?role=nonprofit");
+  await expect(
+    page.getByRole("button", { name: "Verify 0 hours →", exact: true }),
+  ).toBeDisabled();
+  await role(page, "Student").click();
+  const hours = page.getByLabel("Hours completed", { exact: true });
+  await hours.fill("5");
+  await page.getByRole("button", { name: "Submit hours", exact: true }).click();
+  await expect(hours).toBeEnabled();
+  await hours.fill("2.5");
+  await page.getByRole("button", { name: "Submit hours", exact: true }).click();
+  await expect(page.getByRole("progressbar")).toHaveAttribute(
+    "aria-valuenow",
+    "26",
+  );
+  await expect(
+    page.getByRole("button", { name: "Hours submitted ✓", exact: true }),
+  ).toBeDisabled();
+  await page.reload();
+  await expect(hours).toHaveValue("2.5");
+  await role(page, "School Admin").click();
+  await expect(
+    page.getByRole("button", { name: "Accept verified hours", exact: true }),
+  ).toBeDisabled();
+  await role(page, "Nonprofit").click();
+  await page
+    .getByRole("button", { name: "Verify 2.5 hours →", exact: true })
+    .click();
+  await role(page, "School Admin").click();
+  await page
+    .getByRole("button", { name: "Accept verified hours", exact: true })
+    .click();
+  await expect(
+    page.getByRole("button", { name: "Accepted ✓", exact: true }),
+  ).toBeDisabled();
+  await expect(page.locator(".vu-kpis article").nth(1)).toContainText("108.5");
+  await role(page, "Student").click();
+  await expect(page.getByRole("progressbar")).toHaveAttribute(
+    "aria-valuenow",
+    "28.5",
+  );
+  await page.getByRole("button", { name: "Reset demo", exact: true }).click();
+  await expect(hours).toBeEnabled();
+  await expect(page.getByRole("progressbar")).toHaveAttribute(
+    "aria-valuenow",
+    "26",
+  );
 });
