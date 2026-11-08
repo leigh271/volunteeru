@@ -540,4 +540,24 @@
     gap: 12px;
   }
 }
-.ev-close{position:absolute;top:15px;right:16px;width:34px;height:34px;display:grid;place-items:center;border-radius:50%;background:#f7f3fc;font-size:23px;color:#9e87b8;z-index:2}.ev-close:hover{background:#eee5fa;color:#7454df}.ev-dialog>.ev-eyebrow{padding-right:35px}
+.ev-close {
+  position: absolute;
+  top: 15px;
+  right: 16px;
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #f7f3fc;
+  font-size: 23px;
+  color: #9e87b8;
+  z-index: 2;
+}
+.ev-close:hover {
+  background: #eee5fa;
+  color: #7454df;
+}
+.ev-dialog > .ev-eyebrow {
+  padding-right: 35px;
+}

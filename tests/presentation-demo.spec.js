@@ -269,7 +269,7 @@ test("sample service clock is explicit and fills a four-hour completed shift", a
   await page
     .getByRole("button", { name: "Try a 4-hour sample shift", exact: true })
     .click();
-  await expect(page.getByText(/Sample attendance · Check-in:/)).toBeVisible();
+  await expect(page.getByText(/Sample attendance · Nov 7/)).toBeVisible();
   await expect(
     page.getByRole("button", { name: "Checked out ✓", exact: true }),
   ).toBeDisabled();
