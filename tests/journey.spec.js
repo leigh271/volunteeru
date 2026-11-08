@@ -151,7 +151,7 @@ test("malformed browser data recovers to welcome", async ({ page }) => {
   );
   await page.reload();
   await expect(
-    page.getByRole("heading", { name: "Find your cause. Make your impact." }),
+    page.getByRole("heading", { name: "Good grows with you." }),
   ).toBeVisible();
   await page.getByRole("button", { name: /Find my opportunities/ }).click();
   await expect(page.getByLabel("Your name")).toHaveValue("");
