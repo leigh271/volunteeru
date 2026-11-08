@@ -1,3 +1,4 @@
+import { bloomMarkup } from "./bloom.js";
 import {
   studentRequirementsMarkup,
   bindStudentRequirements,
@@ -101,6 +102,7 @@ export function progressMarkup() {
   const completed = Array.isArray(storedTraining) ? storedTraining : [];
   return `<section class="page-heading"><div><div class="eyebrow">EVERY LITTLE STEP ADDS UP</div><h1>Your <em>impact journey.</em></h1><p>Follow your events, learning, and school progress in one place.</p></div></section>
     <p class="demo-notice">Local demo records. Self-reported training and submitted hours are separate from coordinator verification.</p>
+    ${bloomMarkup()}
     <div class="journey-stats"><article><span>✓</span><strong>${esc(verified)}</strong><p>Approved hours</p></article><article><span>◷</span><strong>${esc(pending)}</strong><p>Hours awaiting review</p></article><article><span>▦</span><strong>${shifts.length}</strong><p>Confirmed event shifts</p></article></div>
     <section class="journey-panel"><h2>Your school requirements</h2>${connection ? `<p>${esc(connection.schoolName)}${connection.isDemo ? " · DEMO" : ""}</p>${target > 0 ? `<div class="journey-meter" role="progressbar" aria-label="School service hours" aria-valuemin="0" aria-valuemax="${esc(target)}" aria-valuenow="${esc(Math.min(target, verified))}"><span style="width:${percentage}%"></span></div><p><strong>${esc(verified)} / ${esc(target)} approved hours</strong> · ${percentage}% of your goal</p>` : "<p>Your school has not provided an hours target yet.</p>"}<div class="journey-requirements"><p><strong>Capstone project</strong><br>${esc(connection.capstone || "No capstone requirement provided.")}</p><p><strong>Service learning</strong><br>${esc(connection.serviceLearning || "No service learning requirement provided.")}</p></div>` : `<p>Connect through your school’s registration link to see its hours, capstone, and service learning requirements.</p><button class="secondary" data-page="Profile">Open your profile →</button>`}</section>
     <div class="journey-columns"><section class="journey-panel"><h2>Registered events</h2><p>Confirmed shifts appear after nonprofit approval and scheduling.</p>${
