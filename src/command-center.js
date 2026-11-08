@@ -1,4 +1,10 @@
 import {
+  eventDayAttendance,
+  approveRecordedCheckout,
+  reviewArrival,
+  setCheckoutReminder,
+} from "./event-attendance-demo.js";
+import {
   outreachMarkup,
   trainingMarkup,
   bindOutreachDemo,
@@ -108,7 +114,7 @@ function volunteers(d, e, w) {
   return trainingMarkup(d, e, w);
 }
 function attendanceRows(d, e, predicate, kind) {
-  const rows = d.attendance.filter((a) => a.event_id === e.id && predicate(a));
+  const rows = eventDayAttendance(d, e.id).filter(predicate);
   return rows.length
     ? rows
         .slice(0, expandedRows)
@@ -119,7 +125,7 @@ function attendanceRows(d, e, predicate, kind) {
               .split(" ")
               .map((n) => n[0])
               .join(""),
-          )}</span><span><strong>${esc(p.name)}</strong><small>${esc(a.role)} · ${a.actual_check_in ? "In " + fmt(a.actual_check_in) : "Not checked in"}${a.actual_check_out ? " · Out " + fmt(a.actual_check_out) : ""}</small></span></button><div class="cc-person-actions">${kind === "missing" ? `<button class="cc-secondary" data-cc-message="checkout" data-person="${esc(p.volunteer_id)}">Request time</button><button class="cc-text-button" data-cc-hours="${esc(a.attendance_id)}">Review hours</button>` : kind === "checked-out" ? pill(a.review_status === "approved" ? "Hours approved" : "Awaiting hours review", a.review_status === "approved" ? "green" : "amber") : pill("Expected")}</div></div>`;
+          )}</span><span><strong>${esc(p.name)}</strong><small>${esc(a.role)}${a.checkout_reminder && a.checkout_reminder.status !== "resolved" ? " · Follow-up " + (Date.parse(a.checkout_reminder.dueAt) <= Date.now() ? "due: " : "scheduled: ") + esc(new Date(a.checkout_reminder.dueAt).toLocaleString()) : ""} · ${a.actual_check_in ? "In " + fmt(a.actual_check_in) : "Not checked in"}${a.actual_check_out ? " · Out " + fmt(a.actual_check_out) : ""}</small></span></button><div class="cc-person-actions">${kind === "missing" ? `<button class="cc-secondary" data-cc-message="checkout" data-person="${esc(p.volunteer_id)}">Draft outreach</button><button class="cc-secondary" data-checkout-reminder="${esc(a.attendance_id)}">Set reminder</button><button class="cc-text-button" data-cc-hours="${esc(a.attendance_id)}">Enter checkout & hours</button>` : kind === "checked-out" ? (a.checkout_approved_at ? pill("Checkout approved", "green") : `<button class="cc-secondary" data-cc-approve-checkout="${esc(a.attendance_id)}">Approve checkout</button>`) : a.checkin_review ? pill(a.checkin_review === "approved" ? "Check-in approved" : "Did not show · approved", a.actual_check_in ? "green" : "amber") : `<button class="cc-secondary" data-review-arrival="${esc(a.volunteer_id)}">${a.actual_check_in ? "Approve check-in" : "Did not show · approve"}</button>`}</div></div>`;
         })
         .join("") +
         (rows.length > expandedRows
@@ -131,12 +137,14 @@ function studentLink(e) {
   return `${location.origin}/?view=student&eventAccess=${encodeURIComponent(e.id)}`;
 }
 function checkin(d, e, w) {
-  const a = d.attendance.filter((a) => a.event_id === e.id),
+  const a = eventDayAttendance(d, e.id),
     checked = a.filter((a) => a.actual_check_in);
-  return `<div class="cc-simple-summary">${stat(eventPeople(d, e.id).filter((p) => p.decision === "approved").length, "approved for today")}${stat(checked.length, "checked in")}${stat(a.filter((a) => !a.actual_check_in).length, "not checked in")}</div><section class="cc-card cc-access-card"><div><span class="cc-card-icon">⌁</span><h3>A simple arrival page for students</h3><p>Share this link so volunteers can open their event check-in page.</p></div><div class="cc-access-actions"><button class="cc-primary" id="cc-student-access">Preview student page ↗</button><button class="cc-secondary" id="cc-copy-access">Copy check-in link</button></div></section><section class="cc-card"><h3>Who has arrived?</h3><p class="cc-card-description">Expand a group when you need it. Attendance below comes from the supplied future-data demo.</p>${fold(
+  return `<div class="cc-simple-summary">${stat(eventPeople(d, e.id).length, "registered for today")}${stat(checked.length, "checked in")}${stat(a.filter((a) => !a.actual_check_in).length, "not checked in")}</div><section class="cc-card cc-access-card"><div><span class="cc-card-icon">⌁</span><h3>A simple arrival page for students</h3><p>Share this link so volunteers can open their event check-in page.</p></div><div class="cc-access-actions"><button class="cc-primary" id="cc-student-access">Preview student page ↗</button><button class="cc-secondary" id="cc-copy-access">Copy check-in link</button></div></section><section class="cc-card"><h3>Who has arrived?</h3><p class="cc-card-description">Expand a group when you need it. Times are Eastern. November 21 attendance is a simulated event-day example.</p>${fold(
     "Checked in",
     checked.length,
     attendanceRows(d, e, (a) => Boolean(a.actual_check_in), "checked-in"),
+    "Arrival times · Eastern",
+    true,
   )}${fold(
     "Not checked in",
     a.length - checked.length,
@@ -144,7 +152,7 @@ function checkin(d, e, w) {
   )}<div class="cc-roster-finish"><p>Close arrival check-in when your event team has arrived.</p><button class="cc-secondary" id="cc-close-checkin">${w.checkinClosed ? "Check-in closed ✓" : "Mark check-in complete"}</button></div></section>`;
 }
 function checkout(d, e, w) {
-  const a = d.attendance.filter((a) => a.event_id === e.id),
+  const a = eventDayAttendance(d, e.id),
     out = a.filter((a) => a.actual_check_out),
     missing = a.filter((a) => a.actual_check_in && !a.actual_check_out);
   return `<div class="cc-simple-summary">${stat(out.length, "checked out")}${stat(missing.length, "need a check-out time")}${stat(a.filter((a) => a.review_status === "pending_coordinator_review").length, "ready for hour review")}</div><section class="cc-card"><h3>Finish the day with clear records.</h3><p class="cc-card-description">A missing check-out stays open until a coordinator reviews the volunteer’s reply. Estimated times never become approved hours automatically.</p>${fold(
@@ -157,11 +165,13 @@ function checkout(d, e, w) {
       "missing",
     ),
     "Ask volunteers what time they left",
+    true,
   )}${fold(
     "Checked out",
     out.length,
     attendanceRows(d, e, (a) => Boolean(a.actual_check_out), "checked-out"),
-    "Review completed visits",
+    "Review completed visits · Eastern",
+    true,
   )}${fold(
     "Complete times awaiting approval",
     a.filter((a) => a.review_status === "pending_coordinator_review").length,
@@ -469,6 +479,52 @@ export function bindCommandCenter(
   all(
     "[data-cc-hours]",
     (b) => (b.onclick = () => reviewHours(d, b.dataset.ccHours, render)),
+  );
+  all(
+    "[data-cc-approve-checkout]",
+    (b) =>
+      (b.onclick = () => {
+        approveRecordedCheckout(d, b.dataset.ccApproveCheckout);
+        bridge(d);
+        render();
+        notify(
+          "Checkout and hours approved. Student records and reports updated.",
+        );
+      }),
+  );
+  all(
+    "[data-review-arrival]",
+    (b) =>
+      (b.onclick = () => {
+        reviewArrival(d, e.id, b.dataset.reviewArrival);
+        bridge(d);
+        render();
+      }),
+  );
+  all(
+    "[data-checkout-reminder]",
+    (b) =>
+      (b.onclick = () => {
+        const a = d.attendance.find(
+          (a) => a.attendance_id === b.dataset.checkoutReminder,
+        );
+        const el = modal(
+          `<h2>Follow up on missing checkout</h2><p>Ask when they left and how many hours they completed. This creates an in-app follow-up task; no message is sent.</p><form><label>Remind me (local time)<input type="datetime-local" name="due" required></label><label>Follow-up note<textarea name="note">Please confirm your departure time and total hours completed.</textarea></label><button class="cc-primary">Save reminder</button></form>`,
+        );
+        el.querySelector("form").onsubmit = (ev) => {
+          ev.preventDefault();
+          const f = new FormData(ev.target);
+          setCheckoutReminder(
+            d,
+            a.attendance_id,
+            new Date(f.get("due")).toISOString(),
+            f.get("note"),
+          );
+          bridge(d);
+          el.close();
+          render();
+        };
+      }),
   );
   on("cc-finish", () => {
     const missing = d.attendance.filter(
